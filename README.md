@@ -9,9 +9,52 @@ Unity version: **6000.1.2f1** - May 6, 2025
 https://unity.com/releases/editor/archive  
 
 
+# VS Code Preferences
+
+Enable Setting 'Format On Save' - The current file will be formatted when you press CMD+S.
+
+Open Settings, search for "exclude", under "Files: Exclude", click on **Add Pattern**. Type
+`**/bin` and click **OK**. And do the same for `**/obj`. This will hide these folders from the
+Solution Explorer, since we won't interact with them very often.
+
+Within Settings, search for "bracket" and make sure these two settings are Enabled:
+- Auto Closing Brackets - Always
+- Bracket Pair Colorization: Enabled - Checked
+- Bracket Pair Colorization: Independent Color Pool Per Bracket Type - Unchecked
+- Guides: Bracket Pairs - True
+
+Open the **Command Palette** with: `SHIFT + CMD + P` (MacOS).
+
+Open the editor's **More Actions...** contextual menu with `CMD + .` (MacOS); this will provide 
+you with helpful quick actions like "Remove unnecessary usings", or "Generate constructor".
+
+Open the **Keyboard Shortcuts** window under Settings, then click on the small icon in the
+top-right corner with tooltip "Open Keyboard Shortcuts (JSON)" (the icon looks like a piece
+of paper with a folded corner, and a circular arrow on the left). In the `keybindings.json`
+file, add this entry:
+
+```json
+{
+    "key": "shift shift",
+    "command": "workbench.action.quickOpen"
+}
+```
+
+Save the `keybindings.json` file and then close it. Now, when you double-tap SHIFT, it will open
+up a sort of "Global Object Search" form field, and you can type the name of an entity, like
+our `AppUser.cs`, and then press RETURN to open the file. Super-handy to have!
+
+More details:
+https://stackoverflow.com/questions/29613191/intellij-shift-shift-shortcut-in-visual-studio-global-search  
+
+Under **Settings > CodeLens**, turn off "Show Main Code Lens". It adds extraneous noise to every 
+method signature in the editor UI, with a bunch of "N references" indicators everywhere.
+
+
 # Unity Tips & Tricks
 
 ## General
+* Unity 6 Engine Lifecycle Execution Order: https://docs.unity3d.com/6000.0/Documentation/Manual/execution-order.html
 * The Unity documentation can be found [here](https://docs.unity3d.com/Manual/index.html) 
   and the scripting reference can be found [here](https://docs.unity3d.com/ScriptReference/index.html)
 * You can modify the template used by Unity when creating new scripts by editing 
