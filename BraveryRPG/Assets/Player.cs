@@ -34,9 +34,10 @@ public class Player : MonoBehaviour
 
     private void HandleAnimations()
     {
-        bool isMoving = rb.linearVelocity.x != 0;
-
-        anim.SetBool("isMoving", isMoving);
+        // Update the attributes of our Animator Blend Tree.
+        anim.SetBool("isGrounded", isGrounded);
+        anim.SetFloat("xVelocity", rb.linearVelocity.x);
+        anim.SetFloat("yVelocity", rb.linearVelocity.y);
     }
 
     private void HandleInput()
