@@ -482,9 +482,9 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.5
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -524,8 +524,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def78211c84b94277b05086c586c318a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3.5
-  jumpForce: 8
+  moveSpeed: 7
+  jumpForce: 12
+  groundCheckDistance: 1.4
+  isGrounded: 0
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
   facingRight: 1
 --- !u!70 &1373728709
 CapsuleCollider2D:
@@ -575,7 +580,7 @@ GameObject:
   - component: {fileID: 1451996439}
   - component: {fileID: 1451996438}
   - component: {fileID: 1451996440}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}

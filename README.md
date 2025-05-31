@@ -127,7 +127,7 @@ method signature in the editor UI, with a bunch of "N references" indicators eve
 
 | Sprite Sheet Editor - Grid By Cell Size |
 | :---: |
-| ![Sprite Sheet Editor](Screenshots/animator-ui-01.png) |
+| ![Sprite Sheet Editor](Screenshots/sprite-sheet-editor-01.png) |
 
 | Animator UI - Exit Time & Transition |
 | :---: |

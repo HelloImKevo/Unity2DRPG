@@ -5,11 +5,16 @@ public class Player : MonoBehaviour
     private Animator anim;
     private Rigidbody2D rb;
 
+    [Header("Movement details")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 8;
     private float xInput;
+    private bool facingRight = true;
 
-    [SerializeField] private bool facingRight = true;
+    [Header("Collision details")]
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private LayerMask whatIsGround;
+    private bool isGrounded;
 
     void Awake()
     {
@@ -20,6 +25,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleCollision();
         HandleInput();
         HandleMovement();
         HandleAnimations();
@@ -50,7 +56,15 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        if (isGrounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
+    }
+
+    private void HandleCollision()
+    {
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
     }
 
     private void HandleFlip()
@@ -71,5 +85,11 @@ public class Player : MonoBehaviour
         // Flip the sprite around the Y-Axis.
         transform.Rotate(0, 180, 0);
         facingRight = !facingRight;
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Enable us to visualize the Raycast in the Unity Editor (does not affect gameplay).
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, -groundCheckDistance));
     }
 }
