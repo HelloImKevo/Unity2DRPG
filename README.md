@@ -121,3 +121,15 @@ method signature in the editor UI, with a bunch of "N references" indicators eve
 * Now drag the prefab as many times as you need in to the scene
 * Any settings that differ for the object in the scene from the prefab will be shown in bold in the `Inspector` window
 * You can revert an object in the scene back to the prefab defaults by clicking `Prefab -> Revert` in the `Inspector` window
+
+
+# Screenshots
+
+| Sprite Sheet Editor - Grid By Cell Size |
+| :---: |
+| ![Sprite Sheet Editor](Screenshots/animator-ui-01.png) |
+
+| Animator UI - Exit Time & Transition |
+| :---: |
+| ![Animator UI](Screenshots/animator-ui-01.png) |
+
