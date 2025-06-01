@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 503aaa3ed81c7488cbbeeae5440bf4e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  redColorDuration: 1
 --- !u!212 &34994174
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -819,7 +820,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def78211c84b94277b05086c586c318a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyColliders: []
   attackRadius: 0.85
   attackPoint: {fileID: 1797716488}
   whatIsEnemy:
@@ -1161,7 +1161,7 @@ Transform:
   m_GameObject: {fileID: 1797716487}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -0.1, z: 0}
+  m_LocalPosition: {x: 1.15, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
