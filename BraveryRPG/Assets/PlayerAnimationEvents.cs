@@ -10,6 +10,8 @@ public class PlayerAnimationEvents : MonoBehaviour
         player = GetComponentInParent<Player>();
     }
 
+    public void DamageEnemies() => player.DamageEnemies();
+
     //
     // Summary:
     //     Triggered by the Player.Animator 'playerAttack' animation, on the first frame.
