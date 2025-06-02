@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private StateMachine stateMachine;
+    private EntityState idleState;
+
     private Animator anim;
     private Rigidbody2D rb;
 
@@ -23,15 +26,24 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     private bool isGrounded;
 
-    void Awake()
+    private void Awake()
     {
+        stateMachine = new StateMachine();
+        idleState = new EntityState(stateMachine, "Idle State");
+
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+        stateMachine.Initialize(idleState);
     }
 
     // Update is called once per frame
     void Update()
     {
+        stateMachine.CurrentState.Update();
         HandleCollision();
         HandleInput();
         HandleMovement();
