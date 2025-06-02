@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private PlayerInputSet input;
     private StateMachine stateMachine;
     public Player_IdleState IdleState { get; private set; }
     public Player_MoveState MoveState { get; private set; }
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
     [Header("Movement details")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 8;
+    public Vector2 MoveInput { get; private set; }
     private float xInput;
     private bool facingRight = true;
     private bool canMove = true;
@@ -29,12 +31,28 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        input = new PlayerInputSet();
+
         stateMachine = new StateMachine();
         IdleState = new Player_IdleState(this, stateMachine, "idle");
         MoveState = new Player_MoveState(this, stateMachine, "move");
 
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnEnable()
+    {
+        input.Enable();
+
+        // Subscribe to New Input System 'Movement' action map.
+        input.Player.Movement.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
+        input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
+    }
+
+    private void OnDisable()
+    {
+        input.Disable();
     }
 
     private void Start()

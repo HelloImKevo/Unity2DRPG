@@ -10,7 +10,8 @@ public class Player_MoveState : EntityState
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.G))
+        // If there is no horizontal movement input, transition to Idle State.
+        if (player.MoveInput.x == 0)
         {
             stateMachine.ChangeState(player.IdleState);
         }
