@@ -3,7 +3,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private StateMachine stateMachine;
-    private EntityState idleState;
+    public Player_IdleState IdleState { get; private set; }
+    public Player_MoveState MoveState { get; private set; }
 
     private Animator anim;
     private Rigidbody2D rb;
@@ -29,7 +30,8 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         stateMachine = new StateMachine();
-        idleState = new EntityState(stateMachine, "Idle State");
+        IdleState = new Player_IdleState(this, stateMachine, "idle");
+        MoveState = new Player_MoveState(this, stateMachine, "move");
 
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -37,7 +39,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        stateMachine.Initialize(idleState);
+        stateMachine.Initialize(IdleState);
     }
 
     // Update is called once per frame

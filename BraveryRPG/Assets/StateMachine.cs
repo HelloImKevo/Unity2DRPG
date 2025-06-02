@@ -1,3 +1,6 @@
+/// <summary>
+/// Provides the structure for our FSM (Finite State Machine).
+/// </summary>
 public class StateMachine
 {
     public EntityState CurrentState { get; private set; }
