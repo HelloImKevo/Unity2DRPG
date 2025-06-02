@@ -63,7 +63,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        stateMachine.CurrentState.Update();
+        stateMachine.UpdateActiveState();
         HandleCollision();
         HandleInput();
         HandleMovement();
