@@ -13,6 +13,8 @@ public abstract class EntityState
     protected Rigidbody2D rb;
     protected PlayerInputSet input;
 
+    protected float stateTimer;
+
     public EntityState(Player player, StateMachine stateMachine, string animBoolName)
     {
         this.player = player;
@@ -32,13 +34,31 @@ public abstract class EntityState
 
     public virtual void Update()
     {
+        stateTimer -= Time.deltaTime;
+        stateTimer = Mathf.Max(0, stateTimer);
+
         // Run logic of the state here.
         anim.SetFloat("yVelocity", rb.linearVelocity.y);
+
+        // Enable the user to interrupt an Attack animation by Dashing.
+        if (input.Player.Dash.WasPressedThisFrame() && CanDash())
+        {
+            stateMachine.ChangeState(player.DashState);
+        }
     }
 
     public virtual void Exit()
     {
         // This will be called every time we exit state and change to a new one.
         anim.SetBool(animBoolName, false);
+    }
+
+    private bool CanDash()
+    {
+        if (player.WallDetected || stateMachine.CurrentState == player.DashState)
+        {
+            return false;
+        }
+        return true;
     }
 }
