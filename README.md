@@ -133,3 +133,86 @@ method signature in the editor UI, with a bunch of "N references" indicators eve
 | :---: |
 | ![Animator UI](Screenshots/animator-ui-01.png) |
 
+
+# Diagrams
+
+## Class Hierarchy for Bravery RPG
+
+```mermaid
+classDiagram
+    direction TB
+    
+    MonoBehaviour <|-- Player
+    MonoBehaviour <|-- Enemy
+    MonoBehaviour <|-- PlayerAnimationEvents
+    
+    class StateMachine {
+        +EntityState CurrentState
+        +Initialize(EntityState startState)
+        +ChangeState(EntityState newState)
+        +UpdateActiveState()
+    }
+    
+    class EntityState {
+        #Player player
+        #StateMachine stateMachine
+        #string stateName
+        +Enter()
+        +Update()
+        +Exit()
+    }
+    
+    EntityState <|-- Player_IdleState
+    EntityState <|-- Player_MoveState
+    
+    Player *-- StateMachine
+    Player *-- Player_IdleState
+    Player *-- Player_MoveState
+    PlayerAnimationEvents --> Player
+    
+    class Player {
+        -PlayerInputSet input
+        -StateMachine stateMachine
+        +Player_IdleState IdleState
+        +Player_MoveState MoveState
+        -Animator anim
+        -Rigidbody2D rb
+        -attackRadius, attackPoint, whatIsEnemy
+        -moveSpeed, jumpForce
+        +Vector2 MoveInput
+        -bool canMove, canJump, facingRight
+        -HandleInput()
+        -HandleMovement()
+        -HandleAnimations()
+        -HandleCollision()
+        -HandleFlip()
+        +DamageEnemies()
+        +EnableMovementAndJump(bool)
+    }
+    
+    class Player_IdleState {
+        +Update()
+    }
+    
+    class Player_MoveState {
+        +Update()
+    }
+    
+    class PlayerAnimationEvents {
+        -Player player
+        +DamageEnemies()
+        -DisableMovementAndJump()
+        -EnableMovementAndJump()
+    }
+    
+    class Enemy {
+        -SpriteRenderer sr
+        -float redColorDuration
+        +float timer
+        -ChangeColorIfNeeded()
+        +TakeDamage()
+        -TurnWhite()
+    }
+    
+    Player --> Enemy : damages
+```
