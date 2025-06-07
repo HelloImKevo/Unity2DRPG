@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public Player_JumpState JumpState { get; private set; }
     public Player_FallState FallState { get; private set; }
     public Player_DashState DashState { get; private set; }
+    public Player_BasicAttackState BasicAttackState { get; private set; }
     public Player_WallSlideState WallSlideState { get; private set; }
     public Player_WallJumpState WallJumpState { get; private set; }
 
@@ -16,6 +17,9 @@ public class Player : MonoBehaviour
     public Rigidbody2D Rb { get; private set; }
 
     [Header("Attack details")]
+    public Vector2 attackVelocity;
+    // Forward movement applied to player when attack is initiated.
+    public float attackVelocityDuration = 0.1f;
     [SerializeField] private float attackRadius;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private LayerMask whatIsEnemy;
@@ -62,6 +66,7 @@ public class Player : MonoBehaviour
         JumpState = new Player_JumpState(this, stateMachine, "jumpFall");
         FallState = new Player_FallState(this, stateMachine, "jumpFall");
         DashState = new Player_DashState(this, stateMachine, "dash");
+        BasicAttackState = new Player_BasicAttackState(this, stateMachine, "basicAttack");
         WallSlideState = new Player_WallSlideState(this, stateMachine, "wallSlide");
         WallJumpState = new Player_WallJumpState(this, stateMachine, "jumpFall");
     }
@@ -95,6 +100,11 @@ public class Player : MonoBehaviour
         // HandleAnimations();
     }
 
+    public void CallAnimationTrigger()
+    {
+        stateMachine.CurrentState.CallAnimationTrigger();
+    }
+
     public void DamageEnemies()
     {
         Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
@@ -111,29 +121,6 @@ public class Player : MonoBehaviour
         // canJump = enable;
     }
 
-    private void HandleInput()
-    {
-        xInput = UnityEngine.Input.GetAxisRaw("Horizontal");
-
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
-        {
-            TryToJump();
-        }
-
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            TryToAttack();
-        }
-    }
-
-    private void TryToAttack()
-    {
-        if (GroundDetected)
-        {
-            Anim.SetTrigger("attack");
-        }
-    }
-
     private void TryToJump()
     {
         if (GroundDetected && canJump)
@@ -146,19 +133,6 @@ public class Player : MonoBehaviour
     {
         Rb.linearVelocity = new Vector2(xVelocity, yVelocity);
         HandleFlip(xVelocity);
-    }
-
-    private void HandleMovement()
-    {
-        if (canMove)
-        {
-            Rb.linearVelocity = new Vector2(xInput * moveSpeed, Rb.linearVelocity.y);
-        }
-        else
-        {
-            // This should stop the character when it attacks.
-            Rb.linearVelocity = new Vector2(0, Rb.linearVelocity.y);
-        }
     }
 
     private void HandleCollisionDetection()

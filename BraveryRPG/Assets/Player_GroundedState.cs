@@ -18,5 +18,10 @@ public class Player_GroundedState : EntityState
         {
             stateMachine.ChangeState(player.JumpState);
         }
+
+        if (input.Player.Attack.WasPerformedThisFrame())
+        {
+            stateMachine.ChangeState(player.BasicAttackState);
+        }
     }
 }
