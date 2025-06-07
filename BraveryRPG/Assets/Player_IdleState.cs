@@ -1,9 +1,18 @@
 using UnityEngine;
 
-public class Player_IdleState : EntityState
+public class Player_IdleState : Player_GroundedState
 {
     public Player_IdleState(Player player, StateMachine stateMachine, string stateName) : base(player, stateMachine, stateName)
     {
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+
+        // Reset velocity when entering Idle (to prevent player from Sliding along
+        // the Ground when landing from Aired state).
+        player.SetVelocity(0, rb.linearVelocity.y);
     }
 
     public override void Update()

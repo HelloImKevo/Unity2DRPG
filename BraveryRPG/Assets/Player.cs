@@ -2,13 +2,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private PlayerInputSet input;
+    public PlayerInputSet Input { get; private set; }
     private StateMachine stateMachine;
     public Player_IdleState IdleState { get; private set; }
     public Player_MoveState MoveState { get; private set; }
+    public Player_JumpState JumpState { get; private set; }
+    public Player_FallState FallState { get; private set; }
 
-    private Animator anim;
-    private Rigidbody2D rb;
+    public Animator Anim { get; private set; }
+    public Rigidbody2D Rb { get; private set; }
 
     [Header("Attack details")]
     [SerializeField] private float attackRadius;
@@ -16,8 +18,10 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask whatIsEnemy;
 
     [Header("Movement details")]
-    [SerializeField] private float moveSpeed = 7f;
-    [SerializeField] private float jumpForce = 8;
+    public float moveSpeed = 8f;
+    public float jumpForce = 12f;
+    [Range(0, 1)]
+    public float inAirMoveMultiplier = 0.7f;
     public Vector2 MoveInput { get; private set; }
     private float xInput;
     private bool facingRight = true;
@@ -27,32 +31,35 @@ public class Player : MonoBehaviour
     [Header("Collision details")]
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask whatIsGround;
-    private bool isGrounded;
+    public bool GroundDetected { get; private set; }
 
     private void Awake()
     {
-        input = new PlayerInputSet();
+        // Must be initialized before the StateMachine.
+        Anim = GetComponentInChildren<Animator>();
+        Rb = GetComponent<Rigidbody2D>();
+
+        Input = new PlayerInputSet();
 
         stateMachine = new StateMachine();
         IdleState = new Player_IdleState(this, stateMachine, "idle");
         MoveState = new Player_MoveState(this, stateMachine, "move");
-
-        anim = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        JumpState = new Player_JumpState(this, stateMachine, "jumpFall");
+        FallState = new Player_FallState(this, stateMachine, "jumpFall");
     }
 
     private void OnEnable()
     {
-        input.Enable();
+        Input.Enable();
 
         // Subscribe to New Input System 'Movement' action map.
-        input.Player.Movement.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
-        input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
+        Input.Player.Movement.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
+        Input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
     }
 
     private void OnDisable()
     {
-        input.Disable();
+        Input.Disable();
     }
 
     private void Start()
@@ -63,12 +70,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleCollisionDetection();
         stateMachine.UpdateActiveState();
-        HandleCollision();
-        HandleInput();
-        HandleMovement();
-        HandleAnimations();
-        HandleFlip();
+        // HandleInput();
+        // HandleMovement();
+        // HandleAnimations();
     }
 
     public void DamageEnemies()
@@ -83,28 +89,20 @@ public class Player : MonoBehaviour
 
     public void EnableMovementAndJump(bool enable)
     {
-        canMove = enable;
-        canJump = enable;
-    }
-
-    private void HandleAnimations()
-    {
-        // Update the attributes of our Animator Blend Tree.
-        anim.SetBool("isGrounded", isGrounded);
-        anim.SetFloat("xVelocity", rb.linearVelocity.x);
-        anim.SetFloat("yVelocity", rb.linearVelocity.y);
+        // canMove = enable;
+        // canJump = enable;
     }
 
     private void HandleInput()
     {
-        xInput = Input.GetAxisRaw("Horizontal");
+        xInput = UnityEngine.Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
         {
             TryToJump();
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0))
         {
             TryToAttack();
         }
@@ -112,46 +110,51 @@ public class Player : MonoBehaviour
 
     private void TryToAttack()
     {
-        if (isGrounded)
+        if (GroundDetected)
         {
-            anim.SetTrigger("attack");
-
+            Anim.SetTrigger("attack");
         }
     }
 
     private void TryToJump()
     {
-        if (isGrounded && canJump)
+        if (GroundDetected && canJump)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            Rb.linearVelocity = new Vector2(Rb.linearVelocity.x, jumpForce);
         }
+    }
+
+    public void SetVelocity(float xVelocity, float yVelocity)
+    {
+        Rb.linearVelocity = new Vector2(xVelocity, yVelocity);
+        HandleFlip(xVelocity);
     }
 
     private void HandleMovement()
     {
         if (canMove)
         {
-            rb.linearVelocity = new Vector2(xInput * moveSpeed, rb.linearVelocity.y);
+            Rb.linearVelocity = new Vector2(xInput * moveSpeed, Rb.linearVelocity.y);
         }
         else
         {
             // This should stop the character when it attacks.
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            Rb.linearVelocity = new Vector2(0, Rb.linearVelocity.y);
         }
     }
 
-    private void HandleCollision()
+    private void HandleCollisionDetection()
     {
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+        GroundDetected = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
     }
 
-    private void HandleFlip()
+    private void HandleFlip(float xVelocity)
     {
-        if (rb.linearVelocity.x > 0 && facingRight == false)
+        if (xVelocity > 0 && facingRight == false)
         {
             Flip();
         }
-        else if (rb.linearVelocity.x < 0 && facingRight == true)
+        else if (xVelocity < 0 && facingRight == true)
         {
             Flip();
         }
