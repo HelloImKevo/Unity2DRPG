@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public Player_MoveState MoveState { get; private set; }
     public Player_JumpState JumpState { get; private set; }
     public Player_FallState FallState { get; private set; }
+    public Player_WallSlideState WallSlideState { get; private set; }
 
     public Animator Anim { get; private set; }
     public Rigidbody2D Rb { get; private set; }
@@ -22,16 +23,23 @@ public class Player : MonoBehaviour
     public float jumpForce = 12f;
     [Range(0, 1)]
     public float inAirMoveMultiplier = 0.7f;
+    [Range(0, 1)]
+    public float wallSlideSlowMultiplier = 0.5f;
     public Vector2 MoveInput { get; private set; }
     private float xInput;
     private bool facingRight = true;
+    // 1 = Right, -1 = Left.
+    private int facingDir = 1;
     private bool canMove = true;
     private bool canJump = true;
 
-    [Header("Collision details")]
+    [Header("Collision detection")]
     [SerializeField] private float groundCheckDistance;
+    // Part of our Wall-Slide system.
+    [SerializeField] private float wallCheckDistance;
     [SerializeField] private LayerMask whatIsGround;
     public bool GroundDetected { get; private set; }
+    public bool WallDetected { get; private set; }
 
     private void Awake()
     {
@@ -46,6 +54,7 @@ public class Player : MonoBehaviour
         MoveState = new Player_MoveState(this, stateMachine, "move");
         JumpState = new Player_JumpState(this, stateMachine, "jumpFall");
         FallState = new Player_FallState(this, stateMachine, "jumpFall");
+        WallSlideState = new Player_WallSlideState(this, stateMachine, "wallSlide");
     }
 
     private void OnEnable()
@@ -146,6 +155,7 @@ public class Player : MonoBehaviour
     private void HandleCollisionDetection()
     {
         GroundDetected = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+        WallDetected = Physics2D.Raycast(transform.position, Vector2.right * facingDir, wallCheckDistance, whatIsGround);
     }
 
     private void HandleFlip(float xVelocity)
@@ -160,18 +170,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    [ContextMenu("Flip")]
-    private void Flip()
+    public void Flip()
     {
         // Flip the sprite around the Y-Axis.
         transform.Rotate(0, 180, 0);
         facingRight = !facingRight;
+        facingDir *= -1;
     }
 
     private void OnDrawGizmos()
     {
         // Enable us to visualize the Raycast in the Unity Editor (does not affect gameplay).
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, -groundCheckDistance));
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(wallCheckDistance * facingDir, 0));
         Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
 }

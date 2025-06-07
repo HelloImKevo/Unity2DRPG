@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Player_GroundedState : EntityState
 {
     public Player_GroundedState(Player player, StateMachine stateMachine, string animBoolName) : base(player, stateMachine, animBoolName)
@@ -10,7 +8,8 @@ public class Player_GroundedState : EntityState
     {
         base.Update();
 
-        if (rb.linearVelocity.y < 0)
+        // Prevents flicker of Animation from WallSlide -> Idle -> Fall -> Idle.
+        if (rb.linearVelocity.y < 0 && !player.GroundDetected)
         {
             stateMachine.ChangeState(player.FallState);
         }
