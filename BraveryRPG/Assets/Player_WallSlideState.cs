@@ -8,7 +8,13 @@ public class Player_WallSlideState : EntityState
     {
         base.Update();
 
+        // Must be called before Jump Input check.
         HandleWallSlide();
+
+        if (input.Player.Jump.WasPressedThisFrame())
+        {
+            stateMachine.ChangeState(player.WallJumpState);
+        }
 
         if (!player.WallDetected)
         {
