@@ -17,9 +17,10 @@ public class Player : MonoBehaviour
     public Rigidbody2D Rb { get; private set; }
 
     [Header("Attack details")]
-    public Vector2 attackVelocity;
+    public Vector2[] attackVelocity;
     // Forward movement applied to player when attack is initiated.
     public float attackVelocityDuration = 0.1f;
+    public float comboResetTime = 0.75f;
     [SerializeField] private float attackRadius;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private LayerMask whatIsEnemy;

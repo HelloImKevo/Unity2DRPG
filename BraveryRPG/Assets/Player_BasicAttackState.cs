@@ -4,16 +4,31 @@ public class Player_BasicAttackState : EntityState
 {
     // Player will be pushed forward a couple of pixels when attacking.
     private float attackVelocityTimer;
+    // We start combo index with number1, this parameter is used in the Animator.
+    private const int FirstComboIndex = 1;
+    [Range(1, 3)]
+    private int comboIndex = FirstComboIndex;
+    private readonly int comboLimit = 3;
+
+    private float lastTimeAttacked;
 
     public Player_BasicAttackState(Player player, StateMachine stateMachine, string animBoolName) : base(player, stateMachine, animBoolName)
     {
+        if (comboLimit != player.attackVelocity.Length)
+        {
+            Debug.LogWarning("Adjusted combo limit, according to attack velocity array!");
+            comboLimit = player.attackVelocity.Length;
+        }
     }
 
     public override void Enter()
     {
         base.Enter();
 
-        GenerateAttackVelocity();
+        ResetComboIndexIfNeeded();
+
+        anim.SetInteger("basicAttackIndex", comboIndex);
+        ApplyAttackVelocity();
     }
 
     public override void Update()
@@ -28,6 +43,16 @@ public class Player_BasicAttackState : EntityState
         }
     }
 
+    public override void Exit()
+    {
+        base.Exit();
+
+        comboIndex++;
+
+        // Remember in-game timestamp of when we last attacked.
+        lastTimeAttacked = Time.time;
+    }
+
     private void HandleAttackVelocity()
     {
         attackVelocityTimer -= Time.deltaTime;
@@ -40,9 +65,25 @@ public class Player_BasicAttackState : EntityState
         }
     }
 
-    private void GenerateAttackVelocity()
+    private void ApplyAttackVelocity()
     {
+        Vector2 attackVelocity = player.attackVelocity[comboIndex - 1];
+
         attackVelocityTimer = player.attackVelocityDuration;
-        player.SetVelocity(player.attackVelocity.x * player.FacingDir, player.attackVelocity.y);
+        player.SetVelocity(attackVelocity.x * player.FacingDir, attackVelocity.y);
+    }
+
+    private void ResetComboIndexIfNeeded()
+    {
+        // If time we attacked was long ago, we reset combo index.
+        if (Time.time > lastTimeAttacked + player.comboResetTime)
+        {
+            comboIndex = FirstComboIndex;
+        }
+
+        if (comboIndex > comboLimit)
+        {
+            comboIndex = FirstComboIndex;
+        }
     }
 }

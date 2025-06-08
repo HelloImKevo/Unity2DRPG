@@ -1357,8 +1357,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def78211c84b94277b05086c586c318a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackVelocity: {x: 3.5, y: 1}
+  attackVelocity:
+  - {x: 4, y: 1.5}
+  - {x: 2, y: 1.5}
+  - {x: 8, y: 1.5}
   attackVelocityDuration: 0.1
+  comboResetTime: 0.75
   attackRadius: 0.85
   attackPoint: {fileID: 1797716488}
   whatIsEnemy:
