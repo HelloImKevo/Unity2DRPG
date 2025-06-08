@@ -19,6 +19,12 @@ public class Player_IdleState : Player_GroundedState
     {
         base.Update();
 
+        // Stop player from being able to 'Continue Running' into a Wall.
+        if (player.MoveInput.x == player.FacingDir && player.WallDetected)
+        {
+            return;
+        }
+
         if (player.MoveInput.x != 0)
         {
             stateMachine.ChangeState(player.MoveState);

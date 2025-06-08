@@ -11,7 +11,7 @@ public class Player_MoveState : Player_GroundedState
         base.Update();
 
         // If there is no horizontal movement input, transition to Idle State.
-        if (player.MoveInput.x == 0)
+        if (player.MoveInput.x == 0 || player.WallDetected)
         {
             stateMachine.ChangeState(player.IdleState);
         }
