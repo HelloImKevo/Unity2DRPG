@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public Player_FallState FallState { get; private set; }
     public Player_DashState DashState { get; private set; }
     public Player_BasicAttackState BasicAttackState { get; private set; }
+    public Player_JumpAttackState JumpAttackState { get; private set; }
     public Player_WallSlideState WallSlideState { get; private set; }
     public Player_WallJumpState WallJumpState { get; private set; }
 
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
 
     [Header("Attack details")]
     public Vector2[] attackVelocity;
+    public Vector2 jumpAttackVelocity;
     // Forward movement applied to player when attack is initiated.
     public float attackVelocityDuration = 0.1f;
     public float comboResetTime = 0.6f;
@@ -45,8 +47,6 @@ public class Player : MonoBehaviour
     private bool facingRight = true;
     // 1 = Right, -1 = Left.
     public int FacingDir { get; private set; } = 1;
-    private bool canMove = true;
-    private bool canJump = true;
 
     [Header("Collision detection")]
     [SerializeField] private float groundCheckDistance;
@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
         FallState = new Player_FallState(this, stateMachine, "jumpFall");
         DashState = new Player_DashState(this, stateMachine, "dash");
         BasicAttackState = new Player_BasicAttackState(this, stateMachine, "basicAttack");
+        JumpAttackState = new Player_JumpAttackState(this, stateMachine, "jumpAttack");
         WallSlideState = new Player_WallSlideState(this, stateMachine, "wallSlide");
         WallJumpState = new Player_WallJumpState(this, stateMachine, "jumpFall");
     }
@@ -136,12 +137,6 @@ public class Player : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().TakeDamage();
         }
-    }
-
-    public void EnableMovementAndJump(bool enable)
-    {
-        // canMove = enable;
-        // canJump = enable;
     }
 
     public void SetVelocity(float xVelocity, float yVelocity)
