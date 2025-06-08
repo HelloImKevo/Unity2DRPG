@@ -6,6 +6,10 @@ public class Player_BasicAttackState : EntityState
     private float attackVelocityTimer;
     // We start combo index with number1, this parameter is used in the Animator.
     private const int FirstComboIndex = 1;
+
+    private bool comboAttackQueued;
+    private int attackDir;
+
     [Range(1, 3)]
     private int comboIndex = FirstComboIndex;
     private readonly int comboLimit = 3;
@@ -16,7 +20,7 @@ public class Player_BasicAttackState : EntityState
     {
         if (comboLimit != player.attackVelocity.Length)
         {
-            Debug.LogWarning("Adjusted combo limit, according to attack velocity array!");
+            Debug.LogWarning("Adjusted combo limit to match attack velocity array!");
             comboLimit = player.attackVelocity.Length;
         }
     }
@@ -25,7 +29,13 @@ public class Player_BasicAttackState : EntityState
     {
         base.Enter();
 
+        comboAttackQueued = false;
+
         ResetComboIndexIfNeeded();
+
+        // Ternary syntax - This assumes that X is a value between -1.0 and +1.0
+        // Define attack direction according to Input.
+        attackDir = player.MoveInput.x != 0 ? (int)player.MoveInput.x : player.FacingDir;
 
         anim.SetInteger("basicAttackIndex", comboIndex);
         ApplyAttackVelocity();
@@ -37,10 +47,12 @@ public class Player_BasicAttackState : EntityState
 
         HandleAttackVelocity();
 
-        if (triggerCalled)
+        if (input.Player.Attack.WasPressedThisFrame())
         {
-            stateMachine.ChangeState(player.IdleState);
+            QueueNextAttack();
         }
+
+        HandleEndOfAttackExit();
     }
 
     public override void Exit()
@@ -51,6 +63,38 @@ public class Player_BasicAttackState : EntityState
 
         // Remember in-game timestamp of when we last attacked.
         lastTimeAttacked = Time.time;
+    }
+
+    private void HandleEndOfAttackExit()
+    {
+        if (onNextComboAttackReadyTrigger || onAnimationEndedTrigger)
+        {
+            if (comboAttackQueued)
+            {
+                // We need to re-enter the BasicAttackState using a deferred Coroutine
+                // that will wait until the current Frame finishes, and then immediately
+                // re-enter the BasicAttackState, to avoid Attack -> Idle -> Attack, which
+                // causes a very slight animation jitter.
+                anim.SetBool(animBoolName, false); // We'll the boolean true on the next frame.
+                player.EnterAttackStateWithDelay();
+            }
+            // If the animation hasn't ended, let it finish (ex: the player sheaths their sword).
+            else if (onAnimationEndedTrigger)
+            {
+                stateMachine.ChangeState(player.IdleState);
+            }
+        }
+    }
+
+    private void QueueNextAttack()
+    {
+        // Prevents the user from being able to spam endless infinite combo chains.
+        // Once the 3-attack combo is finished, the player needs to wait briefly before
+        // initiating a new attack combo.
+        if (comboIndex < comboLimit)
+        {
+            comboAttackQueued = true;
+        }
     }
 
     private void HandleAttackVelocity()
@@ -70,7 +114,7 @@ public class Player_BasicAttackState : EntityState
         Vector2 attackVelocity = player.attackVelocity[comboIndex - 1];
 
         attackVelocityTimer = player.attackVelocityDuration;
-        player.SetVelocity(attackVelocity.x * player.FacingDir, attackVelocity.y);
+        player.SetVelocity(attackVelocity.x * attackDir, attackVelocity.y);
     }
 
     private void ResetComboIndexIfNeeded()

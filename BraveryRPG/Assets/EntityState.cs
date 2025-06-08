@@ -14,7 +14,8 @@ public abstract class EntityState
     protected PlayerInputSet input;
 
     protected float stateTimer;
-    protected bool triggerCalled;
+    protected bool onNextComboAttackReadyTrigger;
+    protected bool onAnimationEndedTrigger;
 
     public EntityState(Player player, StateMachine stateMachine, string animBoolName)
     {
@@ -31,7 +32,8 @@ public abstract class EntityState
     {
         // Every time state will be changed, enter will be called.
         anim.SetBool(animBoolName, true);
-        triggerCalled = false;
+        onNextComboAttackReadyTrigger = false;
+        onAnimationEndedTrigger = false;
     }
 
     public virtual void Update()
@@ -55,9 +57,17 @@ public abstract class EntityState
         anim.SetBool(animBoolName, false);
     }
 
-    public void CallAnimationTrigger()
+    // Currently enables the smooth chaining of attacks in a combo, but could
+    // be extended to support other kinds of interruptible Actions, like being
+    // able to Jump or Dash, before the 3rd Heavy Slash animation is finished.
+    public void CallOnNextActionInputReadyTrigger()
     {
-        triggerCalled = true;
+        onNextComboAttackReadyTrigger = true;
+    }
+
+    public void CallOnAnimationEndedTrigger()
+    {
+        onAnimationEndedTrigger = true;
     }
 
     private bool CanDash()

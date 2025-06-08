@@ -1362,7 +1362,7 @@ MonoBehaviour:
   - {x: 2, y: 1.5}
   - {x: 8, y: 1.5}
   attackVelocityDuration: 0.1
-  comboResetTime: 0.75
+  comboResetTime: 0.6
   attackRadius: 0.85
   attackPoint: {fileID: 1797716488}
   whatIsEnemy:

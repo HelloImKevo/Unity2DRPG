@@ -11,9 +11,19 @@ public class Player_AnimationTriggers : MonoBehaviour
 
     //
     // Summary:
+    //     Triggered by the Player.Animator 'playerBasicAttack_1' animation, close
+    //     to the end of the animation sequence, before the player starts to sheath
+    //     their sword, indicating the attack combo sequence can be continued.
+    public void OnNextActionInputReady()
+    {
+        player.CallOnNextActionInputReadyTrigger();
+    }
+
+    //
+    // Summary:
     //     Triggered by the Player.Animator 'playerBasicAttack' animation, on the last frame.
     public void OnAnimationEnded()
     {
-        player.CallAnimationTrigger();
+        player.CallOnAnimationEndedTrigger();
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -20,7 +21,9 @@ public class Player : MonoBehaviour
     public Vector2[] attackVelocity;
     // Forward movement applied to player when attack is initiated.
     public float attackVelocityDuration = 0.1f;
-    public float comboResetTime = 0.75f;
+    public float comboResetTime = 0.6f;
+    // Reminder: Coroutines require MonoBehaviour (so we can't put this in the EntityState).
+    private Coroutine queuedAttackWorker;
     [SerializeField] private float attackRadius;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private LayerMask whatIsEnemy;
@@ -96,14 +99,33 @@ public class Player : MonoBehaviour
     {
         HandleCollisionDetection();
         stateMachine.UpdateActiveState();
-        // HandleInput();
-        // HandleMovement();
-        // HandleAnimations();
     }
 
-    public void CallAnimationTrigger()
+    public void EnterAttackStateWithDelay()
     {
-        stateMachine.CurrentState.CallAnimationTrigger();
+        if (queuedAttackWorker != null)
+        {
+            StopCoroutine(queuedAttackWorker);
+        }
+
+        queuedAttackWorker = StartCoroutine(EnterAttackStateWithDelayWorker());
+    }
+
+    private IEnumerator EnterAttackStateWithDelayWorker()
+    {
+        // We want to make the Attack animation boolean true on the Next Frame.
+        yield return new WaitForEndOfFrame();
+        stateMachine.ChangeState(BasicAttackState);
+    }
+
+    public void CallOnNextActionInputReadyTrigger()
+    {
+        stateMachine.CurrentState.CallOnNextActionInputReadyTrigger();
+    }
+
+    public void CallOnAnimationEndedTrigger()
+    {
+        stateMachine.CurrentState.CallOnAnimationEndedTrigger();
     }
 
     public void DamageEnemies()
@@ -120,14 +142,6 @@ public class Player : MonoBehaviour
     {
         // canMove = enable;
         // canJump = enable;
-    }
-
-    private void TryToJump()
-    {
-        if (GroundDetected && canJump)
-        {
-            Rb.linearVelocity = new Vector2(Rb.linearVelocity.x, jumpForce);
-        }
     }
 
     public void SetVelocity(float xVelocity, float yVelocity)

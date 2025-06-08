@@ -14,7 +14,9 @@ public class Player_DashState : EntityState
     {
         base.Enter();
 
-        dashDir = player.FacingDir;
+        // Ternary syntax - This assumes that X is a value between -1.0 and +1.0
+        // Define dash direction according to Input.
+        dashDir = player.MoveInput.x != 0 ? (int)player.MoveInput.x : player.FacingDir;
         stateTimer = player.dashDuration;
 
         originalGravityScale = rb.gravityScale;
