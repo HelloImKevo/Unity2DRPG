@@ -1,4 +1,4 @@
-public class Player_JumpAttackState : EntityState
+public class Player_JumpAttackState : PlayerState
 {
     private bool touchedGround;
 

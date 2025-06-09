@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player_DashState : EntityState
+public class Player_DashState : PlayerState
 {
     private float originalGravityScale;
     // Used to prevent a rare race condition bug.

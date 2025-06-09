@@ -1,31 +1,25 @@
 using UnityEngine;
 
 /// <summary>
-/// An Entity possessing an FSM (Finite State Machine).
+/// An abstract Entity possessing an FSM (Finite State Machine).
+/// Concrete implementation examples: Player, Enemy.
 /// </summary>
 public abstract class EntityState
 {
-    protected Player player;
     protected StateMachine stateMachine;
     protected string animBoolName;
 
     protected Animator anim;
     protected Rigidbody2D rb;
-    protected PlayerInputSet input;
 
     protected float stateTimer;
     protected bool onNextComboAttackReadyTrigger;
     protected bool onAnimationEndedTrigger;
 
-    public EntityState(Player player, StateMachine stateMachine, string animBoolName)
+    public EntityState(StateMachine stateMachine, string animBoolName)
     {
-        this.player = player;
         this.stateMachine = stateMachine;
         this.animBoolName = animBoolName;
-
-        anim = player.Anim;
-        rb = player.Rb;
-        input = player.Input;
     }
 
     public virtual void Enter()
@@ -40,15 +34,6 @@ public abstract class EntityState
     {
         stateTimer -= Time.deltaTime;
         stateTimer = Mathf.Max(0, stateTimer);
-
-        // Run logic of the state here.
-        anim.SetFloat("yVelocity", rb.linearVelocity.y);
-
-        // Enable the user to interrupt an Attack animation by Dashing.
-        if (input.Player.Dash.WasPressedThisFrame() && CanDash())
-        {
-            stateMachine.ChangeState(player.DashState);
-        }
     }
 
     public virtual void Exit()
@@ -68,14 +53,5 @@ public abstract class EntityState
     public void CallOnAnimationEndedTrigger()
     {
         onAnimationEndedTrigger = true;
-    }
-
-    private bool CanDash()
-    {
-        if (player.WallDetected || stateMachine.CurrentState == player.DashState)
-        {
-            return false;
-        }
-        return true;
     }
 }

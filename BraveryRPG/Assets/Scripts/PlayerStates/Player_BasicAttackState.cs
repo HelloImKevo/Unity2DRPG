@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player_BasicAttackState : EntityState
+public class Player_BasicAttackState : PlayerState
 {
     // Player will be pushed forward a couple of pixels when attacking.
     private float attackVelocityTimer;
