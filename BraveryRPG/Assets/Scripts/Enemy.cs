@@ -1,19 +1,23 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Entity
 {
     private SpriteRenderer sr;
     [SerializeField] private float redColorDuration = 1;
 
     public float timer;
 
-    private void Awake()
+    protected override void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
+        base.Awake();
+
+        sr = GetComponentInChildren<SpriteRenderer>();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         ChangeColorIfNeeded();
     }
 

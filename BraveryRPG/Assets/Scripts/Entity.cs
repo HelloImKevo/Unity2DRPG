@@ -63,8 +63,16 @@ public class Entity : MonoBehaviour
     private void HandleCollisionDetection()
     {
         GroundDetected = Physics2D.Raycast(primaryGroundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
-        WallDetected = Physics2D.Raycast(primaryWallCheck.position, Vector2.right * FacingDir, wallCheckDistance, whatIsGround)
-                && Physics2D.Raycast(secondaryWallCheck.position, Vector2.right * FacingDir, wallCheckDistance, whatIsGround);
+
+        WallDetected = Physics2D.Raycast(primaryWallCheck.position, Vector2.right * FacingDir, wallCheckDistance, whatIsGround);
+
+        if (secondaryWallCheck != null)
+        {
+            WallDetected = WallDetected
+                    && Physics2D.Raycast(secondaryWallCheck.position, Vector2.right * FacingDir, wallCheckDistance, whatIsGround);
+        }
+
+
     }
 
     private void HandleFlip(float xVelocity)
@@ -92,6 +100,9 @@ public class Entity : MonoBehaviour
         // Enable us to visualize the Raycast in the Unity Editor (does not affect gameplay).
         Gizmos.DrawLine(primaryGroundCheck.position, primaryGroundCheck.position + new Vector3(0, -groundCheckDistance));
         Gizmos.DrawLine(primaryWallCheck.position, primaryWallCheck.position + new Vector3(wallCheckDistance * FacingDir, 0));
-        Gizmos.DrawLine(secondaryWallCheck.position, secondaryWallCheck.position + new Vector3(wallCheckDistance * FacingDir, 0));
+        if (secondaryWallCheck != null)
+        {
+            Gizmos.DrawLine(secondaryWallCheck.position, secondaryWallCheck.position + new Vector3(wallCheckDistance * FacingDir, 0));
+        }
     }
 }
