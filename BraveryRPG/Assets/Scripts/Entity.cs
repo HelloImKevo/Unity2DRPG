@@ -71,8 +71,6 @@ public class Entity : MonoBehaviour
             WallDetected = WallDetected
                     && Physics2D.Raycast(secondaryWallCheck.position, Vector2.right * FacingDir, wallCheckDistance, whatIsGround);
         }
-
-
     }
 
     private void HandleFlip(float xVelocity)

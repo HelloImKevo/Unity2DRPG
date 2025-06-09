@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class EnemyState : EntityState
 {
     protected Enemy enemy;
@@ -10,5 +8,12 @@ public class EnemyState : EntityState
 
         anim = enemy.Anim;
         rb = enemy.Rb;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        anim.SetFloat("moveAnimSpeedMultiplier", enemy.moveAnimSpeedMultiplier);
     }
 }

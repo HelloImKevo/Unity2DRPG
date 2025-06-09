@@ -27,7 +27,7 @@ public class Player : Entity
     [SerializeField] private Transform attackPoint;
     [SerializeField] private LayerMask whatIsEnemy;
 
-    [Header("Movement details")]
+    [Header("Player Movement Details")]
     public float moveSpeed = 8f;
     public float jumpForce = 12f;
     public Vector2 wallJumpForce;
@@ -44,12 +44,6 @@ public class Player : Entity
     protected override void Awake()
     {
         base.Awake();
-
-        // Must be initialized before the StateMachine.
-        Anim = GetComponentInChildren<Animator>();
-        Rb = GetComponent<Rigidbody2D>();
-
-        stateMachine = new StateMachine();
 
         Input = new PlayerInputSet();
         IdleState = new Player_IdleState(this, stateMachine, "idle");
