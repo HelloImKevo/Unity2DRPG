@@ -26,7 +26,13 @@ public class Player_WallSlideState : EntityState
         if (player.GroundDetected)
         {
             stateMachine.ChangeState(player.IdleState);
-            player.Flip();
+
+            // Prevent slightly glitchy sprite flipping when Wall-Sliding and
+            // inputting Move direction towards the Wall.
+            if (player.FacingDir != player.MoveInput.x)
+            {
+                player.Flip();
+            }
         }
     }
 

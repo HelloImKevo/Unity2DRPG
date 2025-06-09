@@ -13,7 +13,7 @@ public class ParallaxBackground : MonoBehaviour
         mainCamera = Camera.main;
         cameraHalfWidth = mainCamera.orthographicSize * mainCamera.aspect;
 
-        CalculateImageLengths();
+        InitializeLayers();
     }
 
     // Use FixedUpdate to prevent jittery pixel vibrations for static layers
@@ -35,7 +35,7 @@ public class ParallaxBackground : MonoBehaviour
         }
     }
 
-    private void CalculateImageLengths()
+    private void InitializeLayers()
     {
         foreach (var layer in backgroundLayers)
         {
