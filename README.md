@@ -134,17 +134,154 @@ method signature in the editor UI, with a bunch of "N references" indicators eve
 | ![Animator UI](Screenshots/animator-ui-01.png) |
 
 
+
+# Architecture Overview
+
+The Bravery RPG project implements a sophisticated State Machine pattern for both player and enemy control:
+
+## Core Architecture
+
+1. **Entity** is the base class for all game actors and:
+   - Inherits from MonoBehaviour
+   - Contains common properties like Animator, RigidBody2D
+   - Handles collision detection, flipping sprites, and velocity setting
+   - Contains a StateMachine reference
+
+2. **StateMachine** manages state transitions and tracks the current state for any Entity.
+
+3. **EntityState** is the abstract base class for all states with standard lifecycle methods:
+   - Enter: Called when entering a state
+   - Update: Called every frame while in a state 
+   - Exit: Called when leaving a state
+
+## Player Architecture
+
+1. **Player** extends Entity with:
+   - Input handling via PlayerInputSet
+   - Multiple state instances for different player behaviors
+   - Combat mechanics like attack velocity and damage dealing
+   - Movement parameters like speed, jump force, and dash duration
+
+2. Player States are organized in a hierarchy:
+   - **PlayerState** (base for all player states)
+     - **Player_GroundedState** (base for states when player is on ground)
+       - Player_IdleState
+       - Player_MoveState
+     - **Player_AiredState** (base for states when player is in air)
+       - Player_JumpState
+       - Player_FallState
+     - Player_DashState
+     - Player_BasicAttackState
+     - Player_JumpAttackState
+     - Player_WallSlideState
+     - Player_WallJumpState
+
+3. **Player_AnimationTriggers** allows animation events to trigger player state changes.
+
+## Enemy Architecture
+
+1. **Enemy** extends Entity with:
+   - Basic damage handling
+   - Movement parameters and idle time configuration
+   - Visual feedback (color change when damaged)
+
+2. **Enemy_Skeleton** extends Enemy for specific enemy type implementation.
+
+3. Enemy States:
+   - **EnemyState** (base for all enemy states)
+     - Enemy_IdleState
+     - Enemy_MoveState
+
+This architecture allows for:
+- Clean separation between different behaviors through the state pattern
+- Code reuse through inheritance hierarchies
+- Easy addition of new states and behaviors
+- Clear distinction between player and enemy behaviors
+
+
 # Diagrams
 
 ## Class Hierarchy for Bravery RPG
 
+### Entity Hierarchy Diagram
+
 ```mermaid
+---
+title: Entity Hierarchy Diagram
+config:
+  theme: neutral
+  layout: elk
+---
 classDiagram
     direction TB
     
-    MonoBehaviour <|-- Player
-    MonoBehaviour <|-- Enemy
-    MonoBehaviour <|-- PlayerAnimationEvents
+    MonoBehaviour <|-- Entity
+    Entity <|-- Player
+    Entity <|-- Enemy
+    Enemy <|-- Enemy_Skeleton
+    MonoBehaviour <|-- Player_AnimationTriggers
+    
+    class Entity {
+        +Animator Anim
+        +Rigidbody2D Rb
+        #StateMachine stateMachine
+        +int FacingDir
+        +bool GroundDetected
+        +bool WallDetected
+        #virtual void Awake()
+        #virtual void Start()
+        #virtual void Update()
+        +void CallOnNextActionInputReadyTrigger()
+        +void CallOnAnimationEndedTrigger()
+        +void SetVelocity(float, float)
+        +void Flip()
+    }
+    
+    class Player {
+        +PlayerInputSet Input
+        +Player_IdleState IdleState
+        +Player_MoveState MoveState
+        +Player_JumpState JumpState
+        +Player_FallState FallState
+        +Player_DashState DashState
+        +Player_BasicAttackState BasicAttackState
+        +Player_JumpAttackState JumpAttackState
+        +Player_WallSlideState WallSlideState
+        +Player_WallJumpState WallJumpState
+        +Vector2[] attackVelocity
+        +Vector2 jumpAttackVelocity
+        +float moveSpeed
+        +float jumpForce
+        +Vector2 wallJumpForce
+        +float dashDuration
+        +float dashSpeed
+        +Vector2 MoveInput
+        +void DamageEnemies()
+        +void EnterAttackStateWithDelay()
+    }
+    
+    class Enemy {
+        +Enemy_IdleState IdleState
+        +Enemy_MoveState MoveState
+        +float idleTime
+        +float moveSpeed
+        +float moveAnimSpeedMultiplier
+        +float timer
+        +void TakeDamage()
+    }
+    
+    class Enemy_Skeleton {
+    }
+    
+    class Player_AnimationTriggers {
+        -Player player
+        +void OnNextActionInputReady()
+        +void OnAnimationEnded()
+    }
+    
+    Player_AnimationTriggers --> Player : triggers animations
+    Entity *-- StateMachine
+    Player *-- PlayerInputSet
     
     class StateMachine {
         +EntityState CurrentState
@@ -152,67 +289,71 @@ classDiagram
         +ChangeState(EntityState newState)
         +UpdateActiveState()
     }
+```
+
+
+### EntityState Hierarchy Diagram
+
+```mermaid
+---
+title: EntityState Hierarchy Diagram
+config:
+  theme: neutral
+  layout: dagre
+---
+classDiagram
+    direction TB
     
     class EntityState {
-        #Player player
+        #Entity entity
         #StateMachine stateMachine
-        #string stateName
+        #string animBoolName
+        #float stateTimer
         +Enter()
         +Update()
         +Exit()
+        +CallOnNextActionInputReadyTrigger()
+        +CallOnAnimationEndedTrigger()
     }
     
-    EntityState <|-- Player_IdleState
-    EntityState <|-- Player_MoveState
+    EntityState <|-- PlayerState
+    EntityState <|-- EnemyState
     
-    Player *-- StateMachine
-    Player *-- Player_IdleState
-    Player *-- Player_MoveState
-    PlayerAnimationEvents --> Player
+    PlayerState <|-- Player_GroundedState
+    PlayerState <|-- Player_AiredState
+    PlayerState <|-- Player_DashState
+    PlayerState <|-- Player_BasicAttackState
+    PlayerState <|-- Player_JumpAttackState
+    PlayerState <|-- Player_WallSlideState
+    PlayerState <|-- Player_WallJumpState
     
-    class Player {
-        -PlayerInputSet input
-        -StateMachine stateMachine
-        +Player_IdleState IdleState
-        +Player_MoveState MoveState
-        -Animator anim
-        -Rigidbody2D rb
-        -attackRadius, attackPoint, whatIsEnemy
-        -moveSpeed, jumpForce
-        +Vector2 MoveInput
-        -bool canMove, canJump, facingRight
-        -HandleInput()
-        -HandleMovement()
-        -HandleAnimations()
-        -HandleCollision()
-        -HandleFlip()
-        +DamageEnemies()
-        +EnableMovementAndJump(bool)
+    Player_GroundedState <|-- Player_IdleState
+    Player_GroundedState <|-- Player_MoveState
+    
+    Player_AiredState <|-- Player_JumpState
+    Player_AiredState <|-- Player_FallState
+    
+    EnemyState <|-- Enemy_IdleState
+    EnemyState <|-- Enemy_MoveState
+    
+    class PlayerState {
+        #Player player
+        #PlayerInputSet input
+        #Animator anim
+        #Rigidbody2D rb
+        #bool onNextComboAttackReadyTrigger
+        #bool onAnimationEndedTrigger
     }
     
-    class Player_IdleState {
+    class EnemyState {
+        #Enemy enemy
+    }
+    
+    class Player_GroundedState {
         +Update()
     }
     
-    class Player_MoveState {
+    class Player_AiredState {
         +Update()
     }
-    
-    class PlayerAnimationEvents {
-        -Player player
-        +DamageEnemies()
-        -DisableMovementAndJump()
-        -EnableMovementAndJump()
-    }
-    
-    class Enemy {
-        -SpriteRenderer sr
-        -float redColorDuration
-        +float timer
-        -ChangeColorIfNeeded()
-        +TakeDamage()
-        -TurnWhite()
-    }
-    
-    Player --> Enemy : damages
 ```
