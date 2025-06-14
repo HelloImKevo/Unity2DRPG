@@ -34,6 +34,8 @@ public abstract class EntityState
     {
         stateTimer -= Time.deltaTime;
         stateTimer = Mathf.Max(0, stateTimer);
+
+        UpdateAnimationParameters();
     }
 
     public virtual void Exit()
@@ -53,5 +55,13 @@ public abstract class EntityState
     public void CallOnAnimationEndedTrigger()
     {
         onAnimationEndedTrigger = true;
+    }
+
+    // Summary:
+    //     Used to update properties of our Animator [anim] instance, within the
+    //     Update() lifecycle.
+    public virtual void UpdateAnimationParameters()
+    {
+        // Override in subclasses as needed.
     }
 }

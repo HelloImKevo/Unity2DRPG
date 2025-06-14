@@ -11,6 +11,7 @@ public class Enemy_GroundedState : EnemyState
         base.Update();
 
         // If enemy detects player, state machine changes to Battle state.
+        // Note: This strategy would not work for Flying enemies.
         if (enemy.PlayerDetected() && enemy.BelowLedgeDetected)
         {
             stateMachine.ChangeState(enemy.BattleState);

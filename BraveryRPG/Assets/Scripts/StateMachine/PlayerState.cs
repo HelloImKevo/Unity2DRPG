@@ -27,13 +27,19 @@ public abstract class PlayerState : EntityState
         base.Update();
 
         // Run logic of the state here.
-        anim.SetFloat("yVelocity", rb.linearVelocity.y);
 
         // Enable the user to interrupt an Attack animation by Dashing.
         if (input.Player.Dash.WasPressedThisFrame() && CanDash())
         {
             stateMachine.ChangeState(player.DashState);
         }
+    }
+
+    public override void UpdateAnimationParameters()
+    {
+        base.UpdateAnimationParameters();
+
+        anim.SetFloat("yVelocity", rb.linearVelocity.y);
     }
 
     public override void Exit()

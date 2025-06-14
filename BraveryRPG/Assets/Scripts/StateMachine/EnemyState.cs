@@ -13,6 +13,11 @@ public class EnemyState : EntityState
     public override void Update()
     {
         base.Update();
+    }
+
+    public override void UpdateAnimationParameters()
+    {
+        base.UpdateAnimationParameters();
 
         // When the enemy enters its Battle state (aggro), increase its move speed
         // to match the aggressive animation (so it looks like the enemy is walking
