@@ -60,7 +60,7 @@ public class Entity : MonoBehaviour
         HandleFlip(xVelocity);
     }
 
-    private void HandleCollisionDetection()
+    protected virtual void HandleCollisionDetection()
     {
         GroundDetected = Physics2D.Raycast(primaryGroundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
 
@@ -73,7 +73,9 @@ public class Entity : MonoBehaviour
         }
     }
 
-    private void HandleFlip(float xVelocity)
+    // Summary:
+    //     1 = Right, -1 = Left.
+    public void HandleFlip(float xVelocity)
     {
         if (xVelocity > 0 && facingRight == false)
         {

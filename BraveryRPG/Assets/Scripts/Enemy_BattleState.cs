@@ -3,6 +3,7 @@ using UnityEngine;
 public class Enemy_BattleState : EnemyState
 {
     private Transform player;
+    private float lastTimeWasInBattle;
 
     public Enemy_BattleState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
     {
@@ -16,7 +17,13 @@ public class Enemy_BattleState : EnemyState
 
         if (player == null)
         {
-            player = enemy.PlayerDetection().transform;
+            player = enemy.PlayerDetected().transform;
+        }
+
+        if (ShouldBackstep())
+        {
+            rb.linearVelocity = new Vector2(enemy.retreatVelocity.x * -DirectionToPlayer(), enemy.retreatVelocity.y);
+            enemy.HandleFlip(DirectionToPlayer());
         }
     }
 
@@ -24,19 +31,46 @@ public class Enemy_BattleState : EnemyState
     {
         base.Update();
 
-        if (WithinAttackRange())
+        // If the player is unreachable, we want the pursuit timer to eventually time-out,
+        // otherwise the player will just be standing in an "aggressively idle" state, on
+        // the ledge. We want the enemy to eventually go back into its Patrol state.
+        if (enemy.PlayerDetected() && enemy.BelowLedgeDetected)
+        {
+            UpdateBattlePursuitTimer();
+        }
+
+        if (BattleTimeIsOver())
+        {
+            stateMachine.ChangeState(enemy.IdleState);
+        }
+
+        if (WithinAttackRange() && enemy.PlayerDetected())
         {
             stateMachine.ChangeState(enemy.AttackState);
         }
         else
         {
-            enemy.SetVelocity(enemy.battleMoveSpeed * DirectionToPlayer(), rb.linearVelocity.y);
+            if (enemy.BelowLedgeDetected)
+            {
+                // Pursue the player (aggro).
+                enemy.SetVelocity(enemy.battleMoveSpeed * DirectionToPlayer(), rb.linearVelocity.y);
+            }
         }
     }
+
+    private void UpdateBattlePursuitTimer() => lastTimeWasInBattle = Time.time;
+
+    private bool BattleTimeIsOver() => Time.time > lastTimeWasInBattle + enemy.battleTimeDuration;
 
     // Summary:
     //     Checks if the player is within attack range of this enemy.
     private bool WithinAttackRange() => DistanceToPlayer() <= enemy.attackDistance;
+
+    // Summary:
+    //     Checks whether the enemy should perform a retreat backstep, to prevent
+    //     the player from exploiting distance checks and standing within the enemy,
+    //     triggering a constant attacking state.
+    private bool ShouldBackstep() => DistanceToPlayer() < enemy.minRetreatDistance;
 
     // Summary:
     //     Calculates the distance between player and enemy, as a positive value.

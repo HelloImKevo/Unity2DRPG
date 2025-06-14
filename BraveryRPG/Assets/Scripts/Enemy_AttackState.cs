@@ -12,7 +12,9 @@ public class Enemy_AttackState : EnemyState
 
         if (onAnimationEndedTrigger)
         {
-            stateMachine.ChangeState(enemy.IdleState);
+            // Switch to Battle state (instead of Idle state), to prevent
+            // player from running through the enemy to reset aggro.
+            stateMachine.ChangeState(enemy.BattleState);
         }
     }
 }

@@ -15,9 +15,9 @@ public class Player : Entity
     public Player_WallSlideState WallSlideState { get; private set; }
     public Player_WallJumpState WallJumpState { get; private set; }
 
-    [Header("Attack details")]
+    [Header("Attack Details")]
     public Vector2[] attackVelocity;
-    public Vector2 jumpAttackVelocity;
+    public Vector2 jumpAttackVelocity = new(3f, 4f);
     // Forward movement applied to player when attack is initiated.
     public float attackVelocityDuration = 0.1f;
     public float comboResetTime = 0.6f;

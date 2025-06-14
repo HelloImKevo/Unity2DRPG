@@ -10,6 +10,16 @@ public class Enemy : Entity
     [Header("Enemy Battle Details")]
     public float battleMoveSpeed = 3f;
     public float attackDistance = 2;
+    public float battleTimeDuration = 5f;
+    public float minRetreatDistance = 1f;
+    [Tooltip("Distance of the backstep retreat effect")]
+    public Vector2 retreatVelocity = new(5f, 3f);
+
+    [Tooltip("Draws a downward Raycast to prevent enemy from pursuing the player off a ledge and falling into the abyss")]
+    [SerializeField] private Transform primaryFallCheck;
+    [SerializeField] private Transform secondaryFallCheck;
+    public float fallCheckDistance = 10f;
+    public bool BelowLedgeDetected { get; private set; }
 
     [Header("Enemy Movement Details")]
     public float idleTime = 2f;
@@ -47,7 +57,25 @@ public class Enemy : Entity
         ChangeColorIfNeeded();
     }
 
-    public RaycastHit2D PlayerDetection()
+    protected override void HandleCollisionDetection()
+    {
+        base.HandleCollisionDetection();
+
+        // Detect if there is a nearby ledge that is safe for the enemy to fall onto,
+        // while the enemy is actively pursuing the player.
+        if (primaryFallCheck != null)
+        {
+            BelowLedgeDetected = Physics2D.Raycast(primaryFallCheck.position, Vector2.down, fallCheckDistance, whatIsGround);
+        }
+
+        if (secondaryFallCheck != null)
+        {
+            BelowLedgeDetected = BelowLedgeDetected
+                    || Physics2D.Raycast(secondaryFallCheck.position, Vector2.down, fallCheckDistance, whatIsGround);
+        }
+    }
+
+    public RaycastHit2D PlayerDetected()
     {
         // Detects whether the enemy has a direct Line of Sight (LOS) to the player.
         // If there is a wall breaking the LOS, then we return default (no player detected).
@@ -95,5 +123,20 @@ public class Enemy : Entity
 
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(playerCheck.position, new Vector3(playerCheck.position.x + (FacingDir * attackDistance), playerCheck.position.y));
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(playerCheck.position, new Vector3(playerCheck.position.x + (FacingDir * minRetreatDistance), playerCheck.position.y));
+
+        if (primaryFallCheck != null)
+        {
+            Gizmos.color = Color.hotPink;
+            Gizmos.DrawLine(primaryFallCheck.position, primaryFallCheck.position + new Vector3(0, -fallCheckDistance));
+        }
+
+        if (secondaryFallCheck != null)
+        {
+            Gizmos.color = Color.hotPink;
+            Gizmos.DrawLine(secondaryFallCheck.position, secondaryFallCheck.position + new Vector3(0, -fallCheckDistance));
+        }
     }
 }
