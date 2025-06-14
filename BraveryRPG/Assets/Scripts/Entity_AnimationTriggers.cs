@@ -1,12 +1,14 @@
 using UnityEngine;
 
-public class Player_AnimationTriggers : MonoBehaviour
+// Summary:
+//     This script should be attached to an [Animator] component.
+public class Entity_AnimationTriggers : MonoBehaviour
 {
-    private Player player;
+    private Entity entity;
 
     private void Awake()
     {
-        player = GetComponentInParent<Player>();
+        entity = GetComponentInParent<Entity>();
     }
 
     //
@@ -16,7 +18,7 @@ public class Player_AnimationTriggers : MonoBehaviour
     //     their sword, indicating the attack combo sequence can be continued.
     public void OnNextActionInputReady()
     {
-        player.CallOnNextActionInputReadyTrigger();
+        entity.CallOnNextActionInputReadyTrigger();
     }
 
     //
@@ -24,6 +26,6 @@ public class Player_AnimationTriggers : MonoBehaviour
     //     Triggered by the Player.Animator 'playerBasicAttack' animation, on the last frame.
     public void OnAnimationEnded()
     {
-        player.CallOnAnimationEndedTrigger();
+        entity.CallOnAnimationEndedTrigger();
     }
 }

@@ -4,6 +4,8 @@ public class Enemy : Entity
 {
     public Enemy_IdleState IdleState { get; protected set; }
     public Enemy_MoveState MoveState { get; protected set; }
+    public Enemy_AttackState AttackState { get; protected set; }
+    public Enemy_BattleState BattleState { get; protected set; }
 
     [Header("Enemy Movement Details")]
     public float idleTime = 2f;
@@ -14,6 +16,13 @@ public class Enemy : Entity
     public float moveAnimSpeedMultiplier = 1;
 
     [SerializeField] private float redColorDuration = 1;
+
+    [Header("Player Detection")]
+    [Tooltip("The 'Player' Layer")]
+    [SerializeField] private LayerMask whatIsPlayer;
+    [Tooltip("The point from which to draw the Raycast for LOS Player detection")]
+    [SerializeField] private Transform playerCheck;
+    [SerializeField] private float playerCheckDistance = 10;
 
     public float timer;
 
@@ -32,6 +41,21 @@ public class Enemy : Entity
         base.Update();
 
         ChangeColorIfNeeded();
+    }
+
+    public RaycastHit2D PlayerDetection()
+    {
+        // Detects whether the enemy has a direct Line of Sight (LOS) to the player.
+        // If there is a wall breaking the LOS, then we return default (no player detected).
+        RaycastHit2D hit = Physics2D.Raycast(
+            playerCheck.position, Vector2.right * FacingDir, playerCheckDistance, whatIsPlayer | whatIsGround);
+
+        if (hit.collider == null || hit.collider.gameObject.layer != LayerMask.NameToLayer("Player"))
+        {
+            return default;
+        }
+
+        return hit;
     }
 
     private void ChangeColorIfNeeded()
@@ -56,5 +80,13 @@ public class Enemy : Entity
 
         // Reset cooldown timer back to default.
         timer = redColorDuration;
+    }
+
+    protected override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(playerCheck.position, new Vector3(playerCheck.position.x + (FacingDir * playerCheckDistance), playerCheck.position.y));
     }
 }
