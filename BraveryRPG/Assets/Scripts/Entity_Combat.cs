@@ -17,9 +17,9 @@ public class Entity_Combat : MonoBehaviour
 
         foreach (var target in GetDetectedColliders())
         {
-            Entity_Health targetHealth = target.GetComponent<Entity_Health>();
+            IDamageable damageable = target.GetComponent<IDamageable>();
 
-            targetHealth?.TakeDamage(damageToInflict, transform);
+            damageable?.TakeDamage(damageToInflict, transform);
         }
     }
 
@@ -31,15 +31,5 @@ public class Entity_Combat : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(targetCheckPoint.position, targetCheckRadius);
-    }
-
-    public void DamageEnemies()
-    {
-        Collider2D[] targetColliders = GetDetectedColliders();
-
-        // foreach (Collider2D enemy in enemyColliders)
-        // {
-        //     enemy.GetComponent<Enemy>().TakeDamage();
-        // }
     }
 }

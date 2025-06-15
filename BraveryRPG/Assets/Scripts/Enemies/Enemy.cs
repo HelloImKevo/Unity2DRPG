@@ -30,8 +30,6 @@ public class Enemy : Entity
     [Tooltip("Used to speed up or slow down animations for faster or slower enemies")]
     public float moveAnimSpeedMultiplier = 1;
 
-    [SerializeField] private float redColorDuration = 1;
-
     [Header("Player Detection")]
     [Tooltip("The 'Player' Layer")]
     [SerializeField] private LayerMask whatIsPlayer;
@@ -39,8 +37,6 @@ public class Enemy : Entity
     [SerializeField] private Transform playerCheck;
     [SerializeField] private float playerCheckDistance = 10;
     public Transform PlayerRef { get; private set; }
-
-    public float timer;
 
     protected override void Awake()
     {
@@ -134,19 +130,6 @@ public class Enemy : Entity
         }
 
         return hit;
-    }
-
-    public void TakeDamage()
-    {
-        Debug.Log(gameObject.name + " took some damage!");
-
-        // sr.color = Color.red;
-
-        // Alternative example to Invoke function after time elapsed:
-        // Invoke(nameof(TurnWhite), redColorDuration);
-
-        // Reset cooldown timer back to default.
-        timer = redColorDuration;
     }
 
     protected override void OnDrawGizmos()
