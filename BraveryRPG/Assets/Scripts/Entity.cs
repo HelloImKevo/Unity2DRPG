@@ -58,6 +58,11 @@ public class Entity : MonoBehaviour
         stateMachine.CurrentState.CallOnAnimationEndedTrigger();
     }
 
+    public virtual void EntityDeath()
+    {
+        // Override in subclasses as needed.
+    }
+
     #region: Knockback Effect When Damaged
 
     public void ReceiveKnockback(Vector2 knockback, float duration)

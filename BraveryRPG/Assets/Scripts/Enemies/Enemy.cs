@@ -6,6 +6,7 @@ public class Enemy : Entity
     public Enemy_MoveState MoveState { get; protected set; }
     public Enemy_AttackState AttackState { get; protected set; }
     public Enemy_BattleState BattleState { get; protected set; }
+    public Enemy_DeadState DeadState { get; protected set; }
 
     [Header("Enemy Battle Details")]
     public float battleMoveSpeed = 3f;
@@ -74,6 +75,13 @@ public class Enemy : Entity
             BelowLedgeDetected = BelowLedgeDetected
                     || Physics2D.Raycast(secondaryFallCheck.position, Vector2.down, fallCheckDistance, whatIsGround);
         }
+    }
+
+    public override void EntityDeath()
+    {
+        base.EntityDeath();
+
+        stateMachine.ChangeState(DeadState);
     }
 
     public void TryEnterBattleState(Transform player)

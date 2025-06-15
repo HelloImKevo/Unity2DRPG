@@ -11,6 +11,12 @@ public class Enemy_Health : Entity_Health
     {
         base.TakeDamage(damage, damageDealer);
 
+        if (isDead)
+        {
+            // Do not enter the Battle state.
+            return;
+        }
+
         // Alternative approach:
         // damageDealer.CompareTag("Player")
         if (damageDealer.GetComponent<Player>() != null)
