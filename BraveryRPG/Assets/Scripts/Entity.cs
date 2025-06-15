@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// Summary:
@@ -23,6 +24,9 @@ public class Entity : MonoBehaviour
     [SerializeField] private Transform secondaryWallCheck;
     public bool GroundDetected { get; private set; }
     public bool WallDetected { get; private set; }
+
+    private Coroutine knockbackCoroutine;
+    private bool isKnockedBack;
 
     protected virtual void Awake()
     {
@@ -54,8 +58,35 @@ public class Entity : MonoBehaviour
         stateMachine.CurrentState.CallOnAnimationEndedTrigger();
     }
 
+    #region: Knockback Effect When Damaged
+
+    public void ReceiveKnockback(Vector2 knockback, float duration)
+    {
+        // Check if task is already running, and stop it.
+        if (knockbackCoroutine != null) StopCoroutine(knockbackCoroutine);
+
+        // Spawn the new coroutine.
+        knockbackCoroutine = StartCoroutine(LaunchKnockbackTask(knockback, duration));
+    }
+
+    private IEnumerator LaunchKnockbackTask(Vector2 knockback, float duration)
+    {
+        isKnockedBack = true;
+        Rb.linearVelocity = knockback;
+
+        yield return new WaitForSeconds(duration);
+
+        // Reset velocity when coroutine is finished.
+        Rb.linearVelocity = Vector2.zero;
+        isKnockedBack = false;
+    }
+
+    #endregion
+
     public void SetVelocity(float xVelocity, float yVelocity)
     {
+        if (isKnockedBack) return;
+
         Rb.linearVelocity = new Vector2(xVelocity, yVelocity);
         HandleFlip(xVelocity);
     }
