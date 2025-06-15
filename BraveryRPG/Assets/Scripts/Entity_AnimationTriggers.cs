@@ -5,10 +5,12 @@ using UnityEngine;
 public class Entity_AnimationTriggers : MonoBehaviour
 {
     private Entity entity;
+    private Entity_Combat entityCombat;
 
     private void Awake()
     {
         entity = GetComponentInParent<Entity>();
+        entityCombat = GetComponentInParent<Entity_Combat>();
     }
 
     //
@@ -27,5 +29,13 @@ public class Entity_AnimationTriggers : MonoBehaviour
     public void OnAnimationEnded()
     {
         entity.CallOnAnimationEndedTrigger();
+    }
+
+    // Summary:
+    //     Triggered at the peak of an Attack Animation, when the Attack would "Make Contact"
+    //     if there was a destructible object or enemy within collision range.
+    public void OnAttackPeak()
+    {
+        entityCombat.PerformAttack();
     }
 }

@@ -23,9 +23,6 @@ public class Player : Entity
     public float comboResetTime = 0.6f;
     // Reminder: Coroutines require MonoBehaviour (so we can't put this in the EntityState).
     private Coroutine queuedAttackWorker;
-    [SerializeField] private float attackRadius;
-    [SerializeField] private Transform attackPoint;
-    [SerializeField] private LayerMask whatIsEnemy;
 
     [Header("Player Movement Details")]
     public float moveSpeed = 8f;
@@ -81,23 +78,12 @@ public class Player : Entity
         stateMachine.ChangeState(BasicAttackState);
     }
 
-    public void DamageEnemies()
-    {
-        Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsEnemy);
-
-        foreach (Collider2D enemy in enemyColliders)
-        {
-            enemy.GetComponent<Enemy>().TakeDamage();
-        }
-    }
-
     protected override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
-
-        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
 
+    // Entry point for the new Unity Input System.
     private void OnEnable()
     {
         Input.Enable();

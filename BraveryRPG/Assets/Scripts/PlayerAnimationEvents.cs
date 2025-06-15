@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// TODO: This class can be deleted - no longer used.
+//  Use Entity_AnimationTriggers instead.
 public class PlayerAnimationEvents : MonoBehaviour
 {
 
@@ -10,7 +12,7 @@ public class PlayerAnimationEvents : MonoBehaviour
         player = GetComponentInParent<Player>();
     }
 
-    public void DamageEnemies() => player.DamageEnemies();
+    // public void DamageEnemies() => player.DamageEnemies();
 
     //
     // Summary:
