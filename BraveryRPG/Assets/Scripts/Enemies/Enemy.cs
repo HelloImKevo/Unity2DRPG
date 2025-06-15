@@ -38,7 +38,7 @@ public class Enemy : Entity
     [Tooltip("The point from which to draw the Raycast for LOS Player detection")]
     [SerializeField] private Transform playerCheck;
     [SerializeField] private float playerCheckDistance = 10;
-    public Transform Player { get; private set; }
+    public Transform PlayerRef { get; private set; }
 
     public float timer;
 
@@ -55,8 +55,18 @@ public class Enemy : Entity
     protected override void Update()
     {
         base.Update();
+    }
 
-        ChangeColorIfNeeded();
+    private void OnEnable()
+    {
+        // Subscribe to Action Event and observe.
+        Player.OnPlayerDeath += HandlePlayerDeath;
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe from event.
+        Player.OnPlayerDeath -= HandlePlayerDeath;
     }
 
     protected override void HandleCollisionDetection()
@@ -84,26 +94,31 @@ public class Enemy : Entity
         stateMachine.ChangeState(DeadState);
     }
 
+    private void HandlePlayerDeath()
+    {
+        stateMachine.ChangeState(IdleState);
+    }
+
     public void TryEnterBattleState(Transform player)
     {
         if (stateMachine.CurrentState == BattleState) return;
 
         if (stateMachine.CurrentState == AttackState) return;
 
-        Player = player;
+        PlayerRef = player;
         stateMachine.ChangeState(BattleState);
     }
 
     public Transform GetPlayerReference()
     {
-        if (Player == null)
+        if (PlayerRef == null)
         {
             // Attempt to acquire Player reference from LOS raycast.
             // Does not work if the enemy is attacked from behind.
-            Player = PlayerDetected().transform;
+            PlayerRef = PlayerDetected().transform;
         }
 
-        return Player;
+        return PlayerRef;
     }
 
     public RaycastHit2D PlayerDetected()
@@ -119,17 +134,6 @@ public class Enemy : Entity
         }
 
         return hit;
-    }
-
-    private void ChangeColorIfNeeded()
-    {
-        timer -= Time.deltaTime;
-        timer = Mathf.Max(0, timer);
-
-        // if (timer <= 0 && sr.color != Color.white)
-        // {
-        //     TurnWhite();
-        // }
     }
 
     public void TakeDamage()

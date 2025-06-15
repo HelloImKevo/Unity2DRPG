@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class Player : Entity
 {
+    public static event Action OnPlayerDeath;
+
     public PlayerInputSet Input { get; private set; }
 
     public Player_IdleState IdleState { get; private set; }
@@ -14,6 +17,7 @@ public class Player : Entity
     public Player_JumpAttackState JumpAttackState { get; private set; }
     public Player_WallSlideState WallSlideState { get; private set; }
     public Player_WallJumpState WallJumpState { get; private set; }
+    public Player_DeadState DeadState { get; private set; }
 
     [Header("Attack Details")]
     public Vector2[] attackVelocity;
@@ -52,6 +56,7 @@ public class Player : Entity
         JumpAttackState = new Player_JumpAttackState(this, stateMachine, "jumpAttack");
         WallSlideState = new Player_WallSlideState(this, stateMachine, "wallSlide");
         WallJumpState = new Player_WallJumpState(this, stateMachine, "jumpFall");
+        DeadState = new Player_DeadState(this, stateMachine, "dead");
     }
 
     protected override void Start()
@@ -59,6 +64,15 @@ public class Player : Entity
         base.Start();
 
         stateMachine.Initialize(IdleState);
+    }
+
+    public override void EntityDeath()
+    {
+        base.EntityDeath();
+
+        // Emit player death event to all subscribers.
+        OnPlayerDeath?.Invoke();
+        stateMachine.ChangeState(DeadState);
     }
 
     public void EnterAttackStateWithDelay()
