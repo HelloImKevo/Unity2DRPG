@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 34994175}
   - component: {fileID: 34994178}
+  - component: {fileID: 34994181}
   - component: {fileID: 34994180}
   - component: {fileID: 34994177}
   - component: {fileID: 34994179}
@@ -284,12 +285,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159d59b1d4f134a4a866c93115b727d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetColliders: []
+  damageToInflict: 10
   targetCheckPoint: {fileID: 1507650426}
-  targetCheckRadius: 0.6
+  targetCheckRadius: 1.1
   whatIsTarget:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
+--- !u!114 &34994181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34994171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad75bed3a7cd42c8be7765966ec89fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHp: 100
+  isDead: 0
 --- !u!1 &179699070
 GameObject:
   m_ObjectHideFlags: 0
@@ -15408,6 +15423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1373728707}
   - component: {fileID: 1373728708}
+  - component: {fileID: 1373728711}
   - component: {fileID: 1373728710}
   - component: {fileID: 1373728705}
   - component: {fileID: 1373728709}
@@ -15548,12 +15564,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159d59b1d4f134a4a866c93115b727d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetColliders: []
+  damageToInflict: 10
   targetCheckPoint: {fileID: 1797716488}
   targetCheckRadius: 0.85
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &1373728711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373728703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad75bed3a7cd42c8be7765966ec89fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHp: 100
+  isDead: 0
 --- !u!1 &1381510561
 GameObject:
   m_ObjectHideFlags: 0
@@ -15641,7 +15671,7 @@ Transform:
   m_GameObject: {fileID: 1507650425}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.85, y: -0.25, z: 0}
+  m_LocalPosition: {x: 1.05, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

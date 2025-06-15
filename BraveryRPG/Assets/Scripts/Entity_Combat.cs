@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Entity_Combat : MonoBehaviour
 {
+    public float damageToInflict = 10;
+
     [Header("Target Detection")]
     [Tooltip("Central point from which collision detection will be performed for melee attacks")]
     [SerializeField] private Transform targetCheckPoint;
@@ -15,7 +17,9 @@ public class Entity_Combat : MonoBehaviour
 
         foreach (var target in GetDetectedColliders())
         {
-            Debug.Log("Attack hit " + target.name);
+            Entity_Health targetHealth = target.GetComponent<Entity_Health>();
+
+            targetHealth?.TakeDamage(damageToInflict);
         }
     }
 
