@@ -15,9 +15,16 @@ public class Enemy_BattleState : EnemyState
 
         Debug.Log("Enemy enters Battle State!");
 
+        UpdateBattlePursuitTimer();
+
         if (player == null)
         {
-            player = enemy.PlayerDetected().transform;
+            // Attempt to acquire Player reference from LOS raycast, or from TakeDamage.Transform
+            // collision component reference.
+            // Alternative special C# "if null, then assign" coalescing assignment syntax:
+            // player ??= enemy.GetPlayerReference();
+            // (Discouraged by Unity Linter)
+            player = enemy.GetPlayerReference();
         }
 
         if (ShouldBackstep())

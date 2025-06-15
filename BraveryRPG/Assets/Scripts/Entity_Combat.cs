@@ -19,7 +19,7 @@ public class Entity_Combat : MonoBehaviour
         {
             Entity_Health targetHealth = target.GetComponent<Entity_Health>();
 
-            targetHealth?.TakeDamage(damageToInflict);
+            targetHealth?.TakeDamage(damageToInflict, transform);
         }
     }
 

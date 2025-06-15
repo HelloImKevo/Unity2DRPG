@@ -5,7 +5,10 @@ public class Entity_Health : MonoBehaviour
     [SerializeField] protected float currentHp = 100f;
     [SerializeField] protected bool isDead;
 
-    public virtual void TakeDamage(float damage)
+    // Summary:
+    //     [damageDealer] can be used by subclasses to acquire components, such as the
+    //     Player or Enemy reference.
+    public virtual void TakeDamage(float damage, Transform damageDealer)
     {
         if (isDead) return;
 

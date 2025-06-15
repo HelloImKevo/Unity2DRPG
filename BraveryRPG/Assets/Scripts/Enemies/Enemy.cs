@@ -37,6 +37,7 @@ public class Enemy : Entity
     [Tooltip("The point from which to draw the Raycast for LOS Player detection")]
     [SerializeField] private Transform playerCheck;
     [SerializeField] private float playerCheckDistance = 10;
+    public Transform Player { get; private set; }
 
     public float timer;
 
@@ -73,6 +74,28 @@ public class Enemy : Entity
             BelowLedgeDetected = BelowLedgeDetected
                     || Physics2D.Raycast(secondaryFallCheck.position, Vector2.down, fallCheckDistance, whatIsGround);
         }
+    }
+
+    public void TryEnterBattleState(Transform player)
+    {
+        if (stateMachine.CurrentState == BattleState) return;
+
+        if (stateMachine.CurrentState == AttackState) return;
+
+        Player = player;
+        stateMachine.ChangeState(BattleState);
+    }
+
+    public Transform GetPlayerReference()
+    {
+        if (Player == null)
+        {
+            // Attempt to acquire Player reference from LOS raycast.
+            // Does not work if the enemy is attacked from behind.
+            Player = PlayerDetected().transform;
+        }
+
+        return Player;
     }
 
     public RaycastHit2D PlayerDetected()
