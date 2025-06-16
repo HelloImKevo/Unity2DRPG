@@ -7,6 +7,7 @@ public class Enemy : Entity
     public Enemy_AttackState AttackState { get; protected set; }
     public Enemy_BattleState BattleState { get; protected set; }
     public Enemy_DeadState DeadState { get; protected set; }
+    public Enemy_StunnedState StunnedState { get; protected set; }
 
     [Header("Enemy Battle Details")]
     public float battleMoveSpeed = 3f;
@@ -21,6 +22,11 @@ public class Enemy : Entity
     [SerializeField] private Transform secondaryFallCheck;
     public float fallCheckDistance = 10f;
     public bool BelowLedgeDetected { get; private set; }
+
+    [Header("Stunned State Details")]
+    public float stunnedDuration = 1f;
+    public Vector2 stunnedVelocity = new(6f, 7f);
+    [SerializeField] protected bool canBeStunned;
 
     [Header("Enemy Movement Details")]
     public float idleTime = 2f;
@@ -94,6 +100,9 @@ public class Enemy : Entity
     {
         stateMachine.ChangeState(IdleState);
     }
+
+    // Determines whether the enemy can be counterattacked and stunned.
+    public void EnableCounterWindow(bool enable) => canBeStunned = enable;
 
     public void TryEnterBattleState(Transform player)
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy_Skeleton : Enemy
+public class Enemy_Skeleton : Enemy, ICounterable
 {
     protected override void Awake()
     {
@@ -13,6 +13,7 @@ public class Enemy_Skeleton : Enemy
         AttackState = new Enemy_AttackState(this, stateMachine, "attack");
         BattleState = new Enemy_BattleState(this, stateMachine, "battle");
         DeadState = new Enemy_DeadState(this, stateMachine, "idle"); // We aren't applying an animation on death.
+        StunnedState = new Enemy_StunnedState(this, stateMachine, "stunned");
     }
 
     protected override void Start()
@@ -25,5 +26,12 @@ public class Enemy_Skeleton : Enemy
     protected override void Update()
     {
         base.Update();
+    }
+
+    public void OnReceiveCounterattack()
+    {
+        if (!canBeStunned) return;
+
+        stateMachine.ChangeState(StunnedState);
     }
 }
