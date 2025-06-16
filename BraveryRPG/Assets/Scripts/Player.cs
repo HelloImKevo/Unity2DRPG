@@ -18,12 +18,15 @@ public class Player : Entity
     public Player_WallSlideState WallSlideState { get; private set; }
     public Player_WallJumpState WallJumpState { get; private set; }
     public Player_DeadState DeadState { get; private set; }
+    public Player_CounterattackState CounterattackState { get; private set; }
 
     [Header("Attack Details")]
     public Vector2[] attackVelocity;
     public Vector2 jumpAttackVelocity = new(3f, 4f);
     // Forward movement applied to player when attack is initiated.
     public float attackVelocityDuration = 0.1f;
+    // Lower values mean the player needs to press the attack button more quickly.
+    // Higher values mean the combo can be continued after a longer window.
     public float comboResetTime = 0.6f;
     // Reminder: Coroutines require MonoBehaviour (so we can't put this in the EntityState).
     private Coroutine queuedAttackWorker;
@@ -57,6 +60,7 @@ public class Player : Entity
         WallSlideState = new Player_WallSlideState(this, stateMachine, "wallSlide");
         WallJumpState = new Player_WallJumpState(this, stateMachine, "jumpFall");
         DeadState = new Player_DeadState(this, stateMachine, "dead");
+        CounterattackState = new Player_CounterattackState(this, stateMachine, "counterattack");
     }
 
     protected override void Start()

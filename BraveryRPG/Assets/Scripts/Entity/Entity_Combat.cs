@@ -130,7 +130,7 @@ public class Entity_Combat : MonoBehaviour
     /// An array of all Collider2D components found within the attack radius
     /// that match the specified layer mask.
     /// </returns>
-    private Collider2D[] GetDetectedColliders()
+    protected Collider2D[] GetDetectedColliders()
     {
         return Physics2D.OverlapCircleAll(targetCheckPoint.position, targetCheckRadius, whatIsTarget);
     }

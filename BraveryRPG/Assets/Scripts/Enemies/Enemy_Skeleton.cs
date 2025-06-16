@@ -23,14 +23,11 @@ public class Enemy_Skeleton : Enemy, ICounterable
         stateMachine.Initialize(IdleState);
     }
 
-    protected override void Update()
-    {
-        base.Update();
-    }
+    public bool CanBeCountered { get => canBeStunned; }
 
     public void OnReceiveCounterattack()
     {
-        if (!canBeStunned) return;
+        if (!CanBeCountered) return;
 
         stateMachine.ChangeState(StunnedState);
     }
