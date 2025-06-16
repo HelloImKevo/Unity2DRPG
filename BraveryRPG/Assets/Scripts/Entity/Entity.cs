@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -5,6 +6,8 @@ using UnityEngine;
 ///     Base class for Player and Enemy actors.
 public class Entity : MonoBehaviour
 {
+    public event Action OnFlipped;
+
     public Animator Anim { get; protected set; }
     public Rigidbody2D Rb { get; protected set; }
 
@@ -129,6 +132,9 @@ public class Entity : MonoBehaviour
         transform.Rotate(0, 180, 0);
         facingRight = !facingRight;
         FacingDir *= -1;
+
+        // Notify subscribers that this entity has flipped.
+        OnFlipped?.Invoke();
     }
 
     protected virtual void OnDrawGizmos()

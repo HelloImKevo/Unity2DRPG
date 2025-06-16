@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Manages health, damage reception, and death mechanics for game entities.
@@ -26,6 +27,10 @@ using UnityEngine;
 /// </summary>
 public class Entity_Health : MonoBehaviour, IDamageable
 {
+    private Slider healthBar;
+
+    [SerializeField] protected float maxHp = 100f;
+
     /// <summary>
     /// The entity's current health points.
     /// 
@@ -34,7 +39,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// configuration in the Unity Inspector and can be modified at runtime
     /// for dynamic health changes like healing or poison effects.
     /// </summary>
-    [SerializeField] protected float currentHp = 100f;
+    [SerializeField] protected float currentHp;
 
     /// <summary>
     /// Flag indicating whether this entity has died.
@@ -136,6 +141,10 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         entity = GetComponent<Entity>();
         entityVfx = GetComponent<Entity_VFX>();
+        healthBar = GetComponentInChildren<Slider>();
+
+        currentHp = maxHp;
+        UpdateHealthBar();
     }
 
     /// <summary>
@@ -188,6 +197,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     protected void ReduceHp(float damage)
     {
         currentHp -= damage;
+        UpdateHealthBar();
 
         if (currentHp <= 0) Die();
     }
@@ -204,6 +214,13 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         isDead = true;
         entity.EntityDeath();
+    }
+
+    private void UpdateHealthBar()
+    {
+        if (healthBar == null) return;
+
+        healthBar.value = currentHp / maxHp;
     }
 
     /// <summary>
