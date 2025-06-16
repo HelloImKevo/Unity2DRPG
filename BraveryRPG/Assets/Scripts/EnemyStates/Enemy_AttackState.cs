@@ -17,4 +17,11 @@ public class Enemy_AttackState : EnemyState
             stateMachine.ChangeState(enemy.BattleState);
         }
     }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+        LastTimeAttackPerformed = Time.time;
+    }
 }

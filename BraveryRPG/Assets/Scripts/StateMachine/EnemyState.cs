@@ -31,6 +31,9 @@ public class EnemyState : EntityState
     /// </summary>
     protected Enemy enemy;
 
+    // When was the last attack performed (using Time.time).
+    public float LastTimeAttackPerformed { get; protected set; }
+
     /// <summary>
     /// Constructs a new EnemyState with required enemy-specific dependencies.
     /// 

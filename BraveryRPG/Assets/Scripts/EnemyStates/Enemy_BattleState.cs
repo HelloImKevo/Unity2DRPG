@@ -53,7 +53,16 @@ public class Enemy_BattleState : EnemyState
 
         if (WithinAttackRange() && enemy.PlayerDetected())
         {
-            stateMachine.ChangeState(enemy.AttackState);
+            // Note: This is tracking the Start of an Attack (rather than when the Attack
+            // was finished), so the attack delay value should be longer than the full
+            // attack animation.
+            // The reason we perform this nested condition check, is to prevent the
+            // enemy from hovering on the player and glitching left-and-right nonstop
+            // while in a "pursuit" state.
+            if (CanPerformAttack())
+            {
+                stateMachine.ChangeState(enemy.AttackState);
+            }
         }
         else
         {
@@ -64,6 +73,8 @@ public class Enemy_BattleState : EnemyState
             }
         }
     }
+
+    private bool CanPerformAttack() => Time.time > enemy.AttackState.LastTimeAttackPerformed + enemy.attackDelay;
 
     private void UpdateBattlePursuitTimer() => lastTimeWasInBattle = Time.time;
 

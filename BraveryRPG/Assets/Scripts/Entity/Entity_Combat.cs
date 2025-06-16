@@ -26,6 +26,8 @@ using UnityEngine;
 /// </summary>
 public class Entity_Combat : MonoBehaviour
 {
+    private Entity_VFX vfx;
+
     /// <summary>
     /// The amount of damage this entity inflicts on targets when attacking.
     /// 
@@ -88,6 +90,11 @@ public class Entity_Combat : MonoBehaviour
     /// </summary>
     [SerializeField] private LayerMask whatIsTarget;
 
+    private void Awake()
+    {
+        vfx = GetComponent<Entity_VFX>();
+    }
+
     /// <summary>
     /// Executes an attack by detecting and damaging targets within range.
     /// 
@@ -109,9 +116,11 @@ public class Entity_Combat : MonoBehaviour
 
         foreach (var target in GetDetectedColliders())
         {
-            IDamageable damageable = target.GetComponent<IDamageable>();
-
-            damageable?.TakeDamage(damageToInflict, transform);
+            if (target.TryGetComponent<IDamageable>(out var damageable))
+            {
+                damageable.TakeDamage(damageToInflict, transform);
+                vfx.CreateOnHitVfx(target.transform);
+            }
         }
     }
 

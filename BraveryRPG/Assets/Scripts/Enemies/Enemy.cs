@@ -12,6 +12,10 @@ public class Enemy : Entity
     [Header("Enemy Battle Details")]
     public float battleMoveSpeed = 3f;
     public float attackDistance = 2;
+    // TODO: Consider adding a range, like random 0.5 - 2.0 second delay.
+    [Tooltip("Delay (seconds) in between attacks while in Battle state (currently tracked at the start of an attack animation)")]
+    public float attackDelay = 1.5f;
+    [Tooltip("How long the enemy remains engaged in pursuit of player, after losing Line of Sight")]
     public float battleTimeDuration = 5f;
     public float minRetreatDistance = 1f;
     [Tooltip("Distance of the backstep retreat effect")]
