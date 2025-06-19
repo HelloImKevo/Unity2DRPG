@@ -9,7 +9,7 @@ public class Chest : MonoBehaviour, IDamageable
     [Header("Open Details")]
     [SerializeField] private Vector2 knockback = new(0, 3f);
 
-    public void TakeDamage(float damage, Transform damageDealer)
+    public bool TakeDamage(float damage, Transform damageDealer)
     {
         vfx.PlayOnDamageVfx();
 
@@ -20,6 +20,8 @@ public class Chest : MonoBehaviour, IDamageable
         // rigidbody, but not the box collider, which results in some
         // odd physics.
         rb.angularVelocity = Random.Range(-120, 120);
+
+        return true;
 
         // Later on: Drop Items.
     }

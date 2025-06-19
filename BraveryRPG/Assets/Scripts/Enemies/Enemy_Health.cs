@@ -7,14 +7,14 @@ public class Enemy_Health : Entity_Health
     // if we need to call it multiple times.
     private Enemy enemy => GetComponent<Enemy>();
 
-    public override void TakeDamage(float damage, Transform damageDealer)
+    public override bool TakeDamage(float damage, Transform damageDealer)
     {
-        base.TakeDamage(damage, damageDealer);
+        bool wasHit = base.TakeDamage(damage, damageDealer);
 
-        if (isDead)
+        if (!wasHit)
         {
-            // Do not enter the Battle state.
-            return;
+            // If enemy evaded the attack, do not enter the Battle state.
+            return false;
         }
 
         // Alternative approach:
@@ -23,5 +23,7 @@ public class Enemy_Health : Entity_Health
         {
             enemy.TryEnterBattleState(damageDealer);
         }
+
+        return true;
     }
 }

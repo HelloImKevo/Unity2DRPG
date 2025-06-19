@@ -118,8 +118,11 @@ public class Entity_Combat : MonoBehaviour
         {
             if (target.TryGetComponent<IDamageable>(out var damageable))
             {
-                damageable.TakeDamage(damageToInflict, transform);
-                vfx.CreateOnHitVfx(target.transform);
+                bool targetDamaged = damageable.TakeDamage(damageToInflict, transform);
+                if (targetDamaged)
+                {
+                    vfx.CreateOnHitVfx(target.transform);
+                }
             }
         }
     }

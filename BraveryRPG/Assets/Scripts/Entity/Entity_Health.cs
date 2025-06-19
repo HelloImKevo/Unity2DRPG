@@ -172,9 +172,15 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// knockback direction and enabling subclass-specific logic like
     /// enemy aggro systems or player interaction tracking.
     /// </param>
-    public virtual void TakeDamage(float damage, Transform damageDealer)
+    public virtual bool TakeDamage(float damage, Transform damageDealer)
     {
-        if (isDead) return;
+        if (isDead) return false;
+
+        if (AttackEvaded())
+        {
+            Debug.Log($"{gameObject.name} evaded the attack!");
+            return false;
+        }
 
         float duration = CalculateDuration(damage);
         Vector2 knockback = CalculateKnockback(damage, damageDealer);
@@ -183,7 +189,11 @@ public class Entity_Health : MonoBehaviour, IDamageable
         if (entity != null) entity.ReceiveKnockback(knockback, duration);
 
         ReduceHp(damage);
+
+        return true;
     }
+
+    private bool AttackEvaded() => Random.Range(0, 100) < stats.GetEvasion();
 
     /// <summary>
     /// Reduces the entity's health by the specified damage amount.
