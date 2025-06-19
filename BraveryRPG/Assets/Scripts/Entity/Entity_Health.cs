@@ -29,8 +29,6 @@ public class Entity_Health : MonoBehaviour, IDamageable
 {
     private Slider healthBar;
 
-    [SerializeField] protected float maxHp = 100f;
-
     /// <summary>
     /// The entity's current health points.
     /// 
@@ -129,6 +127,8 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// </summary>
     private Entity_VFX entityVfx;
 
+    private Entity_Stats stats;
+
     /// <summary>
     /// Initializes component references during the Awake lifecycle phase.
     /// 
@@ -141,9 +141,11 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         entity = GetComponent<Entity>();
         entityVfx = GetComponent<Entity_VFX>();
+        stats = GetComponent<Entity_Stats>();
+
         healthBar = GetComponentInChildren<Slider>();
 
-        currentHp = maxHp;
+        currentHp = stats.GetMaxHealth();
         UpdateHealthBar();
     }
 
@@ -220,7 +222,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         if (healthBar == null) return;
 
-        healthBar.value = currentHp / maxHp;
+        healthBar.value = currentHp / stats.GetMaxHealth();
     }
 
     /// <summary>
@@ -292,5 +294,5 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// True if the damage exceeds the heavy damage threshold percentage,
     /// false otherwise.
     /// </returns>
-    private bool IsHeavyDamage(float damage) => damage / currentHp > heavyDamageThreshold;
+    private bool IsHeavyDamage(float damage) => damage / stats.GetMaxHealth() > heavyDamageThreshold;
 }
