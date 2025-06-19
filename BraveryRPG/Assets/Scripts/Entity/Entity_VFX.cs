@@ -14,13 +14,18 @@ public class Entity_VFX : MonoBehaviour
     [SerializeField] private GameObject hitVfx;
     [Tooltip("Tint color to apply to the Hit VFX")]
     [SerializeField] private Color hitVfxColor = Color.white;
+    [Tooltip("Prefab with larger green energy wave")]
+    [SerializeField] private GameObject critHitVfx;
 
+    private Entity entity;
     private SpriteRenderer sr;
+
     private Material originalMaterial;
     private Coroutine onDamageVfxCoroutine;
 
     private void Awake()
     {
+        entity = GetComponent<Entity>();
         sr = GetComponentInChildren<SpriteRenderer>();
         originalMaterial = sr.material;
     }
@@ -28,10 +33,22 @@ public class Entity_VFX : MonoBehaviour
     // Summary:
     //     Creates an instance of [hitVfx] at the [target] location,
     //     with the same rotation (quaternion).
-    public void CreateOnHitVfx(Transform target)
+    public void CreateOnHitVfx(Transform target, bool isCrit)
     {
-        GameObject vfx = Instantiate(hitVfx, target.position, Quaternion.identity);
-        vfx.GetComponentInChildren<SpriteRenderer>().color = hitVfxColor;
+        GameObject hitPrefab = isCrit ? critHitVfx : hitVfx;
+        GameObject vfx = Instantiate(hitPrefab, target.position, Quaternion.identity);
+        if (!isCrit)
+        {
+            // Note: We could recolor the Crit VFX asset to be grayscale, so that
+            // it can be colorized with our tint.
+            vfx.GetComponentInChildren<SpriteRenderer>().color = hitVfxColor;
+        }
+
+        if (entity.FacingDir == -1 && isCrit)
+        {
+            // Rotate the prefab VFX to face the opposite direction.
+            vfx.transform.Rotate(0, 180, 0);
+        }
     }
 
     public void PlayOnDamageVfx()

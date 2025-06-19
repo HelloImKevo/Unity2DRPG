@@ -26,20 +26,8 @@ using UnityEngine;
 /// </summary>
 public class Entity_Combat : MonoBehaviour
 {
+    private Entity_Stats stats;
     private Entity_VFX vfx;
-
-    /// <summary>
-    /// The amount of damage this entity inflicts on targets when attacking.
-    /// 
-    /// This value represents the base damage that will be applied to any
-    /// IDamageable object hit by this entity's attacks. The damage system
-    /// can be extended to include:
-    /// - Critical hit multipliers
-    /// - Damage type modifiers (fire, ice, etc.)
-    /// - Level-based scaling
-    /// - Equipment bonuses
-    /// </summary>
-    public float damageToInflict = 10;
 
     [Header("Target Detection")]
 
@@ -92,6 +80,7 @@ public class Entity_Combat : MonoBehaviour
 
     private void Awake()
     {
+        stats = GetComponent<Entity_Stats>();
         vfx = GetComponent<Entity_VFX>();
     }
 
@@ -118,10 +107,11 @@ public class Entity_Combat : MonoBehaviour
         {
             if (target.TryGetComponent<IDamageable>(out var damageable))
             {
-                bool targetDamaged = damageable.TakeDamage(damageToInflict, transform);
+                float physicalDamage = stats.GetPhysicalDamage(out bool isCrit);
+                bool targetDamaged = damageable.TakeDamage(physicalDamage, transform);
                 if (targetDamaged)
                 {
-                    vfx.CreateOnHitVfx(target.transform);
+                    vfx.CreateOnHitVfx(target.transform, isCrit);
                 }
             }
         }
