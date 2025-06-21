@@ -364,7 +364,9 @@ MonoBehaviour:
     critPower:
       baseValue: 0
     critChance:
-      baseValue: 60
+      baseValue: 0
+    armorPenetration:
+      baseValue: 0
     fireDamage:
       baseValue: 0
     iceDamage:
@@ -16338,6 +16340,8 @@ MonoBehaviour:
       baseValue: 0
     critChance:
       baseValue: 0
+    armorPenetration:
+      baseValue: 0
     fireDamage:
       baseValue: 0
     iceDamage:
@@ -16979,23 +16983,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth:
-    baseValue: 1000
+    baseValue: 10000
   major:
     strength:
       baseValue: 0
     agility:
-      baseValue: 10
+      baseValue: 0
     intelligence:
       baseValue: 0
     vitality:
-      baseValue: 10
+      baseValue: 0
   offense:
     damage:
       baseValue: 10
     critPower:
       baseValue: 0
     critChance:
-      baseValue: 60
+      baseValue: 0
+    armorPenetration:
+      baseValue: 0
     fireDamage:
       baseValue: 0
     iceDamage:

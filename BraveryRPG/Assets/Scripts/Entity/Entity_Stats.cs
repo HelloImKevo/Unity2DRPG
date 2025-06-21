@@ -4,7 +4,7 @@ public class Entity_Stats : MonoBehaviour
 {
     public Stat maxHealth;
     public Stat_MajorGroup major;
-    public Stat_OffensiveGroup offense;
+    public Stat_OffenseGroup offense;
     public Stat_DefenseGroup defense;
 
     public float GetPhysicalDamage(out bool isCrit)
@@ -27,6 +27,44 @@ public class Entity_Stats : MonoBehaviour
         float finalDamage = isCrit ? totalBaseDamage * critPower : totalBaseDamage;
 
         return finalDamage;
+    }
+
+    /// <summary>
+    /// Calculates armor mitigation percentage for this entity.
+    /// </summary>
+    /// <param name="armorReduction">Opional debuff percentage to reduce the total armor of this entity.</param>
+    /// <returns>Armor mitigation as a fractional percentage. 0.85 is 85%</returns>
+    public float GetArmorMitigation(float armorReduction)
+    {
+        float baseArmor = defense.armor.GetValue();
+        float bonusArmor = major.vitality.GetValue() * 1.0f;
+        float totalArmor = baseArmor + bonusArmor;
+
+        // Cap armor reduction to 100% (handle situations where you receive a 100% armor reduction debuff)
+        float reductionMultiplier = Mathf.Clamp01(1 - armorReduction); // 1 - 0.4 = 0.6
+        float effectiveArmor = totalArmor * reductionMultiplier;
+
+        // 50 = Easy mode, less armor required to reach mitigation cap
+        // 150 = Hard mode, more armor required to reach mitigtaion cap
+        const float scalingConstant = 100f;
+        float mitigation = effectiveArmor / (effectiveArmor + scalingConstant);
+        float mitigationCap = 0.85f; // 85% Max Mitigation
+
+        float finalMitigation = Mathf.Clamp(mitigation, 0, mitigationCap);
+
+        return finalMitigation;
+    }
+
+    /// <returns>
+    /// Fractional percentage of armor penetration, which reduces the effective armor
+    /// of the target of an attack.
+    /// </returns>
+    public float GetArmorPenetration()
+    {
+        // Total armor reduction as multiplier (ex: 30 / 100 = 0.3f multiplier)
+        float finalReduction = offense.armorPenetration.GetValue() / 100f;
+
+        return finalReduction;
     }
 
     public float GetMaxHealth()
