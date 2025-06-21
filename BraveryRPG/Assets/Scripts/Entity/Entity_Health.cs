@@ -172,7 +172,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// knockback direction and enabling subclass-specific logic like
     /// enemy aggro systems or player interaction tracking.
     /// </param>
-    public virtual bool TakeDamage(float damage, float elementalDamage, Transform damageDealer)
+    public virtual bool TakeDamage(float damage, float elementalDamage, ElementType element, Transform damageDealer)
     {
         if (isDead) return false;
 
@@ -187,17 +187,28 @@ public class Entity_Health : MonoBehaviour, IDamageable
 
         float mitigation = stats.GetArmorMitigation(armorReduction);
         // 85% mitigation -> Receive 15% of damage
-        float finalDamage = damage * (1 - mitigation);
+        float finalPhysicalDmg = damage * (1 - mitigation);
 
-        float duration = CalculateDuration(finalDamage);
-        Vector2 knockback = CalculateKnockback(finalDamage, damageDealer);
+        float resistance = stats.GetElementalResistance(element);
+        float finalElementalDmg = elementalDamage * (1 - resistance);
+
+        float duration = CalculateDuration(finalPhysicalDmg);
+        Vector2 knockback = CalculateKnockback(finalPhysicalDmg, damageDealer);
 
         if (entityVfx != null) entityVfx.PlayOnDamageVfx();
         if (entity != null) entity.ReceiveKnockback(knockback, duration);
 
-        ReduceHp(finalDamage);
+        ReduceHp(finalPhysicalDmg + finalElementalDmg);
 
-        Debug.Log($"{gameObject.name} -> Physical damage taken: {finalDamage} (Mitigation: {mitigation}) - Elemental damage taken: {elementalDamage}");
+        Debug.LogFormat(
+            "{0} -> Physical damage taken: {1} (Mitigation: {2}) - Elemental damage taken: {3} (Element: {4}, Resist: {5})",
+            gameObject.name,
+            finalPhysicalDmg,
+            mitigation,
+            finalElementalDmg,
+            element,
+            resistance
+        );
 
         return true;
     }

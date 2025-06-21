@@ -10,7 +10,7 @@ public class Stat_MajorGroup
     [Tooltip("Each AGI point gives 0.5% chance to dodge a physical attack")]
     public Stat agility;
 
-    [Tooltip("Each INT point gives +1 bonus elemental damage")]
+    [Tooltip("Each INT point gives +1 bonus elemental damage and +0.5% elemental resistance")]
     public Stat intelligence;
 
     /// <summary>

@@ -7,9 +7,9 @@ public class Enemy_Health : Entity_Health
     // if we need to call it multiple times.
     private Enemy enemy => GetComponent<Enemy>();
 
-    public override bool TakeDamage(float damage, float elementalDamage, Transform damageDealer)
+    public override bool TakeDamage(float damage, float elementalDamage, ElementType element, Transform damageDealer)
     {
-        bool wasHit = base.TakeDamage(damage, elementalDamage, damageDealer);
+        bool wasHit = base.TakeDamage(damage, elementalDamage, element, damageDealer);
 
         if (!wasHit)
         {

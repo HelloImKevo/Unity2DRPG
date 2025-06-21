@@ -7,7 +7,7 @@ public class Entity_Stats : MonoBehaviour
     public Stat_OffenseGroup offense;
     public Stat_DefenseGroup defense;
 
-    public float GetElementalDamage()
+    public float GetElementalDamage(out ElementType element)
     {
         float fireDamage = offense.fireDamage.GetValue();
         float iceDamage = offense.iceDamage.GetValue();
@@ -22,8 +22,11 @@ public class Entity_Stats : MonoBehaviour
         {
             // Intelligence only provides BONUS damage. If there is no
             // base elemental damage, then return zero.
+            element = ElementType.None;
             return 0;
         }
+
+        element = GetHighestElementType();
 
         float bonusFire = (fireDamage == highestDamage) ? 0 : fireDamage * 0.5f;
         float bonusIce = (iceDamage == highestDamage) ? 0 : iceDamage * 0.5f;
@@ -35,6 +38,70 @@ public class Entity_Stats : MonoBehaviour
         float finalDamage = highestDamage + minorBonusFromWeakerElements + bonusElementalDamage;
 
         return finalDamage;
+    }
+
+    public float GetElementalResistance(ElementType element)
+    {
+        float baseResistance = 0;
+        float bonusResistance = major.intelligence.GetValue() * 0.5f;
+
+        switch (element)
+        {
+            case ElementType.None:
+                baseResistance = 0;
+                break;
+
+            case ElementType.Fire:
+                baseResistance = defense.fireRes.GetValue();
+                break;
+
+            case ElementType.Ice:
+                baseResistance = defense.iceRes.GetValue();
+                break;
+
+            case ElementType.Lightning:
+                baseResistance = defense.lightningRes.GetValue();
+                break;
+        }
+
+        Debug.Log($"{gameObject} -> Resist (base) = {baseResistance} Resist (bonus) = {bonusResistance}");
+
+        float resistance = baseResistance + bonusResistance;
+        // Max resistance cap as a whole percentage.
+        float resistanceCap = 75f; // Traditional 75% max elemental resistance cap.
+        float finalResistance = Mathf.Clamp(resistance, 0, resistanceCap) / 100f;
+
+        return finalResistance;
+    }
+
+    private ElementType GetHighestElementType()
+    {
+        ElementType primaryElement = ElementType.None;
+
+        float highestDamage = 0;
+
+        float fireDamage = offense.fireDamage.GetValue();
+        if (fireDamage > 0)
+        {
+            highestDamage = fireDamage;
+            primaryElement = ElementType.Fire;
+        }
+
+        float iceDamage = offense.iceDamage.GetValue();
+        if (iceDamage > highestDamage)
+        {
+            highestDamage = iceDamage;
+            primaryElement = ElementType.Ice;
+        }
+
+        float lightningDamage = offense.lightningDamage.GetValue();
+        if (lightningDamage > highestDamage)
+        {
+            highestDamage = lightningDamage;
+            primaryElement = ElementType.Lightning;
+        }
+
+        return primaryElement;
     }
 
     public float GetPhysicalDamage(out bool isCrit)
@@ -78,6 +145,7 @@ public class Entity_Stats : MonoBehaviour
         // 150 = Hard mode, more armor required to reach mitigtaion cap
         const float scalingConstant = 100f;
         float mitigation = effectiveArmor / (effectiveArmor + scalingConstant);
+        // Physical damage reduction as a fractional percentage.
         float mitigationCap = 0.85f; // 85% Max Mitigation
 
         float finalMitigation = Mathf.Clamp(mitigation, 0, mitigationCap);
