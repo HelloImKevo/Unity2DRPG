@@ -1,0 +1,90 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Unity: Run All Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/../run_tests.sh",
+            "args": ["all"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Run all Unity tests using automatic Unity detection"
+        },
+        {
+            "label": "Unity: Run Tests (Interactive)",
+            "type": "shell",
+            "command": "${workspaceFolder}/../run_tests.sh",
+            "args": ["entity-stats"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Run Entity_Stats tests using automatic Unity detection"
+        },
+        {
+            "label": "Unity: Run Entity Stats Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/../run_tests.sh",
+            "args": ["entity-stats"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Run only Entity_Stats tests using automatic Unity detection"
+        },
+        {
+            "label": "Unity: Check Unity Installation",
+            "type": "shell",
+            "command": "${workspaceFolder}/../run_tests.sh",
+            "args": ["unity-info"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Show detected Unity installation information"
+        },
+        {
+            "label": "Unity: View Test Results",
+            "type": "shell",
+            "command": "${workspaceFolder}/../run_tests.sh",
+            "args": ["results"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Display the latest test results"
+        }
+    ]
+}
