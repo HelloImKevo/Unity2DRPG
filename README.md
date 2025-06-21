@@ -1,6 +1,40 @@
 # Unity2DRPG
 Unity 2D RPG (Role Playing) Game.
 
+## Quick Start - Unit Testing
+
+The project includes comprehensive unit testing with intelligent Unity instance detection:
+
+```bash
+# Check Unity status and get recommendations
+./run_tests.sh status
+
+# Run all Entity_Stats tests (checks for conflicts automatically)
+./run_tests.sh entity-stats
+
+# Run all tests
+./run_tests.sh all
+
+# Smart Unity Editor integration (uses existing instance if available)
+./run_tests.sh interactive
+
+# Force open new Unity instance (ignores existing instances)
+./run_tests.sh force-new
+
+# Clean up test output files
+./run_tests.sh clean
+
+# Show latest test results
+./run_tests.sh results
+```
+
+### Smart Instance Detection Features
+- ✅ **Detects existing Unity instances** to prevent conflicts
+- ✅ **Uses existing Unity Editor** when already open with the project
+- ✅ **Prompts before conflicts** when Unity is running with different projects
+- ✅ **Provides clear recommendations** based on current Unity status
+- ✅ **Fallback modes** for certificate/proxy issues
+
 
 # Environment Setup
 

@@ -132,6 +132,29 @@ run_tests() {
     local log_file="$LOGS_DIR/${test_name}_Log.txt"
     
     print_status "Running $test_name tests..."
+    
+    # Check for existing Unity instances that might interfere
+    if check_unity_running; then
+        print_warning "⚠️  Unity Editor is running with this project"
+        print_status "Batch mode tests may conflict with the open editor."
+        print_status ""
+        print_status "Options:"
+        print_status "  1. Close Unity Editor and run this command again"
+        print_status "  2. Use interactive mode: ./run_tests.sh interactive"
+        print_status "  3. Continue anyway (may cause conflicts)"
+        echo ""
+        read -p "Continue with batch mode anyway? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_status "Cancelled by user. Try: ./run_tests.sh interactive"
+            return 1
+        fi
+        print_warning "Proceeding with batch mode despite running Unity instance..."
+    elif [ $? -eq 2 ]; then
+        print_warning "⚠️  Unity Editor is running with a different project"
+        print_status "This should not interfere with batch mode, continuing..."
+    fi
+    
     print_status "Results will be saved to: $results_file"
     print_status "Logs will be saved to: $log_file"
     
@@ -202,11 +225,88 @@ run_tests() {
     return $exit_code
 }
 
-# Function to run tests interactively (opens Unity Editor)
+# Function to check if Unity is running with our project
+check_unity_running() {
+    local project_name="BraveryRPG"
+    
+    # Check if Unity is running and get process info
+    local unity_processes=$(pgrep -fl "Unity" 2>/dev/null | grep -v "Unity Hub")
+    
+    if [ -z "$unity_processes" ]; then
+        return 1  # No Unity processes found
+    fi
+    
+    # Try to find Unity process with our project using lsof (list open files)
+    local project_process=$(lsof -c Unity 2>/dev/null | grep "$PROJECT_PATH" | head -1)
+    
+    if [ ! -z "$project_process" ]; then
+        print_success "✅ Found Unity Editor already running with this project"
+        return 0  # Unity is running with our project
+    fi
+    
+    # Alternative check: look for Unity processes and check command line args
+    local unity_with_project=$(pgrep -fl "Unity.*$project_name" 2>/dev/null)
+    if [ ! -z "$unity_with_project" ]; then
+        print_success "✅ Found Unity Editor running with project: $project_name"
+        return 0
+    fi
+    
+    return 2  # Unity is running but not with our project
+}
+
+# Function to run tests through existing Unity instance
+run_tests_via_existing_unity() {
+    local test_filter="$1"
+    local output_name="$2"
+    
+    print_status "🔗 Attempting to run tests through existing Unity instance..."
+    
+    # Use AppleScript to bring Unity to front and show instructions
+    osascript -e 'tell application "Unity" to activate' 2>/dev/null || true
+    
+    print_success "✅ Unity Editor is now in focus"
+    print_status "📋 To run tests manually:"
+    print_status "  1. Go to Window → General → Test Runner"
+    print_status "  2. Switch to EditMode tab"
+    if [ ! -z "$test_filter" ]; then
+        print_status "  3. Filter tests by: $test_filter"
+    fi
+    print_status "  4. Click 'Run All' or select specific tests"
+    print_status "  5. View results in the Test Runner window"
+    
+    echo ""
+    print_status "💡 Alternative: Use Unity's menu 'Tools → Run All Tests' (if available)"
+    print_status "💡 Or run: ./run_tests.sh entity-stats (for batch mode)"
+}
+
+# Function to run tests interactively (opens Unity Editor or uses existing)
 run_tests_interactive() {
     local test_filter="$1"
     
-    print_status "Opening Unity Editor for interactive testing..."
+    print_status "🔍 Checking for existing Unity instances..."
+    
+    if check_unity_running; then
+        # Unity is already running with our project
+        run_tests_via_existing_unity "$test_filter"
+        return 0
+    elif [ $? -eq 2 ]; then
+        # Unity is running but with different project
+        print_warning "⚠️  Unity Editor is running with a different project"
+        print_status "Options:"
+        print_status "  1. Close the current Unity project and run this command again"
+        print_status "  2. Use batch mode: ./run_tests.sh entity-stats"
+        print_status "  3. Continue anyway (will try to open new instance)"
+        echo ""
+        read -p "Continue with new instance? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_status "Cancelled by user"
+            return 1
+        fi
+    fi
+    
+    # No Unity running with our project, start new instance
+    print_status "🚀 Opening Unity Editor for interactive testing..."
     if [ ! -z "$test_filter" ]; then
         print_status "Focus on test filter: $test_filter"
     fi
@@ -232,7 +332,9 @@ show_help() {
     echo "Commands:"
     echo "  all              Run all Edit Mode tests (batch mode)"
     echo "  entity-stats     Run Entity_Stats tests only (batch mode)"
-    echo "  interactive      Open Unity Editor for interactive testing"
+    echo "  interactive      Open Unity Editor for interactive testing (smart instance detection)"
+    echo "  force-new        Force open new Unity instance (ignores existing instances)"
+    echo "  status           Show Unity process status and recommendations"
     echo "  diagnose         Diagnose common Unity testing issues"
     echo "  help             Show this help message"
     echo "  clean            Clean test output files"
@@ -246,7 +348,8 @@ show_help() {
     echo "Examples:"
     echo "  $0 all"
     echo "  $0 entity-stats"
-    echo "  $0 interactive"
+    echo "  $0 interactive      # Uses existing Unity if available"
+    echo "  $0 force-new       # Always opens new Unity instance"
     echo "  $0 diagnose"
     echo "  $0 results"
     echo "  $0 unity-info"
@@ -362,12 +465,24 @@ diagnose_issues() {
     print_status "🔍 Checking for common issues:"
     
     # Check if Unity is running
-    if pgrep -f "Unity" > /dev/null; then
-        print_warning "⚠️  Unity Editor is already running - this might interfere with batch mode"
-        print_status "   Solution: Close Unity Editor before running batch tests"
-    else
-        print_success "✅ No Unity Editor instances running"
-    fi
+    print_status "🔍 Checking Unity process status:"
+    local unity_status=$(check_unity_running)
+    local unity_check_result=$?
+    
+    case $unity_check_result in
+        0)
+            print_success "✅ Unity Editor is running with this project"
+            print_status "   Interactive mode will use existing instance"
+            ;;
+        1)
+            print_success "✅ No Unity Editor instances running"
+            print_status "   Batch mode and interactive mode available"
+            ;;
+        2)
+            print_warning "⚠️  Unity Editor is running with a different project"
+            print_status "   Batch mode may conflict, interactive mode will prompt"
+            ;;
+    esac
     
     # Check Test Framework package
     if [ -f "$PROJECT_PATH/Packages/manifest.json" ]; then
@@ -413,6 +528,74 @@ diagnose_issues() {
     echo "  4. Check Unity Console (Window > Console) for detailed errors"
 }
 
+# Function to show current Unity status and recommendations
+show_status() {
+    print_status "🔍 Checking Unity process status..."
+    
+    local unity_status=$(check_unity_running)
+    local unity_check_result=$?
+    
+    case $unity_check_result in
+        0)
+            print_success "✅ Unity Editor is running with this project"
+            print_status "📋 Recommendations:"
+            print_status "  • Use: ./run_tests.sh interactive (will use existing instance)"
+            print_status "  • Or run tests manually via Window → General → Test Runner"
+            print_status "  • Avoid batch mode while editor is open"
+            ;;
+        1)
+            print_success "✅ No Unity Editor instances running"
+            print_status "📋 Recommendations:"
+            print_status "  • Use: ./run_tests.sh all (for comprehensive testing)"
+            print_status "  • Use: ./run_tests.sh entity-stats (for targeted testing)"
+            print_status "  • Use: ./run_tests.sh interactive (to open Unity Editor)"
+            ;;
+        2)
+            print_warning "⚠️  Unity Editor is running with a different project"
+            print_status "📋 Recommendations:"
+            print_status "  • Close current Unity project first"
+            print_status "  • Or use: ./run_tests.sh force-new (may cause conflicts)"
+            print_status "  • Batch mode should work fine"
+            ;;
+    esac
+    
+    echo ""
+    print_status "🔧 Available commands:"
+    echo "  ./run_tests.sh status          # Show this status"
+    echo "  ./run_tests.sh entity-stats    # Run tests (batch mode)"
+    echo "  ./run_tests.sh interactive     # Smart Unity Editor integration"
+    echo "  ./run_tests.sh diagnose        # Troubleshoot issues"
+    echo "  ./run_tests.sh results         # Show latest test results"
+}
+
+# Function to force open new Unity instance (ignores existing instances)
+run_tests_force_new() {
+    local test_filter="$1"
+    
+    print_status "🚀 Force opening new Unity Editor instance..."
+    
+    if check_unity_running; then
+        print_warning "⚠️  This will open a new Unity instance alongside the existing one"
+        print_status "💡 Note: Only one Unity instance can have a project open at a time"
+    fi
+    
+    if [ ! -z "$test_filter" ]; then
+        print_status "Focus on test filter: $test_filter"
+    fi
+    
+    # Open Unity with the project, Unity Test Runner will be available
+    "$UNITY_PATH" -projectPath "$PROJECT_PATH" &
+    
+    print_success "New Unity Editor instance is starting..."
+    print_status "To run tests:"
+    print_status "  1. Go to Window > General > Test Runner"
+    print_status "  2. Switch to EditMode tab"
+    if [ ! -z "$test_filter" ]; then
+        print_status "  3. Filter tests by: $test_filter"
+    fi
+    print_status "  4. Click 'Run All' or select specific tests"
+}
+
 # Main script logic
 main() {
     case "${1:-help}" in
@@ -428,6 +611,14 @@ main() {
             check_unity
             run_tests_interactive "Entity_StatsTests"
             ;;
+        "force-new")
+            check_unity
+            run_tests_force_new "Entity_StatsTests"
+            ;;
+        "status")
+            check_unity
+            show_status
+            ;;
         "diagnose")
             check_unity
             diagnose_issues
@@ -440,9 +631,6 @@ main() {
             ;;
         "unity-info")
             show_unity_info
-            ;;
-        "diagnose")
-            diagnose_issues
             ;;
         "help"|*)
             show_help

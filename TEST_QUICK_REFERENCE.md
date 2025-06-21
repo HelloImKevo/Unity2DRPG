@@ -4,14 +4,20 @@
 
 ### Command Line (Recommended)
 ```bash
-# Run Entity_Stats tests only (fast, batch mode)
+# 🔍 Check Unity status and get personalized recommendations (NEW!)
+./run_tests.sh status
+
+# Run Entity_Stats tests only (fast, batch mode with conflict detection)
 ./run_tests.sh entity-stats
 
-# Run all tests (batch mode)
+# Run all tests (batch mode with conflict detection)
 ./run_tests.sh all
 
-# Interactive mode (opens Unity Editor) - Use if batch mode fails
+# 🎯 Smart Unity Editor integration - uses existing instance when available (ENHANCED!)
 ./run_tests.sh interactive
+
+# 💪 Force new Unity instance - override smart detection (NEW!)
+./run_tests.sh force-new
 
 # Diagnose issues with Unity testing setup
 ./run_tests.sh diagnose
@@ -25,6 +31,12 @@
 # Check Unity installation
 ./run_tests.sh unity-info
 ```
+
+### ✨ Smart Features
+- **Intelligent Instance Detection**: Automatically detects existing Unity instances
+- **Conflict Prevention**: Warns before potentially conflicting operations
+- **Seamless Integration**: Uses existing Unity Editor when already open with project
+- **Clear Recommendations**: Provides appropriate suggestions based on Unity status
 
 ### VS Code Tasks
 - `Cmd+Shift+P` → "Tasks: Run Task" → Select:
