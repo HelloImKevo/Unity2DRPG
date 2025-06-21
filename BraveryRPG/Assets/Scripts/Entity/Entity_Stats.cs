@@ -7,6 +7,36 @@ public class Entity_Stats : MonoBehaviour
     public Stat_OffenseGroup offense;
     public Stat_DefenseGroup defense;
 
+    public float GetElementalDamage()
+    {
+        float fireDamage = offense.fireDamage.GetValue();
+        float iceDamage = offense.iceDamage.GetValue();
+        float lightningDamage = offense.lightningDamage.GetValue();
+
+        float bonusElementalDamage = major.intelligence.GetValue();
+
+        float highestDamage = Mathf.Max(fireDamage, iceDamage, lightningDamage);
+
+        // Mathf.Approximately(highestDamage, 0f) - shouldn't be necessary for Unity.
+        if (highestDamage <= 0)
+        {
+            // Intelligence only provides BONUS damage. If there is no
+            // base elemental damage, then return zero.
+            return 0;
+        }
+
+        float bonusFire = (fireDamage == highestDamage) ? 0 : fireDamage * 0.5f;
+        float bonusIce = (iceDamage == highestDamage) ? 0 : iceDamage * 0.5f;
+        float bonusLightning = (lightningDamage == highestDamage) ? 0 : lightningDamage * 0.5f;
+
+        // Minor bonus damage from the two weaker elements.
+        float minorBonusFromWeakerElements = bonusFire + bonusIce + bonusLightning;
+
+        float finalDamage = highestDamage + minorBonusFromWeakerElements + bonusElementalDamage;
+
+        return finalDamage;
+    }
+
     public float GetPhysicalDamage(out bool isCrit)
     {
         float baseDamage = offense.damage.GetValue();
@@ -18,7 +48,7 @@ public class Entity_Stats : MonoBehaviour
         float critChance = baseCritChance + bonusCritChance;
 
         float baseCritPower = offense.critPower.GetValue();
-        // Bonus crit chance from strength: +0.5% per STR
+        // Bonus crit power from strength: +0.5% per STR
         float bonusCritPower = major.strength.GetValue() * 0.5f;
         // Total crit power as multiplier (ex: 150 / 100 = 1.5f)
         float critPower = (baseCritPower + bonusCritPower) / 100f;

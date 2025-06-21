@@ -108,7 +108,9 @@ public class Entity_Combat : MonoBehaviour
             if (target.TryGetComponent<IDamageable>(out var damageable))
             {
                 float physicalDamage = stats.GetPhysicalDamage(out bool isCrit);
-                bool targetDamaged = damageable.TakeDamage(physicalDamage, transform);
+                float elementalDamage = stats.GetElementalDamage();
+
+                bool targetDamaged = damageable.TakeDamage(physicalDamage, elementalDamage, transform);
                 if (targetDamaged)
                 {
                     vfx.CreateOnHitVfx(target.transform, isCrit);

@@ -368,11 +368,11 @@ MonoBehaviour:
     armorPenetration:
       baseValue: 0
     fireDamage:
-      baseValue: 0
+      baseValue: 10
     iceDamage:
-      baseValue: 0
+      baseValue: 7
     lightningDamage:
-      baseValue: 0
+      baseValue: 6
   defense:
     armor:
       baseValue: 0
@@ -17003,7 +17003,7 @@ MonoBehaviour:
     armorPenetration:
       baseValue: 0
     fireDamage:
-      baseValue: 0
+      baseValue: 15
     iceDamage:
       baseValue: 0
     lightningDamage:

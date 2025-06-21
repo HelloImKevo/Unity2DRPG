@@ -172,7 +172,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// knockback direction and enabling subclass-specific logic like
     /// enemy aggro systems or player interaction tracking.
     /// </param>
-    public virtual bool TakeDamage(float damage, Transform damageDealer)
+    public virtual bool TakeDamage(float damage, float elementalDamage, Transform damageDealer)
     {
         if (isDead) return false;
 
@@ -197,7 +197,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
 
         ReduceHp(finalDamage);
 
-        Debug.Log($"Final damage taken: {finalDamage} (Mitigation: {mitigation})");
+        Debug.Log($"{gameObject.name} -> Physical damage taken: {finalDamage} (Mitigation: {mitigation}) - Elemental damage taken: {elementalDamage}");
 
         return true;
     }

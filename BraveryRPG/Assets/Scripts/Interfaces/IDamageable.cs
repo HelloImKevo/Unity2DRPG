@@ -31,5 +31,5 @@ public interface IDamageable
     /// for knockback effects, identify the source for gameplay logic (e.g.,
     /// enemy aggro systems), and access components of the attacking entity.
     /// </param>
-    public bool TakeDamage(float damage, Transform damageDealer);
+    public bool TakeDamage(float damage, float elementalDamage, Transform damageDealer);
 }
