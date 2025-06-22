@@ -62,6 +62,13 @@ public class Entity_Combat : MonoBehaviour
     [Tooltip("Circular radius from the Target Check Point to detect collisions when a melee attack is performed")]
     [SerializeField] private float targetCheckRadius = 1f;
 
+    [Header("Offense Status Effect Details")]
+    [Tooltip("Duration of status effects applied by this entity to its targets, in seconds.")]
+    [SerializeField] private float defaultDuration = 3f;
+    [Range(0, 1)]
+    [Tooltip("Slow effect applied to targets of this entity as a fractional percentage; 0.2 = 20% slow effect.")]
+    [SerializeField] private float chillSlowMultiplier = 0.2f;
+
     /// <summary>
     /// Layer mask that defines which objects can be targeted by attacks.
     /// 
@@ -111,11 +118,33 @@ public class Entity_Combat : MonoBehaviour
                 float elementalDamage = stats.GetElementalDamage(out ElementType element);
 
                 bool targetDamaged = damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
+
+                if (element != ElementType.None)
+                {
+                    ApplyStatusEffect(target.transform, element);
+                }
+
                 if (targetDamaged)
                 {
+                    vfx.UpdateOnHitColor(element);
                     vfx.CreateOnHitVfx(target.transform, isCrit);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Applies the status effect associated with the input ElementType, to the Target
+    /// of this entity's attack or skill.
+    /// </summary>
+    /// <param name="target">The target to apply the status effect on.</param>
+    public void ApplyStatusEffect(Transform target, ElementType element)
+    {
+        if (!target.TryGetComponent<Entity_StatusHandler>(out var statusHandler)) return;
+
+        if (ElementType.Ice == element && statusHandler.CanBeApplied(ElementType.Ice))
+        {
+            statusHandler.ApplyChilledEffect(defaultDuration, chillSlowMultiplier);
         }
     }
 

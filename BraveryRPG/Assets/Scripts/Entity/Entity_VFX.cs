@@ -17,6 +17,10 @@ public class Entity_VFX : MonoBehaviour
     [Tooltip("Prefab with larger green energy wave")]
     [SerializeField] private GameObject critHitVfx;
 
+    [Header("Element Colors")]
+    [SerializeField] private Color chillVfx = Color.cyan;
+    private Color originalHitVfxColor;
+
     private Entity entity;
     private SpriteRenderer sr;
 
@@ -28,6 +32,40 @@ public class Entity_VFX : MonoBehaviour
         entity = GetComponent<Entity>();
         sr = GetComponentInChildren<SpriteRenderer>();
         originalMaterial = sr.material;
+        originalHitVfxColor = hitVfxColor;
+    }
+
+    public void PlayOnStatusBlinkVfx(float duration, ElementType element)
+    {
+        if (ElementType.Ice == element)
+        {
+            StartCoroutine(PlayStatusBlinkVfxCo(duration, chillVfx));
+        }
+    }
+
+    private IEnumerator PlayStatusBlinkVfxCo(float duration, Color effectColor)
+    {
+        float tickInterval = 0.25f;
+        float timeHasPassed = 0;
+
+        Color lightColor = effectColor * 1.2f;
+        Color darkColor = effectColor * 0.9f;
+
+        bool toggle = false;
+
+        while (timeHasPassed < duration)
+        {
+            sr.color = toggle ? lightColor : darkColor;
+            toggle = !toggle;
+
+            // Pause the coroutine briefly.
+            yield return new WaitForSeconds(tickInterval);
+
+            // Increment time tracker by the pause interval.
+            timeHasPassed += tickInterval;
+        }
+
+        sr.color = Color.white;
     }
 
     // Summary:
@@ -49,6 +87,14 @@ public class Entity_VFX : MonoBehaviour
             // Rotate the prefab VFX to face the opposite direction.
             vfx.transform.Rotate(0, 180, 0);
         }
+    }
+
+    public void UpdateOnHitColor(ElementType element)
+    {
+        if (ElementType.Ice == element) hitVfxColor = chillVfx;
+
+        // Reset "On Hit" visual effect tint to original configuration.
+        if (ElementType.None == element) hitVfxColor = originalHitVfxColor;
     }
 
     public void PlayOnDamageVfx()

@@ -70,6 +70,46 @@ public class Player : Entity
         stateMachine.Initialize(IdleState);
     }
 
+    protected override IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)
+    {
+        // Speeds should be DECREASED to simulate player slowness.
+        float originalMoveSpeed = moveSpeed;
+        float originalJumpForce = jumpForce;
+        float originalAnimSpeed = Anim.speed;
+        Vector2 originalWallJumpForce = wallJumpForce;
+        Vector2 originalJumpAttackVelocity = jumpAttackVelocity;
+        Vector2[] originalAttackVelocity = Vector2Utils.DeepCopy(attackVelocity);
+
+        // 20% Slow Multiplier should reduce speed to 80%
+        float speedMultiplier = 1 - slowMultiplier;
+        moveSpeed *= speedMultiplier;
+        jumpForce *= speedMultiplier;
+        Anim.speed *= speedMultiplier;
+        wallJumpForce *= speedMultiplier;
+        jumpAttackVelocity *= speedMultiplier;
+
+        for (int i = 0; i < attackVelocity.Length; i++)
+        {
+            attackVelocity[i] = attackVelocity[i] * speedMultiplier;
+        }
+
+        // Apply the slow effect for duration seconds.
+        yield return new WaitForSeconds(duration);
+
+        // After slow effect has worn off, restore original values.
+        moveSpeed = originalMoveSpeed;
+        jumpForce = originalJumpForce;
+        Anim.speed = originalAnimSpeed;
+        wallJumpForce = originalWallJumpForce;
+        jumpAttackVelocity = originalJumpAttackVelocity;
+
+        for (int i = 0; i < attackVelocity.Length; i++)
+        {
+            // Reset each Vector2 to the deep copy references.
+            attackVelocity[i] = originalAttackVelocity[i];
+        }
+    }
+
     public override void EntityDeath()
     {
         base.EntityDeath();

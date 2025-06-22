@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : Entity
@@ -91,6 +92,36 @@ public class Enemy : Entity
             BelowLedgeDetected = BelowLedgeDetected
                     || Physics2D.Raycast(secondaryFallCheck.position, Vector2.down, fallCheckDistance, whatIsGround);
         }
+    }
+
+    protected override IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)
+    {
+        // Speeds should be DECREASED to simulate enemy slowness.
+        float originalMoveSpeed = moveSpeed;
+        float originalBattleMoveSpeed = battleMoveSpeed;
+        float originalAnimSpeed = Anim.speed;
+
+        // 20% Slow Multiplier should reduce speed to 80%
+        float speedMultiplier = 1 - slowMultiplier;
+        moveSpeed *= speedMultiplier;
+        battleMoveSpeed *= speedMultiplier;
+        Anim.speed *= speedMultiplier;
+
+        // Attack delay should be INCREASED to simulate enemy slowness.
+        float originalAttackDelay = attackDelay;
+
+        // 20% Slow Multiplier should increase attack delay to 120%
+        float delayMultiplier = 1 + slowMultiplier;
+        attackDelay *= delayMultiplier;
+
+        yield return new WaitForSeconds(duration);
+
+        // After slow effect has worn off, restore original values.
+        moveSpeed = originalMoveSpeed;
+        battleMoveSpeed = originalBattleMoveSpeed;
+        Anim.speed = originalAnimSpeed;
+
+        attackDelay = originalAttackDelay;
     }
 
     public override void EntityDeath()

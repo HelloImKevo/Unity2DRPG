@@ -31,6 +31,8 @@ public class Entity : MonoBehaviour
     private Coroutine knockbackCoroutine;
     private bool isKnockedBack;
 
+    private Coroutine slowDownCoroutine;
+
     protected virtual void Awake()
     {
         // Must be initialized before the StateMachine.
@@ -64,6 +66,21 @@ public class Entity : MonoBehaviour
     public virtual void EntityDeath()
     {
         // Override in subclasses as needed.
+    }
+
+    public void SlowDownEntity(float duration, float slowMultiplier)
+    {
+        if (slowDownCoroutine != null) StopCoroutine(slowDownCoroutine);
+
+        Debug.Log($"{gameObject.name} -> Starting 'SlowDownEntityCo' Coroutine ...");
+        slowDownCoroutine = StartCoroutine(SlowDownEntityCo(duration, slowMultiplier));
+    }
+
+    protected virtual IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)
+    {
+        // Should override in subclasses.
+        // By default, yield return null just waits for the next frame.
+        yield return null;
     }
 
     #region: Knockback Effect When Damaged
