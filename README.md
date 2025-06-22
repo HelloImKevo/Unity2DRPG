@@ -357,3 +357,82 @@ classDiagram
         +Update()
     }
 ```
+
+# Unit Testing Framework
+
+## Standalone Testing (No Unity Editor Required) ✅
+
+This project includes a comprehensive unit testing framework that runs independently of Unity Editor using standard .NET tooling and the Moq mocking framework. This approach is ideal for:
+
+- **Corporate environments** with proxy/firewall restrictions
+- **CI/CD pipelines** without Unity licenses  
+- **Fast developer feedback** loops (~1 second test execution)
+- **Testing pure game logic** and calculations
+- **Mock-based testing** for complex dependencies
+
+### Quick Start
+
+```bash
+# Run all tests with mocking support
+./run_simple_test.sh
+
+# Make script executable if needed
+chmod +x run_simple_test.sh
+```
+
+### VS Code Integration
+
+1. Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux)
+2. Type "Tasks: Run Task"
+3. Select "Run Standalone Tests"
+
+### Current Test Coverage (27 Tests Passing) ✅
+
+**RPGMath Utility Functions (12 tests):**
+- ✅ Damage calculation with bonuses
+- ✅ Percentage conversions
+- ✅ Armor mitigation formulas
+- ✅ Critical hit damage calculations
+- ✅ Value clamping utilities
+- ✅ Edge case handling (zero/negative values)
+
+**StateMachine Behavior (8 tests):**
+- ✅ State initialization and transitions
+- ✅ Lifecycle management (Enter/Update/Exit)
+- ✅ State change permissions
+- ✅ Multi-state transition chains
+- ✅ **Moq framework integration** for mocking
+
+**Vector2Utils Operations (7 tests):**
+- ✅ Deep copy functionality with mock vectors
+- ✅ Array independence verification
+- ✅ Edge cases (null, empty arrays)
+- ✅ Performance testing for large datasets
+
+### Testing Architecture
+
+- **Pure Logic Separation**: Game calculations extracted from Unity MonoBehaviour dependencies
+- **Mocking Support**: Uses Moq framework for testing complex interactions
+- **Test Doubles**: Custom test implementations for Unity-dependent classes
+- **Cross-Platform**: Works on any machine with .NET SDK (no Unity required)
+
+### Framework Features
+
+- **NUnit 3.x** - Industry standard testing framework
+- **Moq 4.x** - Professional mocking library for .NET
+- **Test Discovery** - Automatic test detection and execution
+- **Detailed Reporting** - Console output with test results and timing
+- **VS Code Tasks** - Integrated development workflow
+
+### Adding New Tests
+
+1. **Extract pure logic** from Unity classes into utility classes (like `RPGMath`)
+2. **Create corresponding tests** in the `StandaloneTests/` project
+3. **Use mocking** for complex dependencies with `Mock<T>` from Moq
+4. **Run tests** with `./run_simple_test.sh` to verify functionality
+
+### Requirements
+
+- **.NET SDK 6.0+** (no Unity Editor or license required)
+- **Corporate proxy compatible** (no Unity package downloads)
+- **Offline capable** (all dependencies cached locally)

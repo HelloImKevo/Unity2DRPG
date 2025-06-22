@@ -76,3 +76,16 @@ crashlytics-build.properties
 
 # Miscellaneous
 .DS_Store
+
+# .NET Build Artifacts (for StandaloneTests)
+**/bin/
+**/obj/
+**/*.dll
+**/*.pdb
+**/*.deps.json
+**/*.runtimeconfig.json
+**/nunit_random_seed.tmp
+
+# StandaloneTests specific exclusions
+StandaloneTests/bin/
+StandaloneTests/obj/
