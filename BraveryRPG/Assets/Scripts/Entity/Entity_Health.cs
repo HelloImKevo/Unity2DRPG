@@ -192,6 +192,11 @@ public class Entity_Health : MonoBehaviour, IDamageable
         float resistance = stats.GetElementalResistance(element);
         float elementalDamageTaken = elementalDamage * (1 - resistance);
 
+        // Play "Damaged" visual effect whenever HP is reduced.
+        // This effect is being played too often when working with DoT
+        // status effects.
+        if (entityVfx != null) entityVfx.PlayOnDamageFlashWhiteVfx();
+
         HandleKnockback(physicalDamageTaken, damageDealer);
         ReduceHp(physicalDamageTaken + elementalDamageTaken);
 
@@ -229,11 +234,8 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// <param name="damage">
     /// The amount of health points to subtract from current health.
     /// </param>
-    protected void ReduceHp(float damage)
+    public void ReduceHp(float damage)
     {
-        // Play "Damaged" visual effect whenever HP is reduced.
-        if (entityVfx != null) entityVfx.PlayOnDamageVfx();
-
         currentHp -= damage;
         UpdateHealthBar();
 

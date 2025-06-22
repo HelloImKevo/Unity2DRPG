@@ -115,7 +115,8 @@ public class Entity_Combat : MonoBehaviour
             if (target.TryGetComponent<IDamageable>(out var damageable))
             {
                 float physicalDamage = stats.GetPhysicalDamage(out bool isCrit);
-                float elementalDamage = stats.GetElementalDamage(out ElementType element);
+                // Only apply 60% of elemental damage for basic attacks.
+                float elementalDamage = stats.GetElementalDamage(out ElementType element, 0.6f);
 
                 bool targetDamaged = damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
 
@@ -138,13 +139,19 @@ public class Entity_Combat : MonoBehaviour
     /// of this entity's attack or skill.
     /// </summary>
     /// <param name="target">The target to apply the status effect on.</param>
-    public void ApplyStatusEffect(Transform target, ElementType element)
+    public void ApplyStatusEffect(Transform target, ElementType element, float scaleFactor = 1f)
     {
         if (!target.TryGetComponent<Entity_StatusHandler>(out var statusHandler)) return;
 
         if (ElementType.Ice == element && statusHandler.CanBeApplied(ElementType.Ice))
         {
             statusHandler.ApplyChilledEffect(defaultDuration, chillSlowMultiplier);
+        }
+
+        if (ElementType.Fire == element && statusHandler.CanBeApplied(ElementType.Fire))
+        {
+            float fireDamage = stats.offense.fireDamage.GetValue() * scaleFactor;
+            statusHandler.ApplyBurnEffect(defaultDuration, fireDamage);
         }
     }
 

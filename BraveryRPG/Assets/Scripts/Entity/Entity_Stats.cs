@@ -7,7 +7,8 @@ public class Entity_Stats : MonoBehaviour
     public Stat_OffenseGroup offense;
     public Stat_DefenseGroup defense;
 
-    public float GetElementalDamage(out ElementType element)
+    /// <param name="scaleFactor">Fractional percentage value between 0.0 - 2.0 (200%).</param>
+    public float GetElementalDamage(out ElementType element, float scaleFactor = 1f)
     {
         float fireDamage = offense.fireDamage.GetValue();
         float iceDamage = offense.iceDamage.GetValue();
@@ -37,7 +38,7 @@ public class Entity_Stats : MonoBehaviour
 
         float finalDamage = highestDamage + minorBonusFromWeakerElements + bonusElementalDamage;
 
-        return finalDamage;
+        return finalDamage * scaleFactor;
     }
 
     public float GetElementalResistance(ElementType element)
@@ -104,7 +105,8 @@ public class Entity_Stats : MonoBehaviour
         return primaryElement;
     }
 
-    public float GetPhysicalDamage(out bool isCrit)
+    /// <param name="scaleFactor">Fractional percentage value between 0.0 - 2.0 (200%).</param>
+    public float GetPhysicalDamage(out bool isCrit, float scaleFactor = 1f)
     {
         float baseDamage = offense.damage.GetValue();
         float bonusDamage = major.strength.GetValue();
@@ -123,7 +125,7 @@ public class Entity_Stats : MonoBehaviour
         isCrit = Random.Range(0, 100) < critChance;
         float finalDamage = isCrit ? totalBaseDamage * critPower : totalBaseDamage;
 
-        return finalDamage;
+        return finalDamage * scaleFactor;
     }
 
     /// <summary>

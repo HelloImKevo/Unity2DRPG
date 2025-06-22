@@ -19,6 +19,7 @@ public class Entity_VFX : MonoBehaviour
 
     [Header("Element Colors")]
     [SerializeField] private Color chillVfx = Color.cyan;
+    [SerializeField] private Color burnVfx = Color.red;
     private Color originalHitVfxColor;
 
     private Entity entity;
@@ -26,6 +27,8 @@ public class Entity_VFX : MonoBehaviour
 
     private Material originalMaterial;
     private Coroutine onDamageVfxCoroutine;
+
+    private Coroutine statusBlinkVfxCo;
 
     private void Awake()
     {
@@ -39,17 +42,34 @@ public class Entity_VFX : MonoBehaviour
     {
         if (ElementType.Ice == element)
         {
-            StartCoroutine(PlayStatusBlinkVfxCo(duration, chillVfx));
+            statusBlinkVfxCo = StartCoroutine(PlayStatusBlinkVfxCo(duration, chillVfx));
         }
+
+        if (ElementType.Fire == element)
+        {
+            statusBlinkVfxCo = StartCoroutine(PlayStatusBlinkVfxCo(duration, burnVfx));
+        }
+    }
+
+    public void StopAllVfx()
+    {
+        StopAllCoroutines();
+        sr.color = Color.white;
+        sr.material = originalMaterial;
     }
 
     private IEnumerator PlayStatusBlinkVfxCo(float duration, Color effectColor)
     {
-        float tickInterval = 0.25f;
+        float tickInterval = 0.5f;
         float timeHasPassed = 0;
 
-        Color lightColor = effectColor * 1.2f;
-        Color darkColor = effectColor * 0.9f;
+        // Note: Using a scale less than 1 will result in solid opaque colors,
+        // which is not what we want.
+        // Using this technique of applying a color to the SpriteRenderer
+        // generally does not work with alpha channels - you need to use
+        // a Shader to achieve a partially transparent white tint.
+        Color lightColor = ColorUtils.GetTintedColor(effectColor, 1.4f);
+        Color darkColor = ColorUtils.GetTintedColor(effectColor, 0.9f);
 
         bool toggle = false;
 
@@ -65,6 +85,7 @@ public class Entity_VFX : MonoBehaviour
             timeHasPassed += tickInterval;
         }
 
+        // Remove sprite tint.
         sr.color = Color.white;
     }
 
@@ -93,20 +114,27 @@ public class Entity_VFX : MonoBehaviour
     {
         if (ElementType.Ice == element) hitVfxColor = chillVfx;
 
+        if (ElementType.Fire == element) hitVfxColor = burnVfx;
+
         // Reset "On Hit" visual effect tint to original configuration.
         if (ElementType.None == element) hitVfxColor = originalHitVfxColor;
     }
 
-    public void PlayOnDamageVfx()
+    public void PlayOnDamageFlashWhiteVfx()
     {
         // Check if task is already running, and stop it.
         if (onDamageVfxCoroutine != null) StopCoroutine(onDamageVfxCoroutine);
 
         // Spawn the new coroutine.
-        onDamageVfxCoroutine = StartCoroutine(LaunchDamageVfxTask());
+        // Apply a white blink effect to the Sprite when damaged.
+        // TODO: This color (Material) kind of interferes with active blinking status effects.
+        onDamageVfxCoroutine = StartCoroutine(LaunchDamageFlashWhiteVfxCo());
     }
 
-    private IEnumerator LaunchDamageVfxTask()
+    /// <summary>
+    /// Makes the entity sprite briefly flash white.
+    /// </summary>
+    private IEnumerator LaunchDamageFlashWhiteVfxCo()
     {
         sr.material = onDamageMaterial;
 

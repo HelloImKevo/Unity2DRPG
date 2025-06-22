@@ -1,28 +1,72 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Entity_StatusHandler : MonoBehaviour
 {
     private Entity entity;
-    private Entity_Stats stats;
+    private Entity_Stats entityStats;
+    private Entity_Health entityHealth;
     private Entity_VFX entityVfx;
-    private ElementType currentEffect = ElementType.None;
+
+    [SerializeField] private ElementType currentEffect = ElementType.None;
 
     private void Awake()
     {
         entity = GetComponent<Entity>();
-        stats = GetComponent<Entity_Stats>();
+        entityStats = GetComponent<Entity_Stats>();
+        entityHealth = GetComponent<Entity_Health>();
         entityVfx = GetComponent<Entity_VFX>();
     }
 
+    #region Burn DoT
+
+    public void ApplyBurnEffect(float duration, float fireDamage)
+    {
+        float fireResistance = entityStats.GetElementalResistance(ElementType.Fire);
+        // Fire resistance reduces damage dealt by burn effect.
+        float finalDamage = fireDamage * (1 - fireResistance);
+
+        StartCoroutine(BurnEffectCo(duration, finalDamage));
+    }
+
+    private IEnumerator BurnEffectCo(float duration, float totalDamage)
+    {
+        currentEffect = ElementType.Fire;
+        entityVfx.PlayOnStatusBlinkVfx(duration, ElementType.Fire);
+
+        int ticksPerSecond = 2;
+        int tickCount = Mathf.RoundToInt(ticksPerSecond * duration);
+
+        float damagePerTick = totalDamage / tickCount;
+        // IMPORTANT: We must perform the division using a decimal value,
+        // otherwise the Int rounding will cause the DoT damage to be way off.
+        float tickInterval = 1f / ticksPerSecond;
+
+        for (int i = 0; i < tickCount; i++)
+        {
+            // Reduce health of entity.
+            // NOTE: This currently does not trigger the white flash effect.
+            entityHealth.ReduceHp(damagePerTick);
+            // Pause briefly before applying next DoT (Damage over Time) tick.
+            yield return new WaitForSeconds(tickInterval);
+        }
+
+        currentEffect = ElementType.None;
+    }
+
+    #endregion
+
+    #region Chill DoT
+
     public void ApplyChilledEffect(float duration, float slowMultiplier)
     {
-        float iceResistance = stats.GetElementalResistance(ElementType.Ice);
+        float iceResistance = entityStats.GetElementalResistance(ElementType.Ice);
         // Ice resistance reduces the duration of chill slow effects.
-        float reducedDuration = duration * (1 - iceResistance);
+        float finalDuration = duration * (1 - iceResistance);
 
-        StartCoroutine(ChilledEffectCo(reducedDuration, slowMultiplier));
-        Debug.Log($"{gameObject.name} -> Chill effect applied! Duration = {reducedDuration}, Multiplier = {slowMultiplier}");
+        StartCoroutine(ChilledEffectCo(finalDuration, slowMultiplier));
+        Debug.Log($"{gameObject.name} -> Chill effect applied! Duration = {finalDuration}, Multiplier = {slowMultiplier}");
     }
 
     private IEnumerator ChilledEffectCo(float duration, float slowMultiplier)
@@ -35,6 +79,8 @@ public class Entity_StatusHandler : MonoBehaviour
 
         currentEffect = ElementType.None;
     }
+
+    #endregion
 
     public bool CanBeApplied(ElementType element)
     {

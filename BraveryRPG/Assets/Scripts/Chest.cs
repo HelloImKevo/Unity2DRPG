@@ -11,7 +11,7 @@ public class Chest : MonoBehaviour, IDamageable
 
     public bool TakeDamage(float damage, float elementalDamage, ElementType element, Transform damageDealer)
     {
-        vfx.PlayOnDamageVfx();
+        vfx.PlayOnDamageFlashWhiteVfx();
 
         anim.SetBool("chestOpen", true);
         rb.linearVelocity = knockback;
