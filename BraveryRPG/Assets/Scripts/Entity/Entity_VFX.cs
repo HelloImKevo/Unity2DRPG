@@ -19,7 +19,8 @@ public class Entity_VFX : MonoBehaviour
 
     [Header("Element Colors")]
     [SerializeField] private Color chillVfx = Color.cyan;
-    [SerializeField] private Color burnVfx = Color.red;
+    [SerializeField] private Color burnVfx = Color.orangeRed;
+    [SerializeField] private Color electrifyVfx = Color.yellow;
     private Color originalHitVfxColor;
 
     private Entity entity;
@@ -49,10 +50,16 @@ public class Entity_VFX : MonoBehaviour
         {
             statusBlinkVfxCo = StartCoroutine(PlayStatusBlinkVfxCo(duration, burnVfx));
         }
+
+        if (ElementType.Lightning == element)
+        {
+            statusBlinkVfxCo = StartCoroutine(PlayStatusBlinkVfxCo(duration, electrifyVfx));
+        }
     }
 
     public void StopAllVfx()
     {
+        // Stops all coroutines running on this behaviour.
         StopAllCoroutines();
         sr.color = Color.white;
         sr.material = originalMaterial;
@@ -115,6 +122,8 @@ public class Entity_VFX : MonoBehaviour
         if (ElementType.Ice == element) hitVfxColor = chillVfx;
 
         if (ElementType.Fire == element) hitVfxColor = burnVfx;
+
+        if (ElementType.Lightning == element) hitVfxColor = electrifyVfx;
 
         // Reset "On Hit" visual effect tint to original configuration.
         if (ElementType.None == element) hitVfxColor = originalHitVfxColor;

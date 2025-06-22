@@ -413,6 +413,9 @@ MonoBehaviour:
   targetCheckRadius: 1.1
   defaultDuration: 3
   chillSlowMultiplier: 0.3
+  electrifyChargeBuildup: 0.4
+  fireScaling: 0.8
+  lightningScaling: 2.5
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 256
@@ -454,6 +457,7 @@ MonoBehaviour:
   critHitVfx: {fileID: 9223007503879583146, guid: 6233fc37e47eb4615bdfdb2ac0b0c8f3, type: 3}
   chillVfx: {r: 0, g: 1, b: 1, a: 1}
   burnVfx: {r: 1, g: 0.47962806, b: 0.062745094, a: 1}
+  electrifyVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   attackAlert: {fileID: 418434824}
 --- !u!114 &34994183
 MonoBehaviour:
@@ -488,22 +492,22 @@ MonoBehaviour:
     armorPenetration:
       baseValue: 0
     fireDamage:
-      baseValue: 20
+      baseValue: 0
     iceDamage:
       baseValue: 0
     lightningDamage:
-      baseValue: 0
+      baseValue: 10
   defense:
     armor:
       baseValue: 0
     evasion:
       baseValue: 0
     fireRes:
-      baseValue: 2
+      baseValue: 0
     iceRes:
       baseValue: 0
     lightningRes:
-      baseValue: 0
+      baseValue: 2
 --- !u!114 &34994184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,6 +521,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentEffect: 0
+  lightningStrikeVfx: {fileID: 2012309457642443440, guid: b8ddc153c189240aba8b2791c99d875c, type: 3}
+  currentCharge: 0
+  maximumCharge: 1
 --- !u!1 &114100475
 GameObject:
   m_ObjectHideFlags: 0
@@ -15813,6 +15820,7 @@ MonoBehaviour:
   critHitVfx: {fileID: 0}
   chillVfx: {r: 0, g: 1, b: 1, a: 1}
   burnVfx: {r: 1, g: 0, b: 0, a: 1}
+  electrifyVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -17231,6 +17239,7 @@ MonoBehaviour:
   critHitVfx: {fileID: 9223007503879583146, guid: 6233fc37e47eb4615bdfdb2ac0b0c8f3, type: 3}
   chillVfx: {r: 0, g: 1, b: 1, a: 1}
   burnVfx: {r: 1, g: 0.48235294, b: 0.0627451, a: 1}
+  electrifyVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &1373728713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17247,6 +17256,9 @@ MonoBehaviour:
   targetCheckRadius: 0.85
   defaultDuration: 3
   chillSlowMultiplier: 0.3
+  electrifyChargeBuildup: 0.4
+  fireScaling: 0.8
+  lightningScaling: 2.5
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 128
@@ -17284,22 +17296,22 @@ MonoBehaviour:
     armorPenetration:
       baseValue: 0
     fireDamage:
-      baseValue: 20
+      baseValue: 0
     iceDamage:
       baseValue: 0
     lightningDamage:
-      baseValue: 0
+      baseValue: 10
   defense:
     armor:
       baseValue: 0
     evasion:
       baseValue: 0
     fireRes:
-      baseValue: 2
+      baseValue: 0
     iceRes:
       baseValue: 0
     lightningRes:
-      baseValue: 0
+      baseValue: 2
 --- !u!114 &1373728715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17313,6 +17325,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentEffect: 0
+  lightningStrikeVfx: {fileID: 2012309457642443440, guid: b8ddc153c189240aba8b2791c99d875c, type: 3}
+  currentCharge: 0
+  maximumCharge: 1
 --- !u!1 &1381510561
 GameObject:
   m_ObjectHideFlags: 0
@@ -17551,6 +17566,7 @@ MonoBehaviour:
   critHitVfx: {fileID: 0}
   chillVfx: {r: 0, g: 1, b: 1, a: 1}
   burnVfx: {r: 1, g: 0, b: 0, a: 1}
+  electrifyVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &1551594037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52303,6 +52319,7 @@ MonoBehaviour:
   critHitVfx: {fileID: 9223007503879583146, guid: 6233fc37e47eb4615bdfdb2ac0b0c8f3, type: 3}
   chillVfx: {r: 0, g: 1, b: 1, a: 1}
   burnVfx: {r: 1, g: 0, b: 0, a: 1}
+  electrifyVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   attackAlert: {fileID: 1838193952}
 --- !u!114 &1962137460
 MonoBehaviour:
@@ -52317,6 +52334,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentEffect: 0
+  lightningStrikeVfx: {fileID: 2012309457642443440, guid: b8ddc153c189240aba8b2791c99d875c, type: 3}
+  currentCharge: 0
+  maximumCharge: 1
 --- !u!114 &1962137461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52333,6 +52353,9 @@ MonoBehaviour:
   targetCheckRadius: 1.1
   defaultDuration: 3
   chillSlowMultiplier: 0.2
+  electrifyChargeBuildup: 0.4
+  fireScaling: 0.8
+  lightningScaling: 2.5
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 256

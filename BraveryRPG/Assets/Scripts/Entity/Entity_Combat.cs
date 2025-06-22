@@ -68,6 +68,16 @@ public class Entity_Combat : MonoBehaviour
     [Range(0, 1)]
     [Tooltip("Slow effect applied to targets of this entity as a fractional percentage; 0.2 = 20% slow effect.")]
     [SerializeField] private float chillSlowMultiplier = 0.2f;
+    [Range(0, 1)]
+    [Tooltip("Multiple attacks build up electrical charges, which then result in a Lightning Strike.")]
+    [SerializeField] private float electrifyChargeBuildup = 0.4f;
+
+    [Space]
+
+    [Tooltip("Burn DoT (Damage over Time) damage scaling.")]
+    [SerializeField] private float fireScaling = 0.8f;
+    [Tooltip("Lightning Strike damage scaling when enough charges are built up.")]
+    [SerializeField] private float lightningScaling = 2.5f;
 
     /// <summary>
     /// Layer mask that defines which objects can be targeted by attacks.
@@ -145,13 +155,21 @@ public class Entity_Combat : MonoBehaviour
 
         if (ElementType.Ice == element && statusHandler.CanBeApplied(ElementType.Ice))
         {
-            statusHandler.ApplyChilledEffect(defaultDuration, chillSlowMultiplier);
+            statusHandler.ApplyChillEffect(defaultDuration, chillSlowMultiplier);
         }
 
         if (ElementType.Fire == element && statusHandler.CanBeApplied(ElementType.Fire))
         {
+            scaleFactor = fireScaling;
             float fireDamage = stats.offense.fireDamage.GetValue() * scaleFactor;
             statusHandler.ApplyBurnEffect(defaultDuration, fireDamage);
+        }
+
+        if (ElementType.Lightning == element && statusHandler.CanBeApplied(ElementType.Lightning))
+        {
+            scaleFactor = lightningScaling;
+            float lightningDamage = stats.offense.lightningDamage.GetValue() * scaleFactor;
+            statusHandler.ApplyElectrifyEffect(defaultDuration, lightningDamage, electrifyChargeBuildup);
         }
     }
 
