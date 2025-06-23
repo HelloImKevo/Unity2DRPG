@@ -76,3 +76,10 @@ crashlytics-build.properties
 
 # Miscellaneous
 .DS_Store
+
+# Unity Test Framework output files
+BraveryRPG/TestLogs/
+BraveryRPG/TestResults/
+TestLogs/
+TestResults/
+*.xml

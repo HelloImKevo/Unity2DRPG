@@ -1,6 +1,40 @@
 # Unity2DRPG
 Unity 2D RPG (Role Playing) Game.
 
+## Quick Start - Unit Testing
+
+The project includes comprehensive unit testing with intelligent Unity instance detection:
+
+```bash
+# Check Unity status and get recommendations
+./run_tests.sh status
+
+# Run all Entity_Stats tests (checks for conflicts automatically)
+./run_tests.sh entity-stats
+
+# Run all tests
+./run_tests.sh all
+
+# Smart Unity Editor integration (uses existing instance if available)
+./run_tests.sh interactive
+
+# Force open new Unity instance (ignores existing instances)
+./run_tests.sh force-new
+
+# Clean up test output files
+./run_tests.sh clean
+
+# Show latest test results
+./run_tests.sh results
+```
+
+### Smart Instance Detection Features
+- ✅ **Detects existing Unity instances** to prevent conflicts
+- ✅ **Uses existing Unity Editor** when already open with the project
+- ✅ **Prompts before conflicts** when Unity is running with different projects
+- ✅ **Provides clear recommendations** based on current Unity status
+- ✅ **Fallback modes** for certificate/proxy issues
+
 
 # Environment Setup
 
@@ -357,3 +391,214 @@ classDiagram
         +Update()
     }
 ```
+
+
+# Unit Testing Framework
+
+This project uses Unity's built-in Test Framework (based on NUnit) to ensure code quality and reliability, particularly for complex calculation systems like `Entity_Stats`. Unit tests help catch bugs early, document expected behavior, and make refactoring safer.
+
+## Test Framework Architecture
+
+### Unity Test Framework Overview
+Unity's Test Framework provides two types of tests:
+- **Edit Mode Tests** - Run in the Unity Editor without entering Play Mode. Perfect for testing pure logic, calculations, and non-MonoBehaviour classes.
+- **Play Mode Tests** - Run during Play Mode and can test GameObject interactions, physics, and scene-based functionality.
+
+For our stat calculations in `Entity_Stats`, we use Edit Mode tests since they're faster and don't require scene setup.
+
+### Test Assembly Structure
+```
+Assets/Scripts/
+├── Tests.asmdef                    # Test assembly definition
+├── Entity_StatsTests.cs           # Unit tests for Entity_Stats component
+└── Editor/
+    └── TestRunnerUtility.cs       # Helper utilities for running tests
+```
+
+The `Tests.asmdef` file configures the test assembly with:
+- NUnit framework references
+- Unity Test Runner integration  
+- Editor-only execution constraints
+
+## Running Tests
+
+### From VS Code (Recommended)
+1. **Open Command Palette** (`Cmd+Shift+P`)
+2. **Select "Tasks: Run Task"**
+3. **Choose from available test tasks:**
+   - `Unity: Run All Tests` - Runs all tests in batch mode
+   - `Unity: Run Entity Stats Tests` - Runs only Entity_Stats tests
+   - `Unity: Run Tests (Interactive)` - Opens Unity Editor for interactive testing
+   - `Unity: View Test Results` - Displays latest test results
+
+### From Unity Editor
+1. **Open Test Runner Window:** `Window > General > Test Runner`
+2. **Switch to EditMode tab**
+3. **Click "Run All" or select specific tests**
+4. **View results in real-time**
+
+### From Unity Menu (Custom Utilities)
+- `Tools > Testing > Run All Tests`
+- `Tools > Testing > Run Edit Mode Tests`  
+- `Tools > Testing > Run Entity Stats Tests`
+- `Tools > Testing > Open Test Runner Window`
+
+### Command Line (CI/CD)
+```bash
+# Run all tests in batch mode
+/Applications/Unity/Hub/Editor/2022.3.50f1/Unity.app/Contents/MacOS/Unity \
+  -batchmode -quit \
+  -projectPath ./BraveryRPG \
+  -runTests \
+  -testPlatform EditMode \
+  -testResults ./TestResults.xml
+```
+
+## Test Coverage
+
+### Entity_Stats Test Suite
+The `Entity_StatsTests` class provides comprehensive coverage for all stat calculation methods:
+
+#### Physical Damage Tests
+- ✅ Base damage calculation
+- ✅ Strength bonus integration  
+- ✅ Critical hit mechanics
+- ✅ Critical power from strength
+- ✅ Critical chance from agility
+- ✅ Complex multi-stat interactions
+
+#### Elemental Damage Tests
+- ✅ No elemental damage scenarios
+- ✅ Single element type calculation
+- ✅ Multi-element with highest selection
+- ✅ Minor bonus damage from weaker elements
+- ✅ Intelligence bonus integration
+- ✅ Tied element value handling
+
+#### Elemental Resistance Tests
+- ✅ Base resistance calculation
+- ✅ Intelligence bonus resistance
+- ✅ 75% resistance cap enforcement
+- ✅ None element type handling
+
+#### Armor Mitigation Tests
+- ✅ Base armor mitigation formula
+- ✅ Vitality bonus armor
+- ✅ Armor reduction debuff application
+- ✅ 85% mitigation cap enforcement
+- ✅ 100% armor reduction edge case
+
+#### Health & Evasion Tests
+- ✅ Max health with vitality bonuses
+- ✅ Evasion with agility bonuses
+- ✅ Evasion cap enforcement
+
+#### Armor Penetration Tests
+- ✅ Percentage to fraction conversion
+- ✅ Zero and high penetration values
+
+### Test Methodology
+Each test follows the **Arrange-Act-Assert** pattern:
+
+```csharp
+[Test]
+public void GetPhysicalDamage_WithStrengthBonus_IncludesBonusDamage()
+{
+    // Arrange - Set up test conditions
+    SetStatValue(entityStats.offense.damage, 50f);
+    SetStatValue(entityStats.major.strength, 20f);
+    
+    // Act - Execute the method under test
+    float damage = entityStats.GetPhysicalDamage(out bool isCrit);
+    
+    // Assert - Verify expected results
+    Assert.AreEqual(70f, damage, 0.01f, "Should include strength bonus");
+    Assert.IsFalse(isCrit, "Should not crit with 0% chance");
+}
+```
+
+## Test Results and Debugging
+
+### Interpreting Test Results
+- **Green checkmarks** - Tests passed successfully
+- **Red X marks** - Tests failed with assertion errors
+- **Yellow warnings** - Tests passed but with warnings
+
+### Common Test Failures
+1. **Assertion Failures** - Expected vs actual value mismatches
+2. **NullReferenceException** - Missing component initialization
+3. **Precision Errors** - Float comparison issues (use delta values)
+
+### Debugging Failed Tests
+1. **Read the assertion message** - Often contains specific failure details
+2. **Check test setup** - Ensure all required components are initialized
+3. **Verify calculation logic** - Compare expected vs actual formulas
+4. **Use Debug.Log** - Add logging to understand intermediate values
+
+### Test Output Files
+- `TestResults.xml` - Detailed test results in XML format
+- `unity-test.log` - Unity console output during test execution
+- `entity-stats-test.log` - Specific Entity_Stats test output
+
+## Best Practices
+
+### Writing New Tests
+1. **One concept per test** - Each test should verify a single behavior
+2. **Descriptive test names** - Use format: `Method_Scenario_ExpectedBehavior`
+3. **Clear arrange/act/assert sections** - Separate test phases with comments
+4. **Use meaningful assertions** - Include descriptive failure messages
+5. **Test edge cases** - Zero values, caps, negative inputs, etc.
+
+### Test Maintenance
+- **Update tests when changing formulas** - Keep tests synchronized with code
+- **Add tests for new features** - Maintain test coverage as code grows
+- **Refactor test helpers** - Extract common setup into helper methods
+- **Review test failures immediately** - Don't let broken tests accumulate
+
+### Performance Considerations
+- **Edit Mode tests are fast** - They don't require scene loading
+- **Avoid complex GameObject setup** - Use minimal test fixtures
+- **Cache test data** - Reuse test objects when possible
+- **Run specific test suites** - Use filters to run only relevant tests
+
+## Integration with Development Workflow
+
+### Pre-commit Testing
+Run Entity_Stats tests before committing changes to stat calculations:
+```bash
+# Quick test command for pre-commit hooks
+/Applications/Unity/Hub/Editor/2022.3.50f1/Unity.app/Contents/MacOS/Unity \
+  -batchmode -quit -projectPath ./BraveryRPG \
+  -runTests -testPlatform EditMode -testFilter "Entity_StatsTests"
+```
+
+### Continuous Integration
+The test framework supports automated testing in CI/CD pipelines:
+- Tests run in headless mode (no GUI required)
+- XML results can be parsed by CI systems
+- Exit codes indicate test success/failure
+
+### VS Code Integration
+The workspace is configured with tasks for seamless testing:
+- `Cmd+Shift+P` → "Tasks: Run Task" → Select test task
+- Results appear in VS Code terminal
+- Failed tests show detailed error messages
+
+## Troubleshooting
+
+### Common Issues
+1. **"Assembly not found" errors** - Ensure Tests.asmdef is properly configured
+2. **"Unity not found" errors** - Update Unity path in tasks.json
+3. **"Test runner not responding"** - Close Unity Editor and retry
+4. **Permission errors** - Check file system permissions for test output
+
+### Unity Version Compatibility
+This test framework is configured for Unity 2022.3.50f1. For other versions:
+1. Update Unity path in `.vscode/tasks.json`
+2. Verify NUnit version compatibility
+3. Check Test Framework package version
+
+### Getting Help
+- Unity Test Framework Documentation: https://docs.unity3d.com/Packages/com.unity.test-framework@latest
+- NUnit Documentation: https://docs.nunit.org/
+- Unity Forums: https://forum.unity.com/forums/scripting.12/
