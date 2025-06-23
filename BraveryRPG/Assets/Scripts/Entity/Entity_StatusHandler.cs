@@ -57,7 +57,7 @@ public class Entity_StatusHandler : MonoBehaviour
     private void DoLightningStrike(float damage)
     {
         Instantiate(lightningStrikeVfx, transform.position, Quaternion.identity);
-        entityHealth.ReduceHp(damage);
+        entityHealth.ReduceHealth(damage);
     }
 
     private void StopElectrifyEffect()
@@ -108,7 +108,7 @@ public class Entity_StatusHandler : MonoBehaviour
         {
             // Reduce health of entity.
             // NOTE: This currently does not trigger the white flash effect.
-            entityHealth.ReduceHp(damagePerTick);
+            entityHealth.ReduceHealth(damagePerTick);
             // Pause briefly before applying next DoT (Damage over Time) tick.
             yield return new WaitForSeconds(tickInterval);
         }

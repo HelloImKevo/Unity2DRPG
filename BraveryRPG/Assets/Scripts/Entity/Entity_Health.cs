@@ -37,7 +37,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// configuration in the Unity Inspector and can be modified at runtime
     /// for dynamic health changes like healing or poison effects.
     /// </summary>
-    [SerializeField] protected float currentHp;
+    [SerializeField] protected float currentHealth;
 
     /// <summary>
     /// Flag indicating whether this entity has died.
@@ -49,7 +49,13 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// </summary>
     [SerializeField] protected bool isDead;
 
-    [Header("On Damage Knockback")]
+    /// <summary>
+    /// Health regeneration rate frequency, in seconds. Typically every 1 second.
+    /// </summary>
+    [Header("Health Regen")]
+    [Tooltip("Health regeneration rate frequency, in seconds. Typically every 1 second.")]
+    [SerializeField] private float regenInterval = 1f;
+    [SerializeField] private bool canRegenerateHealth = true;
 
     /// <summary>
     /// The knockback force applied when the entity receives normal damage.
@@ -63,6 +69,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// - X: 1-5 for subtle to strong horizontal knockback
     /// - Y: 1-3 for slight to significant vertical lift
     /// </summary>
+    [Header("On Damage Knockback")]
     [SerializeField] private Vector2 onDamageKnockback = new(2.5f, 2f);
 
     /// <summary>
@@ -127,7 +134,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// </summary>
     private Entity_VFX entityVfx;
 
-    private Entity_Stats stats;
+    private Entity_Stats entityStats;
 
     /// <summary>
     /// Initializes component references during the Awake lifecycle phase.
@@ -141,12 +148,20 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         entity = GetComponent<Entity>();
         entityVfx = GetComponent<Entity_VFX>();
-        stats = GetComponent<Entity_Stats>();
+        entityStats = GetComponent<Entity_Stats>();
 
         healthBar = GetComponentInChildren<Slider>();
 
-        currentHp = stats.GetMaxHealth();
+        currentHealth = entityStats.GetMaxHealth();
         UpdateHealthBar();
+
+        // Note: This approach will only work if the entity is created with a starting
+        // health regeneration value. If health regeneration was applied as a buff, this
+        // solution would need to be revised.
+        if (regenInterval > 0)
+        {
+            InvokeRepeating(nameof(RegenerateHealth), 0, regenInterval);
+        }
     }
 
     /// <summary>
@@ -185,11 +200,11 @@ public class Entity_Health : MonoBehaviour, IDamageable
         Entity_Stats attackerStats = damageDealer.GetComponent<Entity_Stats>();
         float armorReduction = attackerStats != null ? attackerStats.GetArmorPenetration() : 0;
 
-        float mitigation = stats.GetArmorMitigation(armorReduction);
+        float mitigation = entityStats.GetArmorMitigation(armorReduction);
         // 85% mitigation -> Receive 15% of damage
         float physicalDamageTaken = damage * (1 - mitigation);
 
-        float resistance = stats.GetElementalResistance(element);
+        float resistance = entityStats.GetElementalResistance(element);
         float elementalDamageTaken = elementalDamage * (1 - resistance);
 
         // Play "Damaged" visual effect whenever HP is reduced.
@@ -198,7 +213,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
         if (entityVfx != null) entityVfx.PlayOnDamageFlashWhiteVfx();
 
         HandleKnockback(physicalDamageTaken, damageDealer);
-        ReduceHp(physicalDamageTaken + elementalDamageTaken);
+        ReduceHealth(physicalDamageTaken + elementalDamageTaken);
 
         Debug.LogFormat(
             "{0} -> Physical damage taken: {1} (Mitigation: {2}) - Elemental damage taken: {3} (Element: {4}, Resist: {5})",
@@ -213,15 +228,28 @@ public class Entity_Health : MonoBehaviour, IDamageable
         return true;
     }
 
-    private void HandleKnockback(float physicalDamageTaken, Transform damageDealer)
-    {
-        float duration = CalculateDuration(physicalDamageTaken);
-        Vector2 knockback = CalculateKnockback(physicalDamageTaken, damageDealer);
+    private bool AttackEvaded() => Random.Range(0, 100) < entityStats.GetEvasion();
 
-        if (entity != null) entity.ReceiveKnockback(knockback, duration);
+    private void RegenerateHealth()
+    {
+        if (!canRegenerateHealth) return;
+
+        float regenAmount = entityStats.resources.healthRegen.GetValue();
+        IncreaseHealth(regenAmount);
     }
 
-    private bool AttackEvaded() => Random.Range(0, 100) < stats.GetEvasion();
+    public void IncreaseHealth(float healAmount)
+    {
+        if (isDead) return;
+
+        float newHealth = currentHealth + healAmount;
+        float maxHealth = entityStats.GetMaxHealth();
+
+        // Disallow "overheal" (regenerating higher health than the maximum).
+        currentHealth = Mathf.Min(newHealth, maxHealth);
+
+        UpdateHealthBar();
+    }
 
     /// <summary>
     /// Reduces the entity's health by the specified damage amount.
@@ -234,12 +262,12 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// <param name="damage">
     /// The amount of health points to subtract from current health.
     /// </param>
-    public void ReduceHp(float damage)
+    public void ReduceHealth(float damage)
     {
-        currentHp -= damage;
+        currentHealth -= damage;
         UpdateHealthBar();
 
-        if (currentHp <= 0) Die();
+        if (currentHealth <= 0) Die();
     }
 
     /// <summary>
@@ -260,7 +288,17 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         if (healthBar == null) return;
 
-        healthBar.value = currentHp / stats.GetMaxHealth();
+        healthBar.value = currentHealth / entityStats.GetMaxHealth();
+    }
+
+    #region Knockback
+
+    private void HandleKnockback(float physicalDamageTaken, Transform damageDealer)
+    {
+        float duration = CalculateDuration(physicalDamageTaken);
+        Vector2 knockback = CalculateKnockback(physicalDamageTaken, damageDealer);
+
+        if (entity != null) entity.ReceiveKnockback(knockback, duration);
     }
 
     /// <summary>
@@ -312,6 +350,8 @@ public class Entity_Health : MonoBehaviour, IDamageable
         return IsHeavyDamage(damage) ? heavyKnockbackDuration : knockbackDuration;
     }
 
+    #endregion
+
     /// <summary>
     /// Determines whether the damage amount qualifies as "heavy damage".
     /// 
@@ -332,5 +372,5 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// True if the damage exceeds the heavy damage threshold percentage,
     /// false otherwise.
     /// </returns>
-    private bool IsHeavyDamage(float damage) => damage / stats.GetMaxHealth() > heavyDamageThreshold;
+    private bool IsHeavyDamage(float damage) => damage / entityStats.GetMaxHealth() > heavyDamageThreshold;
 }

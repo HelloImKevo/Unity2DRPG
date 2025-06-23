@@ -431,8 +431,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f936cbe6590154fb382a1eae54a70c5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHp: 100
+  currentHealth: 0
   isDead: 0
+  regenInterval: 1
+  canRegenerateHealth: 1
   onDamageKnockback: {x: 2.5, y: 2}
   knockbackDuration: 0.2
   heavyDamageThreshold: 0.3
@@ -471,8 +473,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3b58b7c5e8a43a0b381a1441d18fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth:
-    baseValue: 1000
+  resources:
+    maxHealth:
+      baseValue: 10000
+    healthRegen:
+      baseValue: 0
   major:
     strength:
       baseValue: 0
@@ -484,11 +489,11 @@ MonoBehaviour:
       baseValue: 0
   offense:
     damage:
-      baseValue: 0
+      baseValue: 150
     critPower:
       baseValue: 0
     critChance:
-      baseValue: 0
+      baseValue: 15
     armorPenetration:
       baseValue: 0
     fireDamage:
@@ -496,7 +501,7 @@ MonoBehaviour:
     iceDamage:
       baseValue: 0
     lightningDamage:
-      baseValue: 10
+      baseValue: 0
   defense:
     armor:
       baseValue: 0
@@ -17213,8 +17218,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ad75bed3a7cd42c8be7765966ec89fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHp: 100
+  currentHealth: 0
   isDead: 0
+  regenInterval: 1
+  canRegenerateHealth: 1
   onDamageKnockback: {x: 2.5, y: 2}
   knockbackDuration: 0.2
   heavyDamageThreshold: 0.3
@@ -17275,8 +17282,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3b58b7c5e8a43a0b381a1441d18fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth:
-    baseValue: 1000
+  resources:
+    maxHealth:
+      baseValue: 10000
+    healthRegen:
+      baseValue: 12.5
   major:
     strength:
       baseValue: 0
@@ -52371,8 +52381,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f936cbe6590154fb382a1eae54a70c5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHp: 100
+  currentHealth: 0
   isDead: 0
+  regenInterval: 1
+  canRegenerateHealth: 1
   onDamageKnockback: {x: 2.5, y: 2}
   knockbackDuration: 0.2
   heavyDamageThreshold: 0.3
@@ -52390,8 +52402,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3b58b7c5e8a43a0b381a1441d18fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth:
-    baseValue: 1000
+  resources:
+    maxHealth:
+      baseValue: 0
+    healthRegen:
+      baseValue: 0
   major:
     strength:
       baseValue: 0
