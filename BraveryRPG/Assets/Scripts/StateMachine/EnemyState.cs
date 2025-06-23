@@ -57,6 +57,7 @@ public class EnemyState : EntityState
 
         anim = enemy.Anim;
         rb = enemy.Rb;
+        stats = enemy.Stats;
     }
 
     /// <summary>

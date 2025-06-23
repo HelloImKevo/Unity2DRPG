@@ -65,6 +65,8 @@ public abstract class EntityState
     /// </summary>
     protected Rigidbody2D rb;
 
+    protected Entity_Stats stats;
+
     /// <summary>
     /// Timer for states that need to track elapsed time or duration limits.
     /// 
@@ -221,5 +223,16 @@ public abstract class EntityState
     public virtual void UpdateAnimationParameters()
     {
         // Override in subclasses as needed.
+    }
+
+    /// <summary>
+    /// Synchronizes the entity offensive attackSpeed value with the Animator
+    /// 'attackSpeedMultiplier' property. Should be invoked when an entity
+    /// enters any of its "Attack" states.
+    /// </summary>
+    public void SyncAttackSpeed()
+    {
+        float attackSpeed = stats.offense.attackSpeed.GetValue();
+        anim.SetFloat("attackSpeedMultiplier", attackSpeed);
     }
 }

@@ -32,6 +32,7 @@ public class Player_BasicAttackState : PlayerState
         comboAttackQueued = false;
 
         ResetComboIndexIfNeeded();
+        SyncAttackSpeed();
 
         // Ternary syntax - This assumes that X is a value between -1.0 and +1.0
         // Define attack direction according to Input.

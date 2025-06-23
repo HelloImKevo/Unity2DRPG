@@ -72,6 +72,7 @@ public abstract class PlayerState : EntityState
 
         anim = player.Anim;
         rb = player.Rb;
+        stats = player.Stats;
         input = player.Input;
     }
 

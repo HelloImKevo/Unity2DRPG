@@ -5,6 +5,14 @@ using UnityEngine;
 public class Stat_OffenseGroup
 {
     // Physical Damage
+    /// <summary>
+    /// 1 = Default Attack Speed, 1.5 = +50% Increased Attack Speed.
+    /// This value should not be much higher than 3 (300%), because
+    /// it will start to break animations become very overpowered.
+    /// </summary>
+    [Tooltip("Corresponds to Animator property 'attackSpeedMultiplier' and alters entity attack speed. Should default to 1.")]
+    public Stat attackSpeed;
+
     [Tooltip("Base physical damage as a whole number.")]
     public Stat damage;
 
