@@ -192,4 +192,80 @@ public class Entity_Stats : MonoBehaviour
 
         return finalEvasion;
     }
+
+    // TODO: Explore refactoring this implementation to embed the StatType
+    // in each Stat instance, and then iterate over the entity stat collection?
+    public Stat GetStatByType(StatType type)
+    {
+        switch (type)
+        {
+            // Resource
+            case StatType.MaxHealth: return resources.maxHealth;
+            case StatType.HealthRegen: return resources.healthRegen;
+
+            // Major
+            case StatType.Strength: return major.strength;
+            case StatType.Agility: return major.agility;
+            case StatType.Intelligence: return major.intelligence;
+            case StatType.Vitality: return major.vitality;
+
+            // Offense
+            case StatType.AttackSpeed: return offense.attackSpeed;
+            case StatType.Damage: return offense.damage;
+            case StatType.CritChance: return offense.critChance;
+            case StatType.CritPower: return offense.critPower;
+            case StatType.ArmorPenetration: return offense.armorPenetration;
+
+            case StatType.FireDamage: return offense.fireDamage;
+            case StatType.IceDamage: return offense.iceDamage;
+            case StatType.LightningDamage: return offense.lightningDamage;
+
+            // Defense
+            case StatType.Armor: return defense.armor;
+            case StatType.Evasion: return defense.evasion;
+
+            case StatType.IceResistance: return defense.iceRes;
+            case StatType.FireResistance: return defense.fireRes;
+            case StatType.LightningResistance: return defense.lightningRes;
+
+            default:
+                Debug.LogWarning($"StatType {type} not implemented yet.");
+                return null;
+        }
+    }
+
+    [ContextMenu("Update Default Stat Setup")]
+    public void ApplyDefaultStatSetup()
+    {
+        // if (defaultStatSetup == null)
+        // {
+        //     Debug.Log("No default stat setup assigned");
+        //     return;
+        // }
+
+        // resources.maxHealth.SetBaseValue(defaultStatSetup.maxHealth);
+        // resources.healthRegen.SetBaseValue(defaultStatSetup.healthRegen);
+
+        // major.strength.SetBaseValue(defaultStatSetup.strength);
+        // major.agility.SetBaseValue(defaultStatSetup.agility);
+        // major.intelligence.SetBaseValue(defaultStatSetup.intelligence);
+        // major.vitality.SetBaseValue(defaultStatSetup.vitality);
+
+        // offense.attackSpeed.SetBaseValue(defaultStatSetup.attackSpeed);
+        // offense.damage.SetBaseValue(defaultStatSetup.damage);
+        // offense.critChance.SetBaseValue(defaultStatSetup.critChance);
+        // offense.critPower.SetBaseValue(defaultStatSetup.critPower);
+        // offense.armorReduction.SetBaseValue(defaultStatSetup.armorReduction);
+
+        // offense.iceDamage.SetBaseValue(defaultStatSetup.iceDamage);
+        // offense.fireDamage.SetBaseValue(defaultStatSetup.fireDamage);  
+        // offense.lightningDamage.SetBaseValue(defaultStatSetup.lightningDamage);
+
+        // defense.armor.SetBaseValue(defaultStatSetup.armor);
+        // defense.evasion.SetBaseValue(defaultStatSetup.evasion);
+
+        // defense.iceRes.SetBaseValue(defaultStatSetup.iceResistance);
+        // defense.fireRes.SetBaseValue(defaultStatSetup.fireResistance);
+        // defense.lightningRes.SetBaseValue(defaultStatSetup.lightningResistance);
+    }
 }
