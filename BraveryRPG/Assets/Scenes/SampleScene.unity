@@ -17088,7 +17088,7 @@ MonoBehaviour:
       baseValue: 10
       modifiers: []
     critChance:
-      baseValue: 20
+      baseValue: 5
       modifiers: []
     critPower:
       baseValue: 125

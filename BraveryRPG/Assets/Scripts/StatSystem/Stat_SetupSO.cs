@@ -1,8 +1,8 @@
 using UnityEngine;
 
 /// <summary>
-/// Unity Scriptable Object (SO) that facilitates more efficient stat configuration
-/// for entities (Players and Enemies).
+/// Unity Scriptable Object (SO) that facilitates more efficient starting stat
+// configuration for entities (Players and Enemies).
 /// This is like a blueprint that can be instantiated many times.
 /// 
 /// To create a new instance in Unity, Right click, then navigate to:
