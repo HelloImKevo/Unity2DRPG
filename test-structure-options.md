@@ -3,8 +3,8 @@
 ## Current Structure (Option 1 - With .gitignore)
 ```
 Unity2DRPG/
-├── .gitignore                    # Now excludes build artifacts
-├── StandaloneTests/              # Test project (artifacts ignored)
+├── .gitignore                   # Now excludes build artifacts
+├── StandaloneTests/             # Test project (artifacts ignored)
 │   ├── *.cs                     # Test files (tracked)
 │   ├── *.csproj                 # Project file (tracked)
 │   ├── bin/                     # Build output (ignored)
