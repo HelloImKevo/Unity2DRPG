@@ -6,11 +6,29 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     private UI ui;
     private RectTransform rect;
+    private UI_SkillTree skillTree;
 
+    [Header("Unlock Details")]
+    public UI_TreeNode[] requiredNodes;
+    public UI_TreeNode[] conflictNodes;
+
+    [Space]
+    [Tooltip("Whether this Skill has been unlocked by the player.")]
+    public bool isUnlocked;
+
+    /// <summary>
+    /// Skill acquisition is blocked by an unfulfilled prerequisite.
+    /// </summary>
+    [Tooltip("Skill acquisition is blocked by an unfulfilled prerequisite.")]
+    public bool isLocked;
+
+    [Header("Skill Details")]
     [Tooltip("Skill data Scriptable Object containing details like the Name, Description and Cost.")]
-    [SerializeField] private Skill_DataSO skillData;
+    public Skill_DataSO skillData;
 
+    // These fields are displayed in the Unity Editor for convenience.
     [SerializeField] private string skillName;
+    [SerializeField] private int skillCost;
 
     [Tooltip("'Image' Game Object for the Skill Node Icon (not a sprite PNG).")]
     [SerializeField] private Image skillIcon;
@@ -24,27 +42,30 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // [Tooltip("Tint applied to icon image when the skill is currently locked.")]
     // [SerializeField] private Color skillLockedColor = Color.gray;
 
-    public bool isUnlocked;
-
-    /// <summary>
-    /// Skill acquisition is blocked by an unfulfilled prerequisite.
-    /// </summary>
-    public bool isLocked;
-
     private Color lastColor;
 
     void Awake()
     {
         ui = GetComponentInParent<UI>();
         rect = GetComponent<RectTransform>();
+        skillTree = GetComponentInParent<UI_SkillTree>();
 
         UpdateIconColor(GetColorByHex(lockedColorHex));
     }
 
+    /// <summary>
+    /// Unlocks this Skill for the player. Performs other post-unlock tasks,
+    /// such as locking-out conflicting skills in the same Skill Tier.
+    /// </summary>
     private void Unlock()
     {
         isUnlocked = true;
         UpdateIconColor(Color.white);
+        skillTree.RemoveSkillPoints(skillData.cost);
+
+        // When unlocking this skill, we need to lock-out all conflicting
+        // skill nodes in the shared Skill Tier.
+        LockOutConflictingNodes();
 
         // Find Player_SkillManager
         // Unlock skill on skill manager
@@ -58,7 +79,39 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             return false;
         }
 
+        if (!skillTree.EnoughSkillPoints(skillData.cost))
+        {
+            // Not enough skill points to unlock this Skill Node.
+            return false;
+        }
+
+        foreach (var requiredNode in requiredNodes)
+        {
+            // If any of the Required Nodes have not been unlocked, then this
+            // Skill Node cannot be unlocked.
+            if (!requiredNode.isUnlocked) return false;
+        }
+
+        foreach (var conflictNode in conflictNodes)
+        {
+            // If there are any conflicting Nodes in the same Tier that have
+            // already been unlocked, then this Skill is blocked (unless the
+            // user does a Skill Respec).
+            if (conflictNode.isUnlocked) return false;
+        }
+
         return true;
+    }
+
+    /// <summary>
+    /// Locks out all conflicting nodes.
+    /// </summary>
+    private void LockOutConflictingNodes()
+    {
+        foreach (var conflictNode in conflictNodes)
+        {
+            conflictNode.isLocked = true;
+        }
     }
 
     private void UpdateIconColor(Color color)
@@ -77,19 +130,25 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         else
         {
-            Debug.Log("Cannot be unlocked");
+            Debug.Log($"{gameObject.name} cannot be unlocked - Cost: {skillData.cost} points");
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Show tooltip and populate the text fields with skill data.
-        ui.skillTooltip.ShowTooltip(true, rect, skillData);
+        ui.skillTooltip.ShowTooltip(true, rect, this);
 
         if (!isUnlocked)
         {
             // Highlight the icon on Hover.
-            UpdateIconColor(Color.white * 0.9f);
+            // FIXME: This is making the icon partially transparent, revealing the
+            // connection lines underneath. Just using 'white' won't have any visual
+            // effect for Skills that have already been unlocked - so we would need
+            // to add a Shader to the Border (for playing with a Controller rather
+            // than KBM).
+            // UpdateIconColor(Color.white * 0.9f);
+            UpdateIconColor(Color.white);
         }
     }
 
@@ -127,6 +186,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         // Populate the Unity game object with properties derived from the Skill Data SO.
         skillName = skillData.displayName;
+        skillCost = skillData.cost;
         skillIcon.sprite = skillData.icon;
         gameObject.name = "UI_TreeNode - " + skillData.displayName;
     }
