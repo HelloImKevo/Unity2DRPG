@@ -4,7 +4,12 @@ using UnityEngine.UI;
 
 public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    [Tooltip("Image Game Object icon (not a sprite PNG).")]
+    [Tooltip("Skill data Scriptable Object containing details like the Name, Description and Cost.")]
+    [SerializeField] private Skill_DataSO skillData;
+
+    [SerializeField] private string skillName;
+
+    [Tooltip("'Image' Game Object for the Skill Node Icon (not a sprite PNG).")]
     [SerializeField] private Image skillIcon;
 
     /// <summary>
@@ -30,6 +35,22 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         UpdateIconColor(GetColorByHex(lockedColorHex));
     }
 
+    /// <summary>
+    /// Called whenever the script's properties are set, including when an object is deserialized,
+    /// which can occur at various times, such as when you open a scene in the Editor and after
+    /// a domain reload.
+    /// </summary>
+    void OnValidate()
+    {
+        if (skillData == null) return;
+
+        // Populate the Unity game object with properties derived from the Skill Data SO.
+        skillName = skillData.displayName;
+        skillIcon.sprite = skillData.icon;
+        gameObject.name = "UI_TreeNode - " + skillData.displayName;
+    }
+
+
     private void Unlock()
     {
         isUnlocked = true;
@@ -37,6 +58,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         // Find Player_SkillManager
         // Unlock skill on skill manager
+        // Skill Manager unlock skill from skill data Type
     }
 
     private bool CanBeUnlocked()
