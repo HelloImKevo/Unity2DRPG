@@ -16,7 +16,7 @@ public class UI_Tooltip : MonoBehaviour
     /// </summary>
     [SerializeField] private Vector2 offset = new(280f, 20f);
 
-    void Awake()
+    protected virtual void Awake()
     {
         rect = GetComponent<RectTransform>();
     }
@@ -68,5 +68,11 @@ public class UI_Tooltip : MonoBehaviour
         }
 
         rect.position = targetPosition;
+    }
+
+    /// <returns>The text wrapped with HTML color tags with the input hex color.</returns>
+    protected string GetColoredText(string color, string text)
+    {
+        return $"<color={color}>{text}</color>";
     }
 }

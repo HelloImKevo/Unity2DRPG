@@ -5,12 +5,12 @@ using UnityEngine.UI;
 [Serializable]
 public class UI_TreeConnectDetails
 {
-    [Tooltip("A UI_TreeNode instance, like a Skill Tree Node prefab.")]
+    [Tooltip("A child UI_TreeNode instance, like a Skill Tree Node prefab.")]
     public UI_TreeConnectHandler childNode;
 
     public NodeDirectionType direction;
 
-    [Range(100f, 350f)]
+    [Range(50f, 350f)]
     public float length;
 }
 
@@ -23,23 +23,18 @@ public class UI_TreeConnectHandler : MonoBehaviour
     [Tooltip("Array containing a child UI_TreeNode endpoint, Line Direction and Line Length.")]
     [SerializeField] private UI_TreeConnectDetails[] connectionDetails;
 
-    [Tooltip("Should be the 'Connection' group (parent object containing one or more child lines).")]
-    [SerializeField] private UI_TreeConnection[] connections;
+    [Tooltip("The 'Connection' groups (parent object containing one or more child lines) originating from this Skill Node. If this Skill does not have any children, this can be empty.")]
+    [SerializeField] private UI_TreeConnection[] myConnectionLines;
 
-    private RectTransform rect;
+    private RectTransform Rect => GetComponent<RectTransform>();
 
     private void OnValidate()
     {
         if (connectionDetails.Length <= 0) return;
 
-        if (rect == null)
+        if (connectionDetails.Length != myConnectionLines.Length)
         {
-            rect = GetComponent<RectTransform>();
-        }
-
-        if (connectionDetails.Length != connections.Length)
-        {
-            Debug.LogWarning("Details Array Size should match Connections Array Size - " + gameObject.name);
+            Debug.Log("Details Array Size should match Connections Array Size - " + gameObject.name);
             return;
         }
 
@@ -51,9 +46,9 @@ public class UI_TreeConnectHandler : MonoBehaviour
         for (int i = 0; i < connectionDetails.Length; i++)
         {
             var detail = connectionDetails[i];
-            var connection = connections[i];
+            var connection = myConnectionLines[i];
 
-            Vector2 targetPosition = connection.GetConnectionPoint(rect);
+            Vector2 targetPosition = connection.GetConnectionPoint(Rect);
             // Image connectionImage = connection.GetConnectionImage();
 
             connection.DirectConnection(detail.direction, detail.length, 0f); // FIXME
@@ -68,5 +63,5 @@ public class UI_TreeConnectHandler : MonoBehaviour
 
     // public void SetConnectionImage(Image image) => connectionImage = image;
 
-    public void SetPosition(Vector2 position) => rect.anchoredPosition = position;
+    public void SetPosition(Vector2 position) => Rect.anchoredPosition = position;
 }
