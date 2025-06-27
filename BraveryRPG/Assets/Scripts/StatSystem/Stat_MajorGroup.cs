@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Contains the four primary character attributes that form the foundation of character progression.
+/// These stats influence various aspects of combat, survivability, and magical abilities.
+/// </summary>
 [Serializable]
 public class Stat_MajorGroup
 {

@@ -2,6 +2,10 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Manages the skill tooltip display, showing skill information, requirements, and unlock conditions.
+/// Provides dynamic content updates based on skill node states and player progress.
+/// </summary>
 public class UI_SkillTooltip : UI_Tooltip
 {
     private UI ui;
@@ -23,6 +27,9 @@ public class UI_SkillTooltip : UI_Tooltip
     [SerializeField] private Color colorPickerHelper = Color.yellow;
     [SerializeField] private string lockedSkillText = "You've taken a diffrent path - this skill is now locked.";
 
+    /// <summary>
+    /// Initializes component references and calls base awake functionality.
+    /// </summary>
     protected override void Awake()
     {
         base.Awake();
@@ -53,6 +60,13 @@ public class UI_SkillTooltip : UI_Tooltip
         skillRequirements.text = requirements;
     }
 
+    /// <summary>
+    /// Builds and formats the requirements text for a skill, including cost, prerequisites, and conflicts.
+    /// </summary>
+    /// <param name="skillCost">The skill point cost required to unlock the skill.</param>
+    /// <param name="requiredNodes">Array of skill nodes that must be unlocked first.</param>
+    /// <param name="conflictNodes">Array of skill nodes that will be locked out if this skill is taken.</param>
+    /// <returns>Formatted requirements text with appropriate color coding.</returns>
     private string GetRequirements(int skillCost, UI_TreeNode[] requiredNodes, UI_TreeNode[] conflictNodes)
     {
         StringBuilder sb = new();

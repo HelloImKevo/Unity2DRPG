@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Contains offensive combat statistics including physical damage, critical hit mechanics,
+/// and elemental damage types. Manages all aspects of damage output and attack modifiers.
+/// </summary>
 [Serializable]
 public class Stat_OffenseGroup
 {

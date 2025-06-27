@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Configuration data for connecting skill tree nodes, including direction and distance information.
+/// </summary>
 [Serializable]
 public class UI_TreeConnectDetails
 {
@@ -28,6 +31,9 @@ public class UI_TreeConnectHandler : MonoBehaviour
 
     private RectTransform Rect => GetComponent<RectTransform>();
 
+    /// <summary>
+    /// Validates connection configuration and updates connections when values change in the Unity editor.
+    /// </summary>
     private void OnValidate()
     {
         if (connectionDetails.Length <= 0) return;
@@ -41,6 +47,9 @@ public class UI_TreeConnectHandler : MonoBehaviour
         UpdateConnections();
     }
 
+    /// <summary>
+    /// Updates all connection lines and positions child nodes according to their configuration.
+    /// </summary>
     public void UpdateConnections()
     {
         for (int i = 0; i < connectionDetails.Length; i++)
@@ -63,5 +72,9 @@ public class UI_TreeConnectHandler : MonoBehaviour
 
     // public void SetConnectionImage(Image image) => connectionImage = image;
 
+    /// <summary>
+    /// Sets the position of this connection handler's RectTransform.
+    /// </summary>
+    /// <param name="position">The new anchored position to set.</param>
     public void SetPosition(Vector2 position) => Rect.anchoredPosition = position;
 }

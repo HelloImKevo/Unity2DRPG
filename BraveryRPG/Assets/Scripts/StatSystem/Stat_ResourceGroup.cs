@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Contains character resource statistics such as health and regeneration rates.
+/// Manages the vital resources that determine character survivability.
+/// </summary>
 [Serializable]
 public class Stat_ResourceGroup
 {

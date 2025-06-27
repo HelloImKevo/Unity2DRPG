@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Represents a temporary stat modification that can be applied to an entity.
+/// </summary>
 [Serializable]
 public class Buff
 {
@@ -9,6 +12,10 @@ public class Buff
     public float value;
 }
 
+/// <summary>
+/// Interactive object that applies temporary stat buffs to entities that collide with it.
+/// Features visual floating animation and timed buff duration management.
+/// </summary>
 public class Object_Buff : MonoBehaviour
 {
     private SpriteRenderer sr;
@@ -28,12 +35,18 @@ public class Object_Buff : MonoBehaviour
 
     private Vector3 startPosition;
 
+    /// <summary>
+    /// Initializes component references and stores the starting position for floating animation.
+    /// </summary>
     private void Awake()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
         startPosition = transform.position;
     }
 
+    /// <summary>
+    /// Updates the floating animation by smoothly moving the object up and down over time.
+    /// </summary>
     private void Update()
     {
         // Smoothly fluctuates between -1 and 1 over time.
@@ -42,6 +55,10 @@ public class Object_Buff : MonoBehaviour
         transform.position = startPosition + new Vector3(0, yOffset);
     }
 
+    /// <summary>
+    /// Handles collision detection and initiates the buff application process when triggered by an entity.
+    /// </summary>
+    /// <param name="collision">The collider that triggered the interaction.</param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!canBeUsed) return;
@@ -50,6 +67,11 @@ public class Object_Buff : MonoBehaviour
         StartCoroutine(BuffCo(buffDuration));
     }
 
+    /// <summary>
+    /// Coroutine that manages the buff lifecycle, including application, duration timing, and cleanup.
+    /// </summary>
+    /// <param name="duration">The duration in seconds for how long the buff should last.</param>
+    /// <returns>IEnumerator for coroutine execution.</returns>
     private IEnumerator BuffCo(float duration)
     {
         canBeUsed = false;
@@ -67,6 +89,10 @@ public class Object_Buff : MonoBehaviour
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Applies or removes buff effects to the target entity's stats based on the apply parameter.
+    /// </summary>
+    /// <param name="apply">True to apply buffs, false to remove them.</param>
     private void ApplyBuff(bool apply)
     {
         foreach (var buff in buffs)

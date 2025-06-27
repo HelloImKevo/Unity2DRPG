@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages individual connection lines between skill tree nodes, handling direction, length, and positioning.
+/// </summary>
 public class UI_TreeConnection : MonoBehaviour
 {
     [Tooltip("Should be the parent 'Connection' object that serves as the rotation pivot point.")]
@@ -12,6 +15,12 @@ public class UI_TreeConnection : MonoBehaviour
     [Tooltip("Point at the 'End of the Line', which is what child nodes will connect to.")]
     [SerializeField] private RectTransform childNodeConnectionPoint;
 
+    /// <summary>
+    /// Configures the connection line's direction, length, and rotation based on the specified parameters.
+    /// </summary>
+    /// <param name="direction">The direction type for the connection line.</param>
+    /// <param name="length">The length of the connection line.</param>
+    /// <param name="offset">Additional rotation offset to apply.</param>
     public void DirectConnection(NodeDirectionType direction, float length, float offset)
     {
         bool shouldBeActive = direction != NodeDirectionType.None;
@@ -22,6 +31,11 @@ public class UI_TreeConnection : MonoBehaviour
         connectionLine.sizeDelta = new Vector2(finalLength, connectionLine.sizeDelta.y);
     }
 
+    /// <summary>
+    /// Calculates the world position of the connection endpoint for child node positioning.
+    /// </summary>
+    /// <param name="rect">The parent RectTransform to calculate relative position from.</param>
+    /// <returns>The local position of the connection endpoint.</returns>
     public Vector2 GetConnectionPoint(RectTransform rect)
     {
         // Handles World Position, Local Position & Anchored Position,
@@ -38,6 +52,11 @@ public class UI_TreeConnection : MonoBehaviour
         return localPosition;
     }
 
+    /// <summary>
+    /// Converts a NodeDirectionType enum value to its corresponding rotation angle in degrees.
+    /// </summary>
+    /// <param name="type">The direction type to convert.</param>
+    /// <returns>The rotation angle in degrees for the specified direction.</returns>
     private float GetDirectionAngle(NodeDirectionType type)
     {
         switch (type)
@@ -56,6 +75,9 @@ public class UI_TreeConnection : MonoBehaviour
     }
 }
 
+/// <summary>
+/// Defines the eight directional types for skill tree node connections.
+/// </summary>
 public enum NodeDirectionType
 {
     None,

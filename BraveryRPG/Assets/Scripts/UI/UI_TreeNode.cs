@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Represents a single skill node in the skill tree UI. Handles skill unlocking logic,
+/// prerequisite validation, and user interaction through pointer events.
+/// </summary>
 public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     private UI ui;
@@ -44,6 +48,9 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private Color lastColor;
 
+    /// <summary>
+    /// Initializes component references and sets the initial icon color for the skill node.
+    /// </summary>
     void Awake()
     {
         ui = GetComponentInParent<UI>();
@@ -72,6 +79,11 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // Skill Manager unlock skill from skill data Type
     }
 
+    /// <summary>
+    /// Determines whether this skill node can be unlocked based on prerequisites,
+    /// skill point availability, and conflict resolution.
+    /// </summary>
+    /// <returns>True if the skill can be unlocked, false otherwise.</returns>
     private bool CanBeUnlocked()
     {
         if (isLocked || isUnlocked)
@@ -114,6 +126,10 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    /// <summary>
+    /// Updates the visual color of the skill node icon.
+    /// </summary>
+    /// <param name="color">The color to apply to the skill icon.</param>
     private void UpdateIconColor(Color color)
     {
         if (skillIcon == null) return;
@@ -122,6 +138,11 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         skillIcon.color = color;
     }
 
+    /// <summary>
+    /// Handles pointer click events on the skill node. Attempts to unlock the skill
+    /// if all prerequisites are met.
+    /// </summary>
+    /// <param name="eventData">Pointer event data from the UI system.</param>
     public void OnPointerDown(PointerEventData eventData)
     {
         if (CanBeUnlocked())
@@ -134,6 +155,10 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    /// <summary>
+    /// Handles pointer enter events to show the skill tooltip and highlight the node.
+    /// </summary>
+    /// <param name="eventData">Pointer event data from the UI system.</param>
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Show tooltip and populate the text fields with skill data.
@@ -152,6 +177,10 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    /// <summary>
+    /// Handles pointer exit events to hide the skill tooltip and remove node highlighting.
+    /// </summary>
+    /// <param name="eventData">Pointer event data from the UI system.</param>
     public void OnPointerExit(PointerEventData eventData)
     {
         // The 2nd argument doesn't really matter, it could be null,
@@ -168,6 +197,11 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    /// <summary>
+    /// Converts a hexadecimal color string to a Unity Color object.
+    /// </summary>
+    /// <param name="hexNumber">Hexadecimal color string (e.g., "#FF0000").</param>
+    /// <returns>The corresponding Unity Color object.</returns>
     private Color GetColorByHex(string hexNumber)
     {
         ColorUtility.TryParseHtmlString(hexNumber, out Color color);
