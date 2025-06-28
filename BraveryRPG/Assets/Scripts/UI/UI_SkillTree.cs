@@ -7,14 +7,15 @@ using UnityEngine;
 public class UI_SkillTree : MonoBehaviour
 {
     [SerializeField] private int skillPoints;
-    // [SerializeField] private UI_TreeConnectHandler[] parentNodes;
+    [Tooltip("The top-most node in the tree hierarchy. Required for the UpdateAllConnections context menu action.")]
+    [SerializeField] private UI_TreeConnectHandler[] parentNodes;
 
     /// <summary>
     /// Initializes the skill tree on start.
     /// </summary>
     private void Start()
     {
-        // UpdateAllConnections();
+        UpdateAllConnections();
     }
 
     /// <summary>
@@ -27,7 +28,7 @@ public class UI_SkillTree : MonoBehaviour
 
         foreach (var node in skillNodes)
         {
-            // node.Refund();
+            node.Refund();
         }
     }
 
@@ -50,12 +51,15 @@ public class UI_SkillTree : MonoBehaviour
     /// <param name="points">The number of skill points to add.</param>
     public void AddSkillPoints(int points) => skillPoints += points;
 
-    // [ContextMenu("Update All Connections")]
-    // public void UpdateAllConnections()
-    // {
-    //     foreach (var node in parentNodes)
-    //     {
-    //         node.UpdateAllConnections();
-    //     }
-    // }
+    /// <summary>
+    /// Use to rebuild the positions and sorting of all nodes in the skill tree.
+    /// </summary>
+    [ContextMenu("Update All Connections")]
+    public void UpdateAllConnections()
+    {
+        foreach (var node in parentNodes)
+        {
+            node.UpdateAllConnections();
+        }
+    }
 }

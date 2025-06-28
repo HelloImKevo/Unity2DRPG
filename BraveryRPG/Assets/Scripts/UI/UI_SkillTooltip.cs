@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -25,7 +26,9 @@ public class UI_SkillTooltip : UI_Tooltip
     [Tooltip("Hex value to colorize text for important info, such as other skills that will be locked out.")]
     [SerializeField] private string hexImportantInfo;
     [SerializeField] private Color colorPickerHelper = Color.yellow;
-    [SerializeField] private string lockedSkillText = "You've taken a diffrent path - this skill is now locked.";
+    [SerializeField] private string lockedSkillText = "You've taken a different path - this skill is now locked.";
+
+    private Coroutine textEffectCo;
 
     /// <summary>
     /// Initializes component references and calls base awake functionality.
@@ -58,6 +61,25 @@ public class UI_SkillTooltip : UI_Tooltip
             ? skillLockedText
             : GetRequirements(node.skillData.cost, node.requiredNodes, node.conflictNodes);
         skillRequirements.text = requirements;
+    }
+
+    public void PlayLockedSkillBlinkEffect()
+    {
+        if (textEffectCo != null) StopCoroutine(textEffectCo);
+
+        textEffectCo = StartCoroutine(TextBlinkEffectCo(skillRequirements, 0.15f, 3));
+    }
+
+    private IEnumerator TextBlinkEffectCo(TextMeshProUGUI text, float blinkInterval, int blinkCount)
+    {
+        for (int i = 0; i < blinkCount; i++)
+        {
+            text.text = GetColoredText(hexConditionNotMet, lockedSkillText);
+            yield return new WaitForSeconds(blinkInterval);
+
+            text.text = GetColoredText(hexImportantInfo, lockedSkillText);
+            yield return new WaitForSeconds(blinkInterval);
+        }
     }
 
     /// <summary>

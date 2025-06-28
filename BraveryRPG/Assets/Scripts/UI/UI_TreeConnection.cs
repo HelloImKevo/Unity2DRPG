@@ -31,6 +31,8 @@ public class UI_TreeConnection : MonoBehaviour
         connectionLine.sizeDelta = new Vector2(finalLength, connectionLine.sizeDelta.y);
     }
 
+    public Image GetConnectionImage() => connectionLine.GetComponent<Image>();
+
     /// <summary>
     /// Calculates the world position of the connection endpoint for child node positioning.
     /// </summary>

@@ -15,6 +15,10 @@ public class UI_TreeConnectDetails
 
     [Range(50f, 350f)]
     public float length;
+
+    [Range(-50f, 50f)]
+    [Tooltip("Allows for fine-tuning of the precise positions of Skill Nodes in the tree.")]
+    public float rotation = 0f;
 }
 
 /// <summary>
@@ -29,7 +33,15 @@ public class UI_TreeConnectHandler : MonoBehaviour
     [Tooltip("The 'Connection' groups (parent object containing one or more child lines) originating from this Skill Node. If this Skill does not have any children, this can be empty.")]
     [SerializeField] private UI_TreeConnection[] myConnectionLines;
 
+    private Image connectionImage;
+    private Color originalColor;
+
     private RectTransform Rect => GetComponent<RectTransform>();
+
+    void Awake()
+    {
+        if (connectionImage != null) originalColor = connectionImage.color;
+    }
 
     /// <summary>
     /// Validates connection configuration and updates connections when values change in the Unity editor.
@@ -58,19 +70,48 @@ public class UI_TreeConnectHandler : MonoBehaviour
             var connection = myConnectionLines[i];
 
             Vector2 targetPosition = connection.GetConnectionPoint(Rect);
-            // Image connectionImage = connection.GetConnectionImage();
+            // Connect handler gets access to connection details it has in the Unity inspector.
+            // One of the tree nodes has a connection line. We get access to the connection image.
+            // We take the child node, which is an 'Image'
+            Image connectionImage = connection.GetConnectionImage();
 
-            connection.DirectConnection(detail.direction, detail.length, 0f); // FIXME
+            connection.DirectConnection(detail.direction, detail.length, detail.rotation);
 
+            // Guard against MissingReferenceExceptions in the Unity Editor.
             if (detail.childNode == null) continue;
 
             detail.childNode.SetPosition(targetPosition);
-            // detail.childNode.SetConnectionImage(connectionImage);
-            // detail.childNode.transform.SetAsLastSibling();
+            detail.childNode.SetConnectionImage(connectionImage);
+            // Prevents the Red Connection Square Point of parent nodes from being sorted
+            // on top of child Skill node images and being visible to the player.
+            detail.childNode.transform.SetAsLastSibling();
         }
     }
 
-    // public void SetConnectionImage(Image image) => connectionImage = image;
+    /// <summary>
+    /// Do not invoke this function in OnValidate, as it is possible in some circumstances
+    /// to trigger endless recursion, resulting in a StackOverflow crash.
+    /// </summary>
+    public void UpdateAllConnections()
+    {
+        UpdateConnections();
+
+        foreach (var node in connectionDetails)
+        {
+            if (node.childNode == null) continue;
+
+            node.childNode.UpdateConnections();
+        }
+    }
+
+    public void UnlockConnectionImage(bool unlocked)
+    {
+        if (connectionImage == null) return;
+
+        connectionImage.color = unlocked ? Color.white : originalColor;
+    }
+
+    public void SetConnectionImage(Image image) => connectionImage = image;
 
     /// <summary>
     /// Sets the position of this connection handler's RectTransform.

@@ -14,6 +14,7 @@ public static class ColorUtils
             Mathf.Clamp01(baseColor.r * tintFactor),
             Mathf.Clamp01(baseColor.g * tintFactor),
             Mathf.Clamp01(baseColor.b * tintFactor),
+            // TODO: I think this can just be set to 1, for fully-opaque.
             Mathf.Clamp01(baseColor.a * alphaScale)
         );
     }
