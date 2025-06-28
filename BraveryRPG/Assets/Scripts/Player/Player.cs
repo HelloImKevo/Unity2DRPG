@@ -6,6 +6,8 @@ public class Player : Entity
 {
     public static event Action OnPlayerDeath;
 
+    private UI ui;
+
     public PlayerInputSet Input { get; private set; }
 
     public Player_IdleState IdleState { get; private set; }
@@ -48,6 +50,9 @@ public class Player : Entity
     protected override void Awake()
     {
         base.Awake();
+
+        // This performs some heavy lifting - never do this in Update()
+        ui = FindFirstObjectByType<UI>();
 
         Input = new PlayerInputSet();
         IdleState = new Player_IdleState(this, stateMachine, "idle");
@@ -149,6 +154,8 @@ public class Player : Entity
         // Subscribe to New Input System 'Movement' action map.
         Input.Player.Movement.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
         Input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
+
+        Input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI();
     }
 
     private void OnDisable()

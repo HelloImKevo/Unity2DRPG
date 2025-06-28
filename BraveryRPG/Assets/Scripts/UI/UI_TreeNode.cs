@@ -187,12 +187,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // Do not highlight locked skills (but still show the tooltip).
         if (isUnlocked || isLocked) return;
 
-        // Highlight the icon on Hover (when playing with KBM).
-        // TODO: Implement UI control selection behavior for Controller inputs.
-        Color highlightTint = Color.white * 0.9f;
-        // Make the color fully opaque - no transparency.
-        highlightTint.a = 1;
-        UpdateIconColor(highlightTint);
+        ToggleNodeHighlight(true);
     }
 
     /// <summary>
@@ -211,7 +206,19 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // We need to think about how this will work with Controllers;
         // there might be a library that snaps an invisible Cursor
         // to UI Buttons and Interactable components.
-        UpdateIconColor(lastColor);
+        ToggleNodeHighlight(false);
+    }
+
+    private void ToggleNodeHighlight(bool shouldHighlight)
+    {
+        // Highlight the icon on Hover (when playing with KBM).
+        // TODO: Implement UI control selection behavior for Controller inputs.
+        Color highlightTint = Color.white * 0.9f;
+        // Make the color fully opaque - no transparency.
+        highlightTint.a = 1;
+        Color colorToApply = shouldHighlight ? highlightTint : lastColor;
+
+        UpdateIconColor(colorToApply);
     }
 
     /// <summary>
@@ -224,6 +231,22 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         ColorUtility.TryParseHtmlString(hexNumber, out Color color);
 
         return color;
+    }
+
+    /// <summary>
+    /// Restore skill node visual state when toggling the UI as shown / hidden.
+    /// </summary>
+    void OnDisable()
+    {
+        if (isLocked)
+        {
+            UpdateIconColor(GetColorByHex(lockedColorHex));
+        }
+
+        if (isUnlocked)
+        {
+            UpdateIconColor(Color.white);
+        }
     }
 
     /// <summary>
