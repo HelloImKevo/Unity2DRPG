@@ -90,9 +90,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         skillTree.RemoveSkillPoints(skillData.cost);
         connectHandler.UnlockConnectionImage(true);
 
-        // Find Player_SkillManager
-        // Unlock skill on skill manager
-        // Skill Manager unlock skill from skill data Type
+        skillTree.SkillManager.GetSkillByType(skillData.skillType).SetSkillUpgrade(skillData.upgradeData);
     }
 
     /// <summary>
@@ -185,9 +183,10 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         ui.skillTooltip.ShowTooltip(true, rect, this);
 
         // Do not highlight locked skills (but still show the tooltip).
-        if (isUnlocked || isLocked) return;
-
-        ToggleNodeHighlight(true);
+        if (CanBeUnlocked())
+        {
+            ToggleNodeHighlight(true);
+        }
     }
 
     /// <summary>
@@ -200,13 +199,14 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // since we are just moving the Tooltip way off-screen.
         ui.skillTooltip.ShowTooltip(false, rect);
 
-        if (isUnlocked || isLocked) return;
-
-        // Un-highlight the icon when the Mouse Pointer leaves.
-        // We need to think about how this will work with Controllers;
-        // there might be a library that snaps an invisible Cursor
-        // to UI Buttons and Interactable components.
-        ToggleNodeHighlight(false);
+        if (CanBeUnlocked())
+        {
+            // Un-highlight the icon when the Mouse Pointer leaves.
+            // We need to think about how this will work with Controllers;
+            // there might be a library that snaps an invisible Cursor
+            // to UI Buttons and Interactable components.
+            ToggleNodeHighlight(false);
+        }
     }
 
     private void ToggleNodeHighlight(bool shouldHighlight)

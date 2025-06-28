@@ -27,7 +27,7 @@ public class UI_TreeConnectDetails
 /// </summary>
 public class UI_TreeConnectHandler : MonoBehaviour
 {
-    [Tooltip("Array containing a child UI_TreeNode endpoint, Line Direction and Line Length.")]
+    [Tooltip("Child UI_TreeNode Component, containing child Line Direction and Line Length.")]
     [SerializeField] private UI_TreeConnectDetails[] connectionDetails;
 
     [Tooltip("The 'Connection' groups (parent object containing one or more child lines) originating from this Skill Node. If this Skill does not have any children, this can be empty.")]

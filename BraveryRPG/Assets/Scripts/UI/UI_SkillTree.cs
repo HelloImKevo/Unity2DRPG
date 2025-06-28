@@ -10,6 +10,13 @@ public class UI_SkillTree : MonoBehaviour
     [Tooltip("The top-most node in the tree hierarchy. Required for the UpdateAllConnections context menu action.")]
     [SerializeField] private UI_TreeConnectHandler[] parentNodes;
 
+    public Player_SkillManager SkillManager { get; private set; }
+
+    void Awake()
+    {
+        SkillManager = FindAnyObjectByType<Player_SkillManager>();
+    }
+
     /// <summary>
     /// Initializes the skill tree on start.
     /// </summary>

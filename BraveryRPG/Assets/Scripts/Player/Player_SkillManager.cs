@@ -11,16 +11,16 @@ public class Player_SkillManager : MonoBehaviour
         // shard = GetComponentInChildren<Skill_Shard>();
     }
 
-    // public Skill_Base GetSkillByType(SkillType type)
-    // {
-    //     switch (type)
-    //     {
-    //         case SkillType.Dash: return Dash;
-    //         case SkillType.TimeShard: return shard;
+    public Skill_Base GetSkillByType(SkillType type)
+    {
+        switch (type)
+        {
+            case SkillType.Dash: return Dash;
+            // case SkillType.TimeShard: return shard;
 
-    //         default:
-    //             Debug.Log($"Skill type {type} is not implemented yet.");
-    //             return null;
-    //     }
-    // }
+            default:
+                Debug.Log($"Skill type {type} is not implemented yet.");
+                return null;
+        }
+    }
 }

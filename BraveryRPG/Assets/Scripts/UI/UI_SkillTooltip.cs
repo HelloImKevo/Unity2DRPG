@@ -93,6 +93,7 @@ public class UI_SkillTooltip : UI_Tooltip
     {
         StringBuilder sb = new();
 
+        // TODO: Hide the requirements once the skill is unlocked.
         sb.AppendLine("Requirements:");
 
         string costColor = skillTree.EnoughSkillPoints(skillCost) ? hexConditionMet : hexConditionNotMet;

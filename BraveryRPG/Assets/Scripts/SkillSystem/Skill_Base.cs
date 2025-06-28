@@ -8,8 +8,8 @@ public class Skill_Base : MonoBehaviour
 
 
     [Header("General details")]
-    // [SerializeField] protected SkillType skillType;
-    // [SerializeField] protected SkillUpgradeType upgradeType;
+    [SerializeField] protected SkillType skillType;
+    [SerializeField] protected SkillUpgradeType upgradeType;
     [SerializeField] protected float cooldown;
     private float lastTimeUsed;
 
@@ -25,12 +25,12 @@ public class Skill_Base : MonoBehaviour
         // Override when needed.
     }
 
-    // public void SetSkillUpgrade(UpgradeData upgrade)
-    // {
-    //     upgradeType = upgrade.upgradeType;
-    //     cooldown = upgrade.cooldown;
-    //     damageScaleData = upgrade.damageScaleData;
-    // }
+    public void SetSkillUpgrade(UpgradeData upgrade)
+    {
+        upgradeType = upgrade.upgradeType;
+        cooldown = upgrade.cooldown;
+        // damageScaleData = upgrade.damageScaleData;
+    }
 
     public bool CanUseSkill()
     {
