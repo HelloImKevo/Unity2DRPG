@@ -165,6 +165,7 @@ public class Player : Entity
         Input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
 
         Input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI();
+        Input.Player.Spell.performed += ctx => SkillManager.Shard.CreateShard();
     }
 
     private void OnDisable()
