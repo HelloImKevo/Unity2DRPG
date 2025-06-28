@@ -11,6 +11,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private UI ui;
     private RectTransform rect;
     private UI_SkillTree skillTree;
+    private UI_TreeConnectHandler connectHandler;
 
     [Header("Unlock Details")]
     public UI_TreeNode[] requiredNodes;
@@ -56,8 +57,21 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         ui = GetComponentInParent<UI>();
         rect = GetComponent<RectTransform>();
         skillTree = GetComponentInParent<UI_SkillTree>();
+        connectHandler = GetComponentInParent<UI_TreeConnectHandler>();
 
         UpdateIconColor(GetColorByHex(lockedColorHex));
+    }
+
+    public void Refund()
+    {
+        isUnlocked = false;
+        isLocked = false;
+        UpdateIconColor(GetColorByHex(lockedColorHex));
+
+        skillTree.AddSkillPoints(skillData.cost);
+        connectHandler.UnlockConnectionImage(false);
+
+        // Later - Skill Manager and reset skill
     }
 
     /// <summary>
@@ -68,11 +82,13 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         isUnlocked = true;
         UpdateIconColor(Color.white);
-        skillTree.RemoveSkillPoints(skillData.cost);
 
         // When unlocking this skill, we need to lock-out all conflicting
         // skill nodes in the shared Skill Tier.
         LockOutConflictingNodes();
+
+        skillTree.RemoveSkillPoints(skillData.cost);
+        connectHandler.UnlockConnectionImage(true);
 
         // Find Player_SkillManager
         // Unlock skill on skill manager
@@ -149,6 +165,10 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             Unlock();
         }
+        else if (isLocked)
+        {
+            ui.skillTooltip.PlayLockedSkillBlinkEffect();
+        }
         else
         {
             Debug.Log($"{gameObject.name} cannot be unlocked - Cost: {skillData.cost} points");
@@ -164,17 +184,15 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // Show tooltip and populate the text fields with skill data.
         ui.skillTooltip.ShowTooltip(true, rect, this);
 
-        if (!isUnlocked)
-        {
-            // Highlight the icon on Hover.
-            // FIXME: This is making the icon partially transparent, revealing the
-            // connection lines underneath. Just using 'white' won't have any visual
-            // effect for Skills that have already been unlocked - so we would need
-            // to add a Shader to the Border (for playing with a Controller rather
-            // than KBM).
-            // UpdateIconColor(Color.white * 0.9f);
-            UpdateIconColor(Color.white);
-        }
+        // Do not highlight locked skills (but still show the tooltip).
+        if (isUnlocked || isLocked) return;
+
+        // Highlight the icon on Hover (when playing with KBM).
+        // TODO: Implement UI control selection behavior for Controller inputs.
+        Color highlightTint = Color.white * 0.9f;
+        // Make the color fully opaque - no transparency.
+        highlightTint.a = 1;
+        UpdateIconColor(highlightTint);
     }
 
     /// <summary>
@@ -187,14 +205,13 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // since we are just moving the Tooltip way off-screen.
         ui.skillTooltip.ShowTooltip(false, rect);
 
-        if (!isUnlocked)
-        {
-            // Un-highlight the icon when the Mouse Pointer leaves.
-            // We need to think about how this will work with Controllers;
-            // there might be a library that snaps an invisible Cursor
-            // to UI Buttons and Interactable components.
-            UpdateIconColor(lastColor);
-        }
+        if (isUnlocked || isLocked) return;
+
+        // Un-highlight the icon when the Mouse Pointer leaves.
+        // We need to think about how this will work with Controllers;
+        // there might be a library that snaps an invisible Cursor
+        // to UI Buttons and Interactable components.
+        UpdateIconColor(lastColor);
     }
 
     /// <summary>
