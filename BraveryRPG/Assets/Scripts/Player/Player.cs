@@ -10,6 +10,7 @@ public class Player : Entity
 
     public PlayerInputSet Input { get; private set; }
     public Player_SkillManager SkillManager { get; private set; }
+    public Player_VFX Vfx { get; private set; }
 
     #region State Variables
 
@@ -61,6 +62,7 @@ public class Player : Entity
 
         Input = new PlayerInputSet();
         SkillManager = GetComponent<Player_SkillManager>();
+        Vfx = GetComponent<Player_VFX>();
 
         IdleState = new Player_IdleState(this, stateMachine, "idle");
         MoveState = new Player_MoveState(this, stateMachine, "move");

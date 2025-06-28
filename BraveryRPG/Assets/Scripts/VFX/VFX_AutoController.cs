@@ -1,12 +1,19 @@
+using System.Collections;
 using UnityEngine;
 
 public class VFX_AutoController : MonoBehaviour
 {
+    private SpriteRenderer sr;
+
     [SerializeField] private bool autoDestroy = true;
     [SerializeField] private float destroyDelay = 1f;
     [Space]
     [SerializeField] private bool randomOffset = true;
     [SerializeField] private bool randomRotation = true;
+
+    [Header("Fade Effect")]
+    [SerializeField] private bool canFade;
+    [SerializeField] private float fadeSpeed = 1;
 
     [Header("Random Rotation")]
     [SerializeField] private float minRotation = 0f;
@@ -23,12 +30,40 @@ public class VFX_AutoController : MonoBehaviour
     [Range(1, 0)]
     [SerializeField] private float yMaxOffset = 0.3f;
 
+    void Awake()
+    {
+        sr = GetComponentInChildren<SpriteRenderer>();
+    }
+
     private void Start()
     {
+        if (canFade)
+        {
+            StartCoroutine(FadeCo());
+        }
+
         ApplyRandomOffset();
         ApplyRandomRotation();
 
         if (autoDestroy) Destroy(gameObject, destroyDelay);
+    }
+
+    /// <summary>
+    /// Used for the Dash afterimage effect.
+    /// </summary>
+    private IEnumerator FadeCo()
+    {
+        Color targetColor = Color.white;
+
+        while (targetColor.a > 0)
+        {
+            targetColor.a -= fadeSpeed * Time.deltaTime;
+            sr.color = targetColor;
+            // Reduce alpha a little bit, then wait for the next frame.
+            yield return null;
+        }
+
+        sr.color = targetColor;
     }
 
     private void ApplyRandomOffset()

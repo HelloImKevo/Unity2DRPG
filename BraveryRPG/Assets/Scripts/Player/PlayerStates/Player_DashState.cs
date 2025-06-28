@@ -14,6 +14,10 @@ public class Player_DashState : PlayerState
     {
         base.Enter();
 
+        skillManager.Dash.OnStartEffect();
+        // Trigger the afterimage fade effect.
+        player.Vfx.DoImageEchoEffect(player.dashDuration);
+
         // Ternary syntax - This assumes that X is a value between -1.0 and +1.0
         // Define dash direction according to Input.
         dashDir = player.MoveInput.x != 0 ? (int)player.MoveInput.x : player.FacingDir;
@@ -49,6 +53,8 @@ public class Player_DashState : PlayerState
     public override void Exit()
     {
         base.Exit();
+
+        skillManager.Dash.OnEndEffect();
 
         // Prevent rapid acceleration of horizontal velocity when player is not Grounded,
         // and we transition to the Falling state.

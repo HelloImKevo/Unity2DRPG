@@ -27,7 +27,9 @@ public class Skill_DataSO : ScriptableObject
 [Serializable]
 public class UpgradeData
 {
+    [Tooltip("What benefit or perk does this upgrade provide?")]
     public SkillUpgradeType upgradeType;
-    public float cooldown;
+    [Tooltip("Cooldown in seconds - How long before the skill can be used again. Defaults to zero, meaning 'No cooldown'.")]
+    public float cooldown = 0f;
     // public DamageScaleData damageScaleData;
 }

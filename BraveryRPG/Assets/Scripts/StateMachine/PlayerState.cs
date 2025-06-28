@@ -48,7 +48,7 @@ public abstract class PlayerState : EntityState
     /// https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/index.html
     /// </summary>
     protected PlayerInputSet input;
-    protected Player_SkillManager skills;
+    protected Player_SkillManager skillManager;
 
     /// <summary>
     /// Constructs a new PlayerState with required player-specific dependencies.
@@ -75,7 +75,7 @@ public abstract class PlayerState : EntityState
         rb = player.Rb;
         stats = player.Stats;
         input = player.Input;
-        skills = player.SkillManager;
+        skillManager = player.SkillManager;
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ public abstract class PlayerState : EntityState
         // Enable the user to interrupt an Attack animation by Dashing.
         if (input.Player.Dash.WasPressedThisFrame() && CanDash())
         {
-            skills.Dash.SetSkillOnCooldown();
+            skillManager.Dash.SetSkillOnCooldown();
             stateMachine.ChangeState(player.DashState);
         }
     }
@@ -160,7 +160,7 @@ public abstract class PlayerState : EntityState
     /// </returns>
     private bool CanDash()
     {
-        if (!skills.Dash.CanUseSkill())
+        if (!skillManager.Dash.CanUseSkill())
         {
             return false;
         }

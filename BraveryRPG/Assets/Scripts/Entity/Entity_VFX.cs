@@ -24,7 +24,7 @@ public class Entity_VFX : MonoBehaviour
     private Color originalHitVfxColor;
 
     private Entity entity;
-    private SpriteRenderer sr;
+    protected SpriteRenderer sr;
 
     private Material originalMaterial;
     private Coroutine onDamageVfxCoroutine;
