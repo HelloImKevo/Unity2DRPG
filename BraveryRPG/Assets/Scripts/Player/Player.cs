@@ -9,6 +9,9 @@ public class Player : Entity
     private UI ui;
 
     public PlayerInputSet Input { get; private set; }
+    public Player_SkillManager SkillManager { get; private set; }
+
+    #region State Variables
 
     public Player_IdleState IdleState { get; private set; }
     public Player_MoveState MoveState { get; private set; }
@@ -21,6 +24,8 @@ public class Player : Entity
     public Player_WallJumpState WallJumpState { get; private set; }
     public Player_DeadState DeadState { get; private set; }
     public Player_CounterattackState CounterattackState { get; private set; }
+
+    #endregion
 
     [Header("Attack Details")]
     public Vector2[] attackVelocity;
@@ -55,6 +60,8 @@ public class Player : Entity
         ui = FindFirstObjectByType<UI>();
 
         Input = new PlayerInputSet();
+        SkillManager = GetComponent<Player_SkillManager>();
+
         IdleState = new Player_IdleState(this, stateMachine, "idle");
         MoveState = new Player_MoveState(this, stateMachine, "move");
         JumpState = new Player_JumpState(this, stateMachine, "jumpFall");
