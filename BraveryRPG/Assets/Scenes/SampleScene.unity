@@ -16718,10 +16718,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 365024316}
-  - {fileID: 949960063}
-  - {fileID: 491228001}
   - {fileID: 2106783200}
   - {fileID: 1099504821}
+  - {fileID: 491228001}
+  - {fileID: 949960063}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -18292,10 +18292,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1245020436}
-  - {fileID: 2113420233}
-  - {fileID: 55338452}
   - {fileID: 716054847}
   - {fileID: 206418521}
+  - {fileID: 2113420233}
+  - {fileID: 55338452}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -21007,14 +21007,9 @@ MonoBehaviour:
     burnDamageScale: 1
     shockDuration: 3
     shockDamageScale: 1
-    shockCharge: 0.4
+    shockChargeBuildup: 0.4
   targetCheckPoint: {fileID: 1797716488}
   targetCheckRadius: 0.85
-  defaultDuration: 3
-  chillSlowMultiplier: 0.3
-  electrifyChargeBuildup: 0.4
-  fireScaling: 0.8
-  lightningScaling: 2.5
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 128
@@ -57657,9 +57652,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 590103732}
-  - {fileID: 1738595593}
   - {fileID: 449954777}
   - {fileID: 1902035485}
+  - {fileID: 1738595593}
   - {fileID: 1331991641}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

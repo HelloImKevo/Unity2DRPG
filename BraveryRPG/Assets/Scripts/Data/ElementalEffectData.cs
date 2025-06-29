@@ -1,6 +1,3 @@
-using System;
-
-[Serializable]
 public class ElementalEffectData
 {
     public float chillDuration;
@@ -23,6 +20,6 @@ public class ElementalEffectData
 
         shockDuration = damageScale.shockDuration;
         shockDamage = entityStats.offense.lightningDamage.GetValue() * damageScale.shockDamageScale;
-        shockChargeBuildup = damageScale.shockCharge;
+        shockChargeBuildup = damageScale.shockChargeBuildup;
     }
 }

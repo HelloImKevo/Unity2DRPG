@@ -12,6 +12,11 @@ public class Entity_Stats : MonoBehaviour
     public Stat_DefenseGroup defense;
     public Stat_MajorGroup major;
 
+    public AttackData GetAttackData(DamageScaleData scaleData)
+    {
+        return new AttackData(this, scaleData);
+    }
+
     /// <param name="scaleFactor">Fractional percentage value between 0.0 - 2.0 (200%).</param>
     public float GetElementalDamage(out ElementType element, float scaleFactor = 1f)
     {

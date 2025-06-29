@@ -29,6 +29,7 @@ public class Entity_Combat : MonoBehaviour
     private Entity_Stats stats;
     private Entity_VFX vfx;
 
+    [Tooltip("Physical & elemental attack damage scaling and behavior parameters.")]
     public DamageScaleData basicAttackScale;
 
     [Header("Target Detection")]
@@ -63,23 +64,6 @@ public class Entity_Combat : MonoBehaviour
     /// </summary>
     [Tooltip("Circular radius from the Target Check Point to detect collisions when a melee attack is performed")]
     [SerializeField] private float targetCheckRadius = 1f;
-
-    [Header("Offense Status Effect Details")]
-    [Tooltip("Duration of status effects applied by this entity to its targets, in seconds.")]
-    [SerializeField] private float defaultDuration = 3f;
-    [Range(0, 1)]
-    [Tooltip("Slow effect applied to targets of this entity as a fractional percentage; 0.2 = 20% slow effect.")]
-    [SerializeField] private float chillSlowMultiplier = 0.2f;
-    [Range(0, 1)]
-    [Tooltip("Multiple attacks build up electrical charges, which then result in a Lightning Strike.")]
-    [SerializeField] private float electrifyChargeBuildup = 0.4f;
-
-    [Space]
-
-    [Tooltip("Burn DoT (Damage over Time) damage scaling.")]
-    [SerializeField] private float fireScaling = 0.8f;
-    [Tooltip("Lightning Strike damage scaling when enough charges are built up.")]
-    [SerializeField] private float lightningScaling = 2.5f;
 
     /// <summary>
     /// Layer mask that defines which objects can be targeted by attacks.
@@ -126,22 +110,22 @@ public class Entity_Combat : MonoBehaviour
         {
             if (target.TryGetComponent<IDamageable>(out var damageable))
             {
-                ElementalEffectData effectData = new ElementalEffectData(stats, basicAttackScale);
+                AttackData attackData = stats.GetAttackData(basicAttackScale);
 
-                float physicalDamage = stats.GetPhysicalDamage(out bool isCrit);
-                // Only apply 60% of elemental damage for basic attacks.
-                float elementalDamage = stats.GetElementalDamage(out ElementType element, 0.6f);
+                float physicalDamage = attackData.physicalDamage;
+                float elementalDamage = attackData.elementalDamage;
+                ElementType element = attackData.element;
 
                 bool targetDamaged = damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
 
                 if (element != ElementType.None)
                 {
-                    target.GetComponent<Entity_StatusHandler>().ApplyStatusEffect(element, effectData);
+                    target.GetComponent<Entity_StatusHandler>().ApplyStatusEffect(element, attackData.effectData);
                 }
 
                 if (targetDamaged)
                 {
-                    vfx.CreateOnHitVfx(target.transform, isCrit, element);
+                    vfx.CreateOnHitVfx(target.transform, attackData.isCrit, element);
                 }
             }
         }

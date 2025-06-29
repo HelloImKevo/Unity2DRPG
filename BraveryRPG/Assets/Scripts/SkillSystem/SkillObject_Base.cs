@@ -20,26 +20,18 @@ public class SkillObject_Base : MonoBehaviour
 
             if (damageable == null) continue;
 
-            damageable.TakeDamage(1, 1, ElementType.None, transform);
-
-            // AttackData attackData = playerStats.GetAttackData(damageScaleData);
+            AttackData attackData = playerStats.GetAttackData(damageScaleData);
             Entity_StatusHandler statusHandler = target.GetComponent<Entity_StatusHandler>();
 
-            // float physDamage = attackData.physicalDamage;
-            // float elemDamage = attackData.elementalDamage;
-            // ElementType element = attackData.element;
-
-            ElementalEffectData effectData = new ElementalEffectData(playerStats, damageScaleData);
-
-            float physDamage = playerStats.GetPhysicalDamage(out bool isCrit, damageScaleData.physical);
-            float elemDamage = playerStats.GetElementalDamage(out ElementType element, damageScaleData.elemental);
-            // ElementType element = attackData.element;
+            float physDamage = attackData.physicalDamage;
+            float elemDamage = attackData.elementalDamage;
+            ElementType element = attackData.element;
 
             damageable.TakeDamage(physDamage, elemDamage, element, transform);
 
             if (element != ElementType.None)
             {
-                statusHandler?.ApplyStatusEffect(element, effectData);
+                statusHandler?.ApplyStatusEffect(element, attackData.effectData);
             }
 
             Debug.Log($"{GetType().Name} dealt {physDamage} (P) + {elemDamage} (E) damage to: {damageable.GetType().Name}");
