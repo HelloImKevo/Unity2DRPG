@@ -18,11 +18,11 @@ public class Skill_Shard : Skill_Base
     [SerializeField] private int currentCharges = 3;
     [SerializeField] private bool isRecharging;
 
-    // [Header("Teleport Shard Upgrade")]
-    // [SerializeField] private float shardExistDuration = 10;
+    [Header("Teleport Shard Upgrade")]
+    [SerializeField] private float shardExistDuration = 10f;
 
-    // [Header("Health Rewind Shard Upgrade")]
-    // [SerializeField] private float savedHealthPercent;
+    [Header("Health Rewind Shard Upgrade")]
+    [SerializeField] private float savedHealthPercent;
 
     protected override void Awake()
     {
@@ -50,55 +50,56 @@ public class Skill_Shard : Skill_Base
             HandleShardMulticast();
         }
 
-        // if (Unlocked(SkillUpgradeType.Shard_Teleport))
-        // {
-        //     HandleShardTeleport();
-        // }
+        if (Unlocked(SkillUpgradeType.Shard_Teleport))
+        {
+            HandleShardTeleport();
+        }
 
-        // if (Unlocked(SkillUpgradeType.Shard_TeleportHpRewind))
-        // {
-        //     HandleShardHealthRewind();
-        // }
+        if (Unlocked(SkillUpgradeType.Shard_TeleportHpRewind))
+        {
+            HandleShardHealthRewind();
+        }
     }
 
-    // private void HandleShardHealthRewind()
-    // {
-    //     if (currentShard == null)
-    //     {
-    //         CreateShard();
-    //         savedHealthPercent = playerHealth.GetHealthPercent();
-    //     }
-    //     else
-    //     {
-    //         SwapPlayerAndShard();
-    //         playerHealth.SetHealthToPercent(savedHealthPercent);
-    //         SetSkillOnCooldown();
-    //     }
-    // }
+    private void HandleShardHealthRewind()
+    {
+        if (currentShard == null)
+        {
+            CreateShard();
+            savedHealthPercent = playerHealth.GetHealthPercent();
+        }
+        else
+        {
+            SwapPlayerAndShard();
+            playerHealth.SetHealthToPercent(savedHealthPercent);
+            SetSkillOnCooldown();
+        }
+    }
 
-    // private void HandleShardTeleport()
-    // {
-    //     if (currentShard == null)
-    //     {
-    //         CreateShard();
-    //     }
-    //     else
-    //     {
-    //         SwapPlayerAndShard();
-    //         SetSkillOnCooldown();
-    //     }
-    // }
+    private void HandleShardTeleport()
+    {
+        if (currentShard == null)
+        {
+            CreateShard();
+        }
+        else
+        {
+            SwapPlayerAndShard();
+            SetSkillOnCooldown();
+        }
+    }
 
-    // private void SwapPlayerAndShard()
-    // {
-    //     Vector3 shardPosition = currentShard.transform.position;
-    //     Vector3 playerPosition = player.transform.position;
+    private void SwapPlayerAndShard()
+    {
+        Vector3 shardPosition = currentShard.transform.position;
+        Vector3 playerPosition = Player.transform.position;
 
-    //     currentShard.transform.position = playerPosition;
-    //     currentShard.Explode();
+        currentShard.transform.position = playerPosition;
+        // Immediately explode shard to prevent subsequent teleports.
+        currentShard.Explode();
 
-    //     player.TeleportPlayer(shardPosition);
-    // }
+        Player.TeleportPlayer(shardPosition);
+    }
 
     private void HandleShardMulticast()
     {
@@ -150,10 +151,11 @@ public class Skill_Shard : Skill_Base
         currentShard = shard.GetComponent<SkillObject_Shard>();
         currentShard.SetupShard(this);
 
-        // if (Unlocked(SkillUpgradeType.Shard_Teleport) || Unlocked(SkillUpgradeType.Shard_TeleportHpRewind))
-        // {
-        //     currentShard.OnExplode += ForceCooldown;
-        // }
+        if (Unlocked(SkillUpgradeType.Shard_Teleport) || Unlocked(SkillUpgradeType.Shard_TeleportHpRewind))
+        {
+            // Subscribe to event Action - whenever we observe the OnExplode event, force cooldown.
+            currentShard.OnExplode += ForceCooldown;
+        }
     }
 
     public void CreateRawShard()
@@ -168,18 +170,19 @@ public class Skill_Shard : Skill_Base
     {
         if (Unlocked(SkillUpgradeType.Shard_Teleport) || Unlocked(SkillUpgradeType.Shard_TeleportHpRewind))
         {
-            // return shardExistDuration;
+            return shardExistDuration;
         }
 
         return detonateTime;
     }
 
-    // private void ForceCooldown()
-    // {
-    //     if (!OnCooldown())
-    //     {
-    //         SetSkillOnCooldown();
-    //         currentShard.OnExplode -= ForceCooldown;
-    //     }
-    // }
+    private void ForceCooldown()
+    {
+        if (!OnCooldown())
+        {
+            SetSkillOnCooldown();
+            // Unsubscribe this function from the action event.
+            currentShard.OnExplode -= ForceCooldown;
+        }
+    }
 }

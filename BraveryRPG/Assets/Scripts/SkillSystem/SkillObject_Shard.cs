@@ -61,6 +61,7 @@ public class SkillObject_Shard : SkillObject_Base
         GameObject vfx = Instantiate(vfxPrefab, transform.position, Quaternion.identity);
         // vfx.GetComponentInChildren<SpriteRenderer>().color = shardManager.player.vfx.GetElementColor(usedElement);
 
+        // Trigger observable event action.
         OnExplode?.Invoke();
         Destroy(gameObject);
     }

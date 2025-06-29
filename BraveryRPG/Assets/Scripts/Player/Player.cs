@@ -84,6 +84,9 @@ public class Player : Entity
         stateMachine.Initialize(IdleState);
     }
 
+    // TODO: Add some kind of teleportation VFX like a glow or puff of smoke.
+    public void TeleportPlayer(Vector3 position) => transform.position = position;
+
     protected override IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)
     {
         // Speeds should be DECREASED to simulate player slowness.
