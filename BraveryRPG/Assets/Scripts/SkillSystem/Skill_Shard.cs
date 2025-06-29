@@ -11,12 +11,12 @@ public class Skill_Shard : Skill_Base
     [SerializeField] private float detonateTime = 2f;
 
     [Header("Moving Shard Upgrade")]
-    [SerializeField] private float shardSpeed = 7f;
+    [SerializeField] private float shardSpeed = 6f;
 
-    // [Header("Multicast Shard Upgrade")]
-    // [SerializeField] private int maxCharges = 3;
-    // [SerializeField] private int currentCharges;
-    // [SerializeField] private bool isRecharging;
+    [Header("Multicast Shard Upgrade")]
+    [SerializeField] private int maxCharges = 3;
+    [SerializeField] private int currentCharges = 3;
+    [SerializeField] private bool isRecharging;
 
     // [Header("Teleport Shard Upgrade")]
     // [SerializeField] private float shardExistDuration = 10;
@@ -27,39 +27,39 @@ public class Skill_Shard : Skill_Base
     protected override void Awake()
     {
         base.Awake();
-        // currentCharges = maxCharges;
+        currentCharges = maxCharges;
         playerHealth = GetComponentInParent<Entity_Health>();
     }
 
-    // public override void TryUseSkill()
-    // {
-    //     if (!CanUseSkill()) return;
+    public override void TryUseSkill()
+    {
+        if (!CanUseSkill()) return;
 
-    //     if (Unlocked(SkillUpgradeType.Shard))
-    //     {
-    //         HandleShardRegular();
-    //     }
+        if (Unlocked(SkillUpgradeType.Shard))
+        {
+            HandleShardRegular();
+        }
 
-    //     if (Unlocked(SkillUpgradeType.Shard_MoveToEnemy))
-    //     {
-    //         HandleShardMoving();
-    //     }
+        if (Unlocked(SkillUpgradeType.Shard_MoveToEnemy))
+        {
+            HandleShardMoving();
+        }
 
-    //     if (Unlocked(SkillUpgradeType.Shard_Multicast))
-    //     {
-    //         HandleShardMulticast();
-    //     }
+        if (Unlocked(SkillUpgradeType.Shard_Multicast))
+        {
+            HandleShardMulticast();
+        }
 
-    //     if (Unlocked(SkillUpgradeType.Shard_Teleport))
-    //     {
-    //         HandleShardTeleport();
-    //     }
+        // if (Unlocked(SkillUpgradeType.Shard_Teleport))
+        // {
+        //     HandleShardTeleport();
+        // }
 
-    //     if (Unlocked(SkillUpgradeType.Shard_TeleportHpRewind))
-    //     {
-    //         HandleShardHealthRewind();
-    //     }
-    // }
+        // if (Unlocked(SkillUpgradeType.Shard_TeleportHpRewind))
+        // {
+        //     HandleShardHealthRewind();
+        // }
+    }
 
     // private void HandleShardHealthRewind()
     // {
@@ -100,55 +100,55 @@ public class Skill_Shard : Skill_Base
     //     player.TeleportPlayer(shardPosition);
     // }
 
-    // private void HandleShardMulticast()
-    // {
-    //     if (currentCharges <= 0)
-    //         return;
-
-    //     CreateShard();
-    //     currentShard.MoveTowardsClosestTarget(shardSpeed);
-    //     currentCharges--;
-
-    //     if (isRecharging == false)
-    //         StartCoroutine(ShardRechargeCo());
-    // }
-
-    // private IEnumerator ShardRechargeCo()
-    // {
-    //     isRecharging = true;
-
-    //     while (currentCharges < maxCharges)
-    //     {
-    //         yield return new WaitForSeconds(cooldown);
-    //         currentCharges++;
-    //     }
-
-    //     isRecharging = false;
-    // }
-
-    // private void HandleShardMoving()
-    // {
-    //     CreateShard();
-    //     currentShard.MoveTowardsClosestTarget(shardSpeed);
-
-    //     SetSkillOnCooldown();
-    // }
-
-    // private void HandleShardRegular()
-    // {
-    //     CreateShard();
-    //     SetSkillOnCooldown();
-    // }
-
-    public void CreateShard()
+    private void HandleShardMulticast()
     {
-        if (SkillUpgradeType.None == upgradeType) return;
+        if (currentCharges <= 0) return;
 
+        CreateShard();
+        currentShard.MoveTowardsClosestTarget(shardSpeed);
+        currentCharges--;
+
+        if (!isRecharging)
+        {
+            StartCoroutine(ShardRechargeCo());
+        }
+    }
+
+    private IEnumerator ShardRechargeCo()
+    {
+        isRecharging = true;
+
+        while (currentCharges < maxCharges)
+        {
+            yield return new WaitForSeconds(cooldown);
+            // Replenish charge stacks to player.
+            currentCharges++;
+        }
+
+        isRecharging = false;
+    }
+
+    private void HandleShardMoving()
+    {
+        CreateShard();
+        currentShard.MoveTowardsClosestTarget(shardSpeed);
+
+        SetSkillOnCooldown();
+    }
+
+    private void HandleShardRegular()
+    {
+        CreateShard();
+        SetSkillOnCooldown();
+    }
+
+    private void CreateShard()
+    {
         float detonateTime = GetDetonateTime();
 
         GameObject shard = Instantiate(shardPrefab, transform.position, Quaternion.identity);
         currentShard = shard.GetComponent<SkillObject_Shard>();
-        // currentShard.SetupShard(this);
+        currentShard.SetupShard(this);
 
         // if (Unlocked(SkillUpgradeType.Shard_Teleport) || Unlocked(SkillUpgradeType.Shard_TeleportHpRewind))
         // {

@@ -5,7 +5,8 @@ public class SkillObject_Base : MonoBehaviour
     [Tooltip("The 'Enemy' Layer")]
     [SerializeField] protected LayerMask whatIsEnemy;
     [SerializeField] protected Transform targetCheck;
-    [SerializeField] protected float checkRadius = 1f;
+    [SerializeField] protected float damageRadius = 1f;
+    [SerializeField] protected float detectionRadius = 10f;
 
     protected Entity_Stats playerStats;
     // protected DamageScaleData damageScaleData;
@@ -44,7 +45,7 @@ public class SkillObject_Base : MonoBehaviour
         Transform target = null;
         float closestDistance = Mathf.Infinity;
 
-        foreach (var enemy in EnemiesAround(transform, 10))
+        foreach (var enemy in EnemiesAround(transform, detectionRadius))
         {
             float distance = Vector2.Distance(transform.position, enemy.transform.position);
 
@@ -68,6 +69,6 @@ public class SkillObject_Base : MonoBehaviour
         if (targetCheck == null)
             targetCheck = transform;
 
-        Gizmos.DrawWireSphere(targetCheck.position, checkRadius);
+        Gizmos.DrawWireSphere(targetCheck.position, damageRadius);
     }
 }

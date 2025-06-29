@@ -40,7 +40,7 @@ public enum SkillUpgradeType
     Shard_MoveToEnemy,
 
     /// <summary>
-    /// Shard ability can have up to N charges. You can cast them all in a raw
+    /// Shard ability can have up to N charges. You can cast them all in a row.
     /// </summary>
     Shard_Multicast,
 

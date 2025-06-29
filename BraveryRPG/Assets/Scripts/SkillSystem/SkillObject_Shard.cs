@@ -16,6 +16,7 @@ public class SkillObject_Shard : SkillObject_Base
     {
         if (target == null) return;
 
+        // Gradually move (drift) towards target, at a frame-rate-independent speed.
         transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     }
 
@@ -25,17 +26,17 @@ public class SkillObject_Shard : SkillObject_Base
         this.speed = speed;
     }
 
-    // public void SetupShard(Skill_Shard shardManager)
-    // {
-    //     this.shardManager = shardManager;
+    public void SetupShard(Skill_Shard shardManager)
+    {
+        // this.shardManager = shardManager;
 
-    //     playerStats = shardManager.player.stats;
-    //     damageScaleData = shardManager.damageScaleData;
+        // playerStats = shardManager.player.stats;
+        // damageScaleData = shardManager.damageScaleData;
 
-    //     float detonationTime = shardManager.GetDetonateTime();
+        float detonationTime = shardManager.GetDetonateTime();
 
-    //     Invoke(nameof(Explode), detonationTime);
-    // }
+        Invoke(nameof(Explode), detonationTime);
+    }
 
     // public void SetupShard(Skill_Shard shardManager, float detonationTime, bool canMove, float shardSpeed)
     // {
@@ -56,7 +57,7 @@ public class SkillObject_Shard : SkillObject_Base
     /// </summary>
     public void Explode()
     {
-        DamageEnemiesInRadius(transform, checkRadius);
+        DamageEnemiesInRadius(transform, damageRadius);
         GameObject vfx = Instantiate(vfxPrefab, transform.position, Quaternion.identity);
         // vfx.GetComponentInChildren<SpriteRenderer>().color = shardManager.player.vfx.GetElementColor(usedElement);
 
