@@ -18,7 +18,7 @@ public class ElementalEffectData
         chillDuration = damageScale.chillDuration;
         chillSlowMultiplier = damageScale.chillSlowMulitplier;
 
-        burnDuratoin = damageScale.burnDuratin;
+        burnDuratoin = damageScale.burnDuration;
         totalBurnDamage = entityStats.offense.fireDamage.GetValue() * damageScale.burnDamageScale;
 
         shockDuration = damageScale.shockDuration;

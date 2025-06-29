@@ -19,7 +19,7 @@ MonoBehaviour:
     when touched by an enemy or when time goes up.'
   icon: {fileID: -198318909, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   cost: 1
-  unlockedByDefault: 1
+  unlockedByDefault: 0
   skillType: 2
   upgradeData:
     upgradeType: 6
@@ -29,7 +29,7 @@ MonoBehaviour:
       elemental: 2.5
       chillDuration: 3
       chillSlowMulitplier: 0.2
-      burnDuratin: 3
+      burnDuration: 3
       burnDamageScale: 1
       shockDuration: 3
       shockDamageScale: 1

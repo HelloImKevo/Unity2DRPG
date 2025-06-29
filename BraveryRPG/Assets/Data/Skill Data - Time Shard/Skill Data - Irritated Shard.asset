@@ -24,10 +24,10 @@ MonoBehaviour:
     damageScaleData:
       physical: 1
       elemental: 2.5
-      chillDuration: 3
+      chillDuration: 5
       chillSlowMulitplier: 0.2
-      burnDuratin: 3
+      burnDuration: 3
       burnDamageScale: 1
-      shockDuration: 3
+      shockDuration: 1
       shockDamageScale: 1
       shockCharge: 0.4

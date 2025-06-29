@@ -141,8 +141,7 @@ public class Entity_Combat : MonoBehaviour
 
                 if (targetDamaged)
                 {
-                    vfx.UpdateOnHitColor(element);
-                    vfx.CreateOnHitVfx(target.transform, isCrit);
+                    vfx.CreateOnHitVfx(target.transform, isCrit, element);
                 }
             }
         }

@@ -106,7 +106,7 @@ public class Skill_Shard : Skill_Base
         if (currentCharges <= 0) return;
 
         CreateShard();
-        currentShard.MoveTowardsClosestTarget(shardSpeed);
+        currentShard.StartMovingTowardsClosestTarget(shardSpeed);
         currentCharges--;
 
         if (!isRecharging)
@@ -132,7 +132,7 @@ public class Skill_Shard : Skill_Base
     private void HandleShardMoving()
     {
         CreateShard();
-        currentShard.MoveTowardsClosestTarget(shardSpeed);
+        currentShard.StartMovingTowardsClosestTarget(shardSpeed);
 
         SetSkillOnCooldown();
     }
@@ -158,12 +158,16 @@ public class Skill_Shard : Skill_Base
         }
     }
 
+    /// <summary>
+    /// Used to create Shard instances by synergy skills, like Dash.
+    /// </summary>
     public void CreateRawShard()
     {
         bool canMove = Unlocked(SkillUpgradeType.Shard_MoveToEnemy) || Unlocked(SkillUpgradeType.Shard_Multicast);
 
-        // GameObject shard = Instantiate(shardPrefab, transform.position, Quaternion.identity);
-        // shard.GetComponent<SkillObject_Shard>().SetupShard(this, detonateTime, canMove, shardSpeed);
+        GameObject shard = Instantiate(shardPrefab, transform.position, Quaternion.identity);
+        // Use overload which allows for behavior customization of shard instances.
+        shard.GetComponent<SkillObject_Shard>().SetupShard(this, detonateTime, canMove, shardSpeed);
     }
 
     public float GetDetonateTime()

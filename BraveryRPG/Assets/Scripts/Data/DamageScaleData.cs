@@ -15,7 +15,7 @@ public class DamageScaleData
     public float chillSlowMulitplier = 0.2f;
 
     [Header("Burn")]
-    public float burnDuratin = 3f;
+    public float burnDuration = 3f;
     public float burnDamageScale = 1f;
 
 

@@ -20,7 +20,7 @@ public class Entity_VFX : MonoBehaviour
     [Header("Element Colors")]
     [SerializeField] private Color chillVfx = Color.cyan;
     [SerializeField] private Color burnVfx = Color.orangeRed;
-    [SerializeField] private Color electrifyVfx = Color.yellow;
+    [SerializeField] private Color shockVfx = Color.yellow;
     private Color originalHitVfxColor;
 
     private Entity entity;
@@ -53,7 +53,7 @@ public class Entity_VFX : MonoBehaviour
 
         if (ElementType.Lightning == element)
         {
-            statusBlinkVfxCo = StartCoroutine(PlayStatusBlinkVfxCo(duration, electrifyVfx));
+            statusBlinkVfxCo = StartCoroutine(PlayStatusBlinkVfxCo(duration, shockVfx));
         }
     }
 
@@ -99,7 +99,7 @@ public class Entity_VFX : MonoBehaviour
     // Summary:
     //     Creates an instance of [hitVfx] at the [target] location,
     //     with the same rotation (quaternion).
-    public void CreateOnHitVfx(Transform target, bool isCrit)
+    public void CreateOnHitVfx(Transform target, bool isCrit, ElementType element)
     {
         GameObject hitPrefab = isCrit ? critHitVfx : hitVfx;
         GameObject vfx = Instantiate(hitPrefab, target.position, Quaternion.identity);
@@ -107,7 +107,7 @@ public class Entity_VFX : MonoBehaviour
         {
             // Note: We could recolor the Crit VFX asset to be grayscale, so that
             // it can be colorized with our tint.
-            vfx.GetComponentInChildren<SpriteRenderer>().color = hitVfxColor;
+            vfx.GetComponentInChildren<SpriteRenderer>().color = GetElementColor(element);
         }
 
         if (entity.FacingDir == -1 && isCrit)
@@ -117,16 +117,18 @@ public class Entity_VFX : MonoBehaviour
         }
     }
 
-    public void UpdateOnHitColor(ElementType element)
+    public Color GetElementColor(ElementType element)
     {
-        if (ElementType.Ice == element) hitVfxColor = chillVfx;
+        return element switch
+        {
+            ElementType.Ice => chillVfx,
 
-        if (ElementType.Fire == element) hitVfxColor = burnVfx;
+            ElementType.Fire => burnVfx,
 
-        if (ElementType.Lightning == element) hitVfxColor = electrifyVfx;
+            ElementType.Lightning => shockVfx,
 
-        // Reset "On Hit" visual effect tint to original configuration.
-        if (ElementType.None == element) hitVfxColor = originalHitVfxColor;
+            _ => Color.white,
+        };
     }
 
     public void PlayOnDamageFlashWhiteVfx()

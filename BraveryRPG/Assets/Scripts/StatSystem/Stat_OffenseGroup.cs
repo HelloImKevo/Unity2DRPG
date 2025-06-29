@@ -30,12 +30,12 @@ public class Stat_OffenseGroup
     public Stat armorPenetration;
 
     // Elemental Damage
-    [Tooltip("Fire resistance as a whole percentage; 20.5 = 20.5% resist.")]
+    [Tooltip("Base Fire elemental damage.")]
     public Stat fireDamage;
 
-    [Tooltip("Ice resistance as a whole percentage; 30.5 = 30.5% resist.")]
+    [Tooltip("Base Ice elemental damage.")]
     public Stat iceDamage;
 
-    [Tooltip("Lightning resistance as a whole percentage; 40.5 = 40.5% resist.")]
+    [Tooltip("Base Lightning elemental damage.")]
     public Stat lightningDamage;
 }

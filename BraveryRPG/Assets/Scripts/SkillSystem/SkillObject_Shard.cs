@@ -20,7 +20,7 @@ public class SkillObject_Shard : SkillObject_Base
         transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     }
 
-    public void MoveTowardsClosestTarget(float speed)
+    public void StartMovingTowardsClosestTarget(float speed)
     {
         target = FindClosestTarget();
         this.speed = speed;
@@ -38,18 +38,19 @@ public class SkillObject_Shard : SkillObject_Base
         Invoke(nameof(Explode), detonationTime);
     }
 
-    // public void SetupShard(Skill_Shard shardManager, float detonationTime, bool canMove, float shardSpeed)
-    // {
-    //     this.shardManager = shardManager;
-    //     playerStats = shardManager.player.stats;
-    //     damageScaleData = shardManager.damageScaleData;
+    public void SetupShard(Skill_Shard shardManager, float detonationTime, bool canMove, float shardSpeed)
+    {
+        this.shardManager = shardManager;
+        playerStats = shardManager.Player.Stats;
+        damageScaleData = shardManager.damageScaleData;
 
-    //     Invoke(nameof(Explode), detonationTime);
+        Invoke(nameof(Explode), detonationTime);
 
-    //     if (canMove)
-    //         {
-    //         MoveTowardsClosestTarget(shardSpeed);}
-    // }
+        if (canMove)
+        {
+            StartMovingTowardsClosestTarget(shardSpeed);
+        }
+    }
 
     /// <summary>
     /// Deals damage to nearby enemies within the radius, creates a 'Shard Explosion'
@@ -59,7 +60,8 @@ public class SkillObject_Shard : SkillObject_Base
     {
         DamageEnemiesInRadius(transform, damageRadius);
         GameObject vfx = Instantiate(vfxPrefab, transform.position, Quaternion.identity);
-        // vfx.GetComponentInChildren<SpriteRenderer>().color = shardManager.player.vfx.GetElementColor(usedElement);
+        // Colorize the explosion sprite with a tint matching the dominant element.
+        vfx.GetComponentInChildren<SpriteRenderer>().color = shardManager.Player.Vfx.GetElementColor(usedElement);
 
         // Trigger observable event action.
         OnExplode?.Invoke();

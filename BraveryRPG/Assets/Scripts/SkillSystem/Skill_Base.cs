@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Skill_Base : MonoBehaviour
 {
-    public Player_SkillManager skillManager { get; private set; }
+    public Player_SkillManager SkillManager { get; private set; }
     public Player Player { get; private set; }
     public DamageScaleData damageScaleData { get; private set; }
 
@@ -14,7 +14,7 @@ public class Skill_Base : MonoBehaviour
 
     protected virtual void Awake()
     {
-        skillManager = GetComponentInParent<Player_SkillManager>();
+        SkillManager = GetComponentInParent<Player_SkillManager>();
         Player = GetComponentInParent<Player>();
         lastTimeUsed -= cooldown;
     }
@@ -38,7 +38,7 @@ public class Skill_Base : MonoBehaviour
 
         if (OnCooldown())
         {
-            Debug.Log($"{gameObject.name} On Cooldown");
+            Debug.Log($"{GetType().Name} On Cooldown");
             return false;
         }
 

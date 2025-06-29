@@ -15935,6 +15935,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredNodes:
   - {fileID: 590103733}
+  - {fileID: 365024317}
   conflictNodes:
   - {fileID: 1902035484}
   isUnlocked: 0
@@ -16865,7 +16866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccbad1ed9b93c4097be2faed47d34e4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillPoints: 7
+  skillPoints: 14
   parentNodes:
   - {fileID: 1245020438}
   - {fileID: 590103731}
@@ -21002,7 +21003,7 @@ MonoBehaviour:
     elemental: 1
     chillDuration: 3
     chillSlowMulitplier: 0.2
-    burnDuratin: 3
+    burnDuration: 3
     burnDamageScale: 1
     shockDuration: 3
     shockDamageScale: 1
@@ -21058,10 +21059,10 @@ MonoBehaviour:
       baseValue: 0
       modifiers: []
     iceDamage:
-      baseValue: 0
+      baseValue: 10
       modifiers: []
     lightningDamage:
-      baseValue: 10
+      baseValue: 0
       modifiers: []
   defense:
     armor:
@@ -21139,7 +21140,7 @@ MonoBehaviour:
   critHitVfx: {fileID: 9223007503879583146, guid: 6233fc37e47eb4615bdfdb2ac0b0c8f3, type: 3}
   chillVfx: {r: 0, g: 1, b: 1, a: 1}
   burnVfx: {r: 1, g: 0.2705882, b: 0, a: 1}
-  electrifyVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  shockVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   imageEchoInterval: 0.08
   imageEchoPrefab: {fileID: 7838584590452397062, guid: 9034dd9c9b51345888b436f0e95e4901, type: 3}
 --- !u!1 &1381510561
