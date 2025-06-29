@@ -9,7 +9,7 @@ public class SkillObject_Base : MonoBehaviour
     [SerializeField] protected float detectionRadius = 10f;
 
     protected Entity_Stats playerStats;
-    // protected DamageScaleData damageScaleData;
+    protected DamageScaleData damageScaleData;
     protected ElementType usedElement;
 
     protected void DamageEnemiesInRadius(Transform point, float radius)
@@ -23,20 +23,28 @@ public class SkillObject_Base : MonoBehaviour
             damageable.TakeDamage(1, 1, ElementType.None, transform);
 
             // AttackData attackData = playerStats.GetAttackData(damageScaleData);
-            // Entity_StatusHandler statusHandler = target.GetComponent<Entity_StatusHandler>();
+            Entity_StatusHandler statusHandler = target.GetComponent<Entity_StatusHandler>();
 
-            // float physDamage = attackData.phyiscalDamage;
+            // float physDamage = attackData.physicalDamage;
             // float elemDamage = attackData.elementalDamage;
             // ElementType element = attackData.element;
 
-            // damageable.TakeDamage(physDamage, elemDamage, element, transform);
+            ElementalEffectData effectData = new ElementalEffectData(playerStats, damageScaleData);
 
-            // if (element != ElementType.None)
-            // {
-            //     statusHandler?.ApplyStatusEffect(element, attackData.effectData);
-            // }
+            float physDamage = playerStats.GetPhysicalDamage(out bool isCrit, damageScaleData.physical);
+            float elemDamage = playerStats.GetElementalDamage(out ElementType element, damageScaleData.elemental);
+            // ElementType element = attackData.element;
 
-            // usedElement = element;
+            damageable.TakeDamage(physDamage, elemDamage, element, transform);
+
+            if (element != ElementType.None)
+            {
+                statusHandler?.ApplyStatusEffect(element, effectData);
+            }
+
+            Debug.Log($"{GetType().Name} dealt {physDamage} (P) + {elemDamage} (E) damage to: {damageable.GetType().Name}");
+
+            usedElement = element;
         }
     }
 

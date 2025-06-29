@@ -10,13 +10,13 @@ public class Entity_StatusHandler : MonoBehaviour
 
     [SerializeField] private ElementType currentEffect = ElementType.None;
 
-    [Header("Electrify Effect Details")]
+    [Header("Shock Effect Details")]
     [SerializeField] private GameObject lightningStrikeVfx;
     // Fractional percentage value. Once it reaches 1.0 (100%) a lightning strike is performed.
     [SerializeField] private float currentCharge;
     [Tooltip("How much charge must be built up to trigger a Lightning Strike. 1.0 kind of means 100% charge.")]
     [SerializeField] private float maximumCharge = 1f;
-    private Coroutine electrifyCo;
+    private Coroutine shockCo;
 
     private void Awake()
     {
@@ -26,13 +26,35 @@ public class Entity_StatusHandler : MonoBehaviour
         entityVfx = GetComponent<Entity_VFX>();
     }
 
+    /// <summary>
+    /// Applies the status effect associated with the input ElementType, to the this
+    // StatusHandler, which is the Target of another entity's attack or skill.
+    /// </summary>
+    public void ApplyStatusEffect(ElementType element, ElementalEffectData effectData)
+    {
+        if (ElementType.Ice == element && CanBeApplied(ElementType.Ice))
+        {
+            ApplyChillEffect(effectData.chillDuration, effectData.chillSlowMultiplier);
+        }
+
+        if (ElementType.Fire == element && CanBeApplied(ElementType.Fire))
+        {
+            ApplyBurnEffect(effectData.burnDuratoin, effectData.totalBurnDamage);
+        }
+
+        if (ElementType.Lightning == element && CanBeApplied(ElementType.Lightning))
+        {
+            ApplyShockEffect(effectData.shockDuration, effectData.shockDamage, effectData.shockChargeBuildup);
+        }
+    }
+
     #region Electrify Lightning Strike Effect
 
     /// <summary>
     /// Builds up charge of electricity. If there are enough charges,
     /// perform a lightning strike.
     /// </summary>
-    public void ApplyElectrifyEffect(float duration, float damage, float charge)
+    public void ApplyShockEffect(float duration, float damage, float charge)
     {
         // Dealer applies electrify effect to target (Charge build up: 25%, base damage: 43)
         // Target has 40% Lightning Resistance.
@@ -44,14 +66,14 @@ public class Entity_StatusHandler : MonoBehaviour
         if (currentCharge >= maximumCharge)
         {
             DoLightningStrike(damage);
-            StopElectrifyEffect();
+            StopShockEffect();
             return;
         }
 
         // Reset the window threshold and blinking, to allow more charges to build up.
-        if (electrifyCo != null) StopCoroutine(electrifyCo);
+        if (shockCo != null) StopCoroutine(shockCo);
 
-        electrifyCo = StartCoroutine(ElectrifyBlinkEffectCo(duration));
+        shockCo = StartCoroutine(ShockBlinkEffectCo(duration));
     }
 
     private void DoLightningStrike(float damage)
@@ -60,7 +82,7 @@ public class Entity_StatusHandler : MonoBehaviour
         entityHealth.ReduceHealth(damage);
     }
 
-    private void StopElectrifyEffect()
+    private void StopShockEffect()
     {
         currentEffect = ElementType.None;
         currentCharge = 0;
@@ -68,14 +90,14 @@ public class Entity_StatusHandler : MonoBehaviour
         entityVfx.StopAllVfx();
     }
 
-    private IEnumerator ElectrifyBlinkEffectCo(float duration)
+    private IEnumerator ShockBlinkEffectCo(float duration)
     {
         currentEffect = ElementType.Lightning;
         entityVfx.PlayOnStatusBlinkVfx(duration, ElementType.Lightning);
 
         yield return new WaitForSeconds(duration);
 
-        StopElectrifyEffect();
+        StopShockEffect();
     }
 
     #endregion

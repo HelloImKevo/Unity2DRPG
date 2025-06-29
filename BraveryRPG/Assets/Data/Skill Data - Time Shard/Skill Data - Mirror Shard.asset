@@ -21,3 +21,13 @@ MonoBehaviour:
   upgradeData:
     upgradeType: 8
     cooldown: 4
+    damageScaleData:
+      physical: 1
+      elemental: 2.5
+      chillDuration: 3
+      chillSlowMulitplier: 0.2
+      burnDuratin: 3
+      burnDamageScale: 1
+      shockDuration: 3
+      shockDamageScale: 1
+      shockCharge: 0.4

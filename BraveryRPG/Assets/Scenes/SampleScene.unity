@@ -1585,7 +1585,7 @@ MonoBehaviour:
   isLocked: 0
   skillData: {fileID: 11400000, guid: 1f77fade964844b2bb49a579470709d9, type: 2}
   skillName: Time Shard
-  skillCost: 0
+  skillCost: 1
   skillIcon: {fileID: 228307171}
   lockedColorHex: '#808080'
 --- !u!1 &373653969
@@ -16717,10 +16717,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 365024316}
+  - {fileID: 949960063}
+  - {fileID: 491228001}
   - {fileID: 2106783200}
   - {fileID: 1099504821}
-  - {fileID: 491228001}
-  - {fileID: 949960063}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -18291,10 +18291,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1245020436}
-  - {fileID: 716054847}
-  - {fileID: 206418521}
   - {fileID: 2113420233}
   - {fileID: 55338452}
+  - {fileID: 716054847}
+  - {fileID: 206418521}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -20997,6 +20997,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4176bc76efd324ba9b94110fc0b091a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basicAttackScale:
+    physical: 1
+    elemental: 1
+    chillDuration: 3
+    chillSlowMulitplier: 0.2
+    burnDuratin: 3
+    burnDamageScale: 1
+    shockDuration: 3
+    shockDamageScale: 1
+    shockCharge: 0.4
   targetCheckPoint: {fileID: 1797716488}
   targetCheckRadius: 0.85
   defaultDuration: 3
@@ -21051,7 +21061,7 @@ MonoBehaviour:
       baseValue: 0
       modifiers: []
     lightningDamage:
-      baseValue: 0
+      baseValue: 10
       modifiers: []
   defense:
     armor:
@@ -57646,9 +57656,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 590103732}
+  - {fileID: 1738595593}
   - {fileID: 449954777}
   - {fileID: 1902035485}
-  - {fileID: 1738595593}
   - {fileID: 1331991641}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -58007,6 +58017,10 @@ PrefabInstance:
     - target: {fileID: 2498479776550581872, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3233328228463144976, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
+      propertyPath: resources.maxHealth.baseValue
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 4482187794004870783, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: m_Name

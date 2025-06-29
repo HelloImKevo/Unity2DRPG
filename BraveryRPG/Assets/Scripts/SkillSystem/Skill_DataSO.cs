@@ -32,5 +32,5 @@ public class UpgradeData
     public SkillUpgradeType upgradeType;
     [Tooltip("Cooldown in seconds - How long before the skill can be used again. Defaults to zero, meaning 'No cooldown'.")]
     public float cooldown = 0f;
-    // public DamageScaleData damageScaleData;
+    public DamageScaleData damageScaleData;
 }
