@@ -142,6 +142,8 @@ public class Skill_Shard : Skill_Base
 
     public void CreateShard()
     {
+        if (SkillUpgradeType.None == upgradeType) return;
+
         float detonateTime = GetDetonateTime();
 
         GameObject shard = Instantiate(shardPrefab, transform.position, Quaternion.identity);

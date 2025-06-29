@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +44,21 @@ public class UI_TreeConnectHandler : MonoBehaviour
         if (connectionImage != null) originalColor = connectionImage.color;
     }
 
+    public UI_TreeNode[] GetChildNodes()
+    {
+        List<UI_TreeNode> childrenToReturn = new();
+
+        foreach (var node in connectionDetails)
+        {
+            if (node.childNode != null)
+            {
+                childrenToReturn.Add(node.childNode.GetComponent<UI_TreeNode>());
+            }
+        }
+
+        return childrenToReturn.ToArray();
+    }
+
     /// <summary>
     /// Validates connection configuration and updates connections when values change in the Unity editor.
     /// </summary>
@@ -54,6 +70,15 @@ public class UI_TreeConnectHandler : MonoBehaviour
         {
             Debug.Log("Details Array Size should match Connections Array Size - " + gameObject.name);
             return;
+        }
+
+        foreach (var connection in connectionDetails)
+        {
+            if (connection.childNode == this)
+            {
+                Debug.LogWarning($"{gameObject.name} must not have itself declared as a child node!");
+                return;
+            }
         }
 
         UpdateConnections();
@@ -79,6 +104,9 @@ public class UI_TreeConnectHandler : MonoBehaviour
 
             // Guard against MissingReferenceExceptions in the Unity Editor.
             if (detail.childNode == null) continue;
+
+            // Keep this around - useful for debugging.
+            // Debug.Log($"{gameObject.name} Setting position on child node -> {detail.childNode.gameObject.name} ({targetPosition})");
 
             detail.childNode.SetPosition(targetPosition);
             detail.childNode.SetConnectionImage(connectionImage);

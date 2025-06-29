@@ -20,6 +20,7 @@ public class Skill_DataSO : ScriptableObject
     [Header("Unlock & Upgrade")]
     [Tooltip("Cost to purchase and unlock the skill.")]
     public int cost;
+    public bool unlockedByDefault;
     public SkillType skillType;
     public UpgradeData upgradeData;
 }

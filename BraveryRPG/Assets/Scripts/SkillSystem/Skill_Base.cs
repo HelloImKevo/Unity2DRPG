@@ -34,7 +34,8 @@ public class Skill_Base : MonoBehaviour
 
     public bool CanUseSkill()
     {
-        // if (SkillUpgradeType.None == upgradeType) return false;
+        // If the skill is not unlocked, you cannot use it.
+        if (SkillUpgradeType.None == upgradeType) return false;
 
         if (OnCooldown())
         {

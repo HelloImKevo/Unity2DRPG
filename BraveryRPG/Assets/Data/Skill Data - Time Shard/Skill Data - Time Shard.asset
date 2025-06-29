@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3749fe0fc0f944fe2ac8db88705d596a, type: 3}
-  m_Name: Skill Data - Quick Dash
+  m_Name: Skill Data - Time Shard
   m_EditorClassIdentifier: 
-  displayName: Quick Dash
-  description: 'Dash to avoid attacks.
+  displayName: Time Shard
+  description: 'Create a time shard filled with elemental magic.
 
-    You cannot take damage while dashing.'
-  icon: {fileID: -607857116, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
-  cost: 1
+    The shard explodes
+    when touched by an enemy or when time goes up.'
+  icon: {fileID: -198318909, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  cost: 0
   unlockedByDefault: 1
-  skillType: 0
+  skillType: 2
   upgradeData:
-    upgradeType: 1
-    cooldown: 3
+    upgradeType: 6
+    cooldown: 1
