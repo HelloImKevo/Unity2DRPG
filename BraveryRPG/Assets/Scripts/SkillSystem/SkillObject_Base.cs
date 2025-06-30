@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SkillObject_Base : MonoBehaviour
 {
+    [Tooltip("Prefab with a contact sparks animation.")]
     [SerializeField] protected GameObject onHitVfx;
     [Space]
     [Tooltip("The 'Enemy' Layer")]
@@ -23,8 +24,8 @@ public class SkillObject_Base : MonoBehaviour
 
     protected virtual void Awake()
     {
-        anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     protected void DamageEnemiesInRadius(Transform point, float radius)

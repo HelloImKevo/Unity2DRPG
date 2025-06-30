@@ -6,21 +6,23 @@ public class Skill_ThrowSword : Skill_Base
     // private float currentThrowPower;
 
     [Header("Regular Sword Uprgade")]
-    [SerializeField] private GameObject swordPrefab;
+    [SerializeField] private GameObject regularSwordPrefab;
     [Range(0, 10)]
     [SerializeField] private float regularThrowPower = 3f;
 
-    // [Header("Pierce Sword Upgrade")]
-    // [SerializeField] private GameObject pierceSwordPrefab;
-    // public int amountToPierce = 2;
-    // [Range(0, 10)]
-    // [SerializeField] private float pierceThrowPower = 5f;
+    [Header("Pierce Sword Upgrade")]
+    [SerializeField] private GameObject pierceSwordPrefab;
+    [Tooltip("How many enemies the sword can pierce.")]
+    public int amountToPierce = 2;
+    [Range(0, 10)]
+    [SerializeField] private float pierceThrowPower = 5f;
 
-    // [Header("Spin Sword Upgrade")]
-    // [SerializeField] private GameObject spinSwordPrefab;
-    // public int maxDistance = 5;
-    // public float attacksPerSecond = 6f;
-    // public float maxSpinDuration = 3f;
+    [Header("Spin Sword Upgrade")]
+    [SerializeField] private GameObject spinSwordPrefab;
+    public int maxDistance = 6;
+    public float attacksPerSecond = 4f;
+    [Tooltip("How many seconds the sword will spin in its deployed position.")]
+    public float maxSpinDuration = 3f;
     // [Range(0, 10)]
     // [SerializeField] private float spinThrowPower = 5f;
 
@@ -47,7 +49,7 @@ public class Skill_ThrowSword : Skill_Base
     protected override void Awake()
     {
         base.Awake();
-        swordGravity = swordPrefab.GetComponent<Rigidbody2D>().gravityScale;
+        swordGravity = regularSwordPrefab.GetComponent<Rigidbody2D>().gravityScale;
         dots = GenerateDots();
     }
 
@@ -68,6 +70,8 @@ public class Skill_ThrowSword : Skill_Base
     {
         GameObject swordPrefab = GetSwordPrefab();
 
+        Debug.Log("Skill_ThrowSword -> ThrowSword() -> Prefab = " + swordPrefab);
+
         // Don't create the sword right in the middle of the player.
         Vector3 spawnPoint = dots[1].position;
         GameObject newSword = Instantiate(swordPrefab, spawnPoint, Quaternion.identity);
@@ -80,11 +84,11 @@ public class Skill_ThrowSword : Skill_Base
 
     private GameObject GetSwordPrefab()
     {
-        if (Unlocked(SkillUpgradeType.SwordThrow)) return swordPrefab;
+        if (Unlocked(SkillUpgradeType.SwordThrow)) return regularSwordPrefab;
 
-        // if (Unlocked(SkillUpgradeType.SwordThrow_Pierce)) return pierceSwordPrefab;
+        if (Unlocked(SkillUpgradeType.SwordThrow_Pierce)) return pierceSwordPrefab;
 
-        // if (Unlocked(SkillUpgradeType.SwordThrow_Spin)) return spinSwordPrefab;
+        if (Unlocked(SkillUpgradeType.SwordThrow_Spin)) return spinSwordPrefab;
 
         // if (Unlocked(SkillUpgradeType.SwordThrow_Bounce)) return bounceSwordPrefab;
 

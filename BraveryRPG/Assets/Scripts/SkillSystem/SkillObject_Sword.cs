@@ -9,6 +9,13 @@ public class SkillObject_Sword : SkillObject_Base
     protected float comebackSpeed = 20f;
     protected float maxAllowedDistance = 25f;
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Debug.Log($"Created instance of {GetType().Name}");
+    }
+
     protected virtual void Update()
     {
         // Make the sword initially point in the direction it is flying.
@@ -62,11 +69,11 @@ public class SkillObject_Sword : SkillObject_Base
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        StopSword(collision);
+        StickSwordToCollider(collision);
         DamageEnemiesInRadius(transform, 1f);
     }
 
-    protected void StopSword(Collider2D collision)
+    protected void StickSwordToCollider(Collider2D collision)
     {
         // Indicates whether the rigid body should be simulated or not by the physics system.
         rb.simulated = false;
