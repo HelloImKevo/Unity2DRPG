@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 519013220, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  m_Sprite: {fileID: -1030258294, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -32046,7 +32046,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a068eb36bde304f198f1b36ef09d9bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredNodes: []
+  requiredNodes:
+  - {fileID: 1125188516}
   conflictNodes: []
   isUnlocked: 0
   isLocked: 0
@@ -33728,10 +33729,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillType: 3
-  upgradeType: 11
+  upgradeType: 0
   cooldown: 0
-  swordPrefab: {fileID: 9003389822241134907, guid: bb1e73d2b72ea477a8921d17dad8a8af, type: 3}
+  regularSwordPrefab: {fileID: 9003389822241134907, guid: bb1e73d2b72ea477a8921d17dad8a8af, type: 3}
   regularThrowPower: 3
+  pierceSwordPrefab: {fileID: 4251235063125134755, guid: abf8afd3180af48339ef902b79cc1f01, type: 3}
+  amountToPierce: 2
+  pierceThrowPower: 4
+  spinSwordPrefab: {fileID: 9100703952840932971, guid: faa606d24f06f46cea580929bd1747d0, type: 3}
+  maxDistance: 6
+  attacksPerSecond: 4
+  maxSpinDuration: 3
   predictionDot: {fileID: 4444862548797276397, guid: 40b536790733f41819245988dad965a8, type: 3}
   numberOfDots: 20
   spaceBetweenDots: 0.05
@@ -34506,7 +34514,7 @@ GameObject:
   - component: {fileID: 958423788}
   - component: {fileID: 958423789}
   m_Layer: 5
-  m_Name: UI_TreeNode - Irritated Shard
+  m_Name: UI_TreeNode - Piercer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34546,12 +34554,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a068eb36bde304f198f1b36ef09d9bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredNodes: []
+  requiredNodes:
+  - {fileID: 1125188516}
   conflictNodes: []
   isUnlocked: 0
   isLocked: 0
-  skillData: {fileID: 11400000, guid: 43830d17d7ce1437d81e16473b218e8f, type: 2}
-  skillName: Irritated Shard
+  skillData: {fileID: 11400000, guid: 0304d907e127045eb819552cdcab5401, type: 2}
+  skillName: Piercer
   skillCost: 2
   skillIcon: {fileID: 45032478}
   lockedColorHex: '#808080'
@@ -36151,7 +36160,7 @@ GameObject:
   - component: {fileID: 1232293979}
   - component: {fileID: 1232293980}
   m_Layer: 5
-  m_Name: UI_TreeNode - Phantom Recall
+  m_Name: UI_TreeNode - The Chainsaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36191,13 +36200,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a068eb36bde304f198f1b36ef09d9bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredNodes: []
+  requiredNodes:
+  - {fileID: 1125188516}
   conflictNodes: []
   isUnlocked: 0
   isLocked: 0
-  skillData: {fileID: 11400000, guid: 9e9173fe24f5048eb8f8bab0d247b4db, type: 2}
-  skillName: Phantom Recall
-  skillCost: 2
+  skillData: {fileID: 11400000, guid: f6933f7840573410894218e729972b40, type: 2}
+  skillName: The Chainsaw
+  skillCost: 1
   skillIcon: {fileID: 1534813147}
   lockedColorHex: '#808080'
 --- !u!114 &1232293980
@@ -38506,7 +38516,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1074820047, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  m_Sprite: {fileID: 932897928, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
