@@ -46,11 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b34e88a6e104ba98d49f6a75489d25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitVfx: {fileID: 8384318563717163770, guid: 83300ca2739be446bb2708ff20689793, type: 3}
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 128
   targetCheck: {fileID: 5635079207980657594}
-  checkRadius: 1.15
+  damageRadius: 1
+  detectionRadius: 10
   vfxPrefab: {fileID: 6353791527399938105, guid: a5d2456df5e1541b2af3c1df553a710f, type: 3}
 --- !u!58 &7145747131227540176
 CircleCollider2D:

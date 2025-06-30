@@ -2,15 +2,30 @@ using UnityEngine;
 
 public class SkillObject_Base : MonoBehaviour
 {
+    [SerializeField] protected GameObject onHitVfx;
+    [Space]
     [Tooltip("The 'Enemy' Layer")]
     [SerializeField] protected LayerMask whatIsEnemy;
     [SerializeField] protected Transform targetCheck;
     [SerializeField] protected float damageRadius = 1f;
+    [Tooltip("Radius to detect enemies within the vicinity - used for 'follow enemy' skill behaviors.")]
     [SerializeField] protected float detectionRadius = 10f;
+
+    protected Rigidbody2D rb;
+    protected Animator anim;
 
     protected Entity_Stats playerStats;
     protected DamageScaleData damageScaleData;
     protected ElementType usedElement;
+
+    protected bool wasTargetHit;
+    protected Transform lastTarget;
+
+    protected virtual void Awake()
+    {
+        anim = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     protected void DamageEnemiesInRadius(Transform point, float radius)
     {
@@ -27,11 +42,17 @@ public class SkillObject_Base : MonoBehaviour
             float elemDamage = attackData.elementalDamage;
             ElementType element = attackData.element;
 
-            damageable.TakeDamage(physDamage, elemDamage, element, transform);
+            wasTargetHit = damageable.TakeDamage(physDamage, elemDamage, element, transform);
 
             if (element != ElementType.None)
             {
                 statusHandler?.ApplyStatusEffect(element, attackData.effectData);
+            }
+
+            if (wasTargetHit)
+            {
+                // Create On-Hit visual effect.
+                Instantiate(onHitVfx, target.transform.position, Quaternion.identity);
             }
 
             Debug.Log($"{GetType().Name} dealt {physDamage} (P) + {elemDamage} (E) damage to: {damageable.GetType().Name}");

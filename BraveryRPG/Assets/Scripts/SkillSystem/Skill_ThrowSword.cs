@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Skill_ThrowSword : Skill_Base
 {
-    // private SkillObject_Sword currentSword;
-    private float currentThrowPower;
+    private SkillObject_Sword currentSword;
+    // private float currentThrowPower;
 
     [Header("Regular Sword Uprgade")]
     [SerializeField] private GameObject swordPrefab;
@@ -38,7 +38,7 @@ public class Skill_ThrowSword : Skill_Base
     [Tooltip("Distance between the trajectory dots.")]
     [SerializeField] private float spaceBetweenDots = 0.05f;
 
-    [SerializeField] private float swordGravity = 4f;
+    private float swordGravity = 4f;
     private Transform[] dots;
 
     // Uused when we confirm direction and create the sword object and give it the direction to fly.
@@ -47,33 +47,35 @@ public class Skill_ThrowSword : Skill_Base
     protected override void Awake()
     {
         base.Awake();
-        // swordGravity = swordPrefab.GetComponent<Rigidbody2D>().gravityScale;
+        swordGravity = swordPrefab.GetComponent<Rigidbody2D>().gravityScale;
         dots = GenerateDots();
     }
 
-    // public override bool CanUseSkill()
-    // {
-    //     UpdateThrowPower();
+    public override bool CanUseSkill()
+    {
+        // UpdateThrowPower();
 
-    //     if (currentSword != null)
-    //     {
-    //         currentSword.GetSwordBackToPlayer();
-    //         return false;
-    //     }
+        if (currentSword != null)
+        {
+            currentSword.EnableSwordFlyBackToPlayer();
+            return false;
+        }
 
-
-    //     return base.CanUseSkill();
-    // }
+        return base.CanUseSkill();
+    }
 
     public void ThrowSword()
     {
         GameObject swordPrefab = GetSwordPrefab();
-        GameObject newSword = Instantiate(swordPrefab, dots[1].position, Quaternion.identity);
 
-        // currentSword = newSword.GetComponent<SkillObject_Sword>();
-        // currentSword.SetupSword(this, GetThrowPower());
+        // Don't create the sword right in the middle of the player.
+        Vector3 spawnPoint = dots[1].position;
+        GameObject newSword = Instantiate(swordPrefab, spawnPoint, Quaternion.identity);
 
-        SetSkillOnCooldown();
+        currentSword = newSword.GetComponent<SkillObject_Sword>();
+        currentSword.SetupSword(this, GetThrowVelocity());
+
+        // SetSkillOnCooldown();
     }
 
     private GameObject GetSwordPrefab()
@@ -86,7 +88,7 @@ public class Skill_ThrowSword : Skill_Base
 
         // if (Unlocked(SkillUpgradeType.SwordThrow_Bounce)) return bounceSwordPrefab;
 
-        Debug.Log("No valied sword upgrade selected!");
+        Debug.Log("GetSwordPrefab() -> No valid sword upgrade selected!");
         return null;
     }
 
@@ -116,13 +118,13 @@ public class Skill_ThrowSword : Skill_Base
     //     }
     // }
 
-    // private Vector2 GetThrowPower() => confirmedDirection * (currentThrowPower * 10);
+    private Vector2 GetThrowVelocity() => confirmedDirection * (regularThrowPower * 10);
 
     /// <summary>
     /// Moves the dots to positions along a predicted trajectory parabola by
     /// calculating the effect of gravity over distance from the player.
     /// </summary>
-    /// <param name="direction"></param>
+    /// <param name="direction">A position away from the player, such as the mouse cursor coordinates.</param>
     public void PredictTrajectory(Vector2 direction)
     {
         for (int i = 0; i < dots.Length; i++)

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3749fe0fc0f944fe2ac8db88705d596a, type: 3}
+  m_Name: Skill Data - Throw Sword
+  m_EditorClassIdentifier: 
+  displayName: Catch this!
+  description: Throw your sword to damage enemies. Sword will apply status effects.
+    You can have only one active sword at a time.
+  icon: {fileID: 1379959061, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  cost: 1
+  unlockedByDefault: 0
+  skillType: 3
+  upgradeData:
+    upgradeType: 11
+    cooldown: 2
+    damageScaleData:
+      physical: 1.5
+      elemental: 0.5
+      chillDuration: 1
+      chillSlowMulitplier: 0.2
+      burnDuration: 0
+      burnDamageScale: 0
+      shockDuration: 0
+      shockDamageScale: 0
+      shockChargeBuildup: 0.4
