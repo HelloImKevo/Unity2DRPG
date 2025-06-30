@@ -26,7 +26,7 @@ public class Player_CounterattackState : PlayerState
 
         player.SetVelocity(0, rb.linearVelocity.y);
 
-        if (onAnimationEndedTrigger)
+        if (onAnimationEndTriggered)
         {
             stateMachine.ChangeState(player.IdleState);
         }

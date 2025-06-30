@@ -9,8 +9,11 @@ public class Player : Entity
     private UI ui;
 
     public PlayerInputSet Input { get; private set; }
-    public Player_SkillManager SkillManager { get; private set; }
+
     public Player_VFX Vfx { get; private set; }
+    public Entity_Health Health { get; private set; }
+    public Player_SkillManager SkillManager { get; private set; }
+    public Entity_StatusHandler StatusHandler { get; private set; }
 
     #region State Variables
 
@@ -25,6 +28,7 @@ public class Player : Entity
     public Player_WallJumpState WallJumpState { get; private set; }
     public Player_DeadState DeadState { get; private set; }
     public Player_CounterattackState CounterattackState { get; private set; }
+    public Player_ThrowSwordState ThrowSwordState { get; private set; }
 
     #endregion
 
@@ -52,6 +56,7 @@ public class Player : Entity
     public float dashSpeed = 20f;
 
     public Vector2 MoveInput { get; private set; }
+    public Vector2 MousePosition { get; private set; }
 
     protected override void Awake()
     {
@@ -61,8 +66,11 @@ public class Player : Entity
         ui = FindFirstObjectByType<UI>();
 
         Input = new PlayerInputSet();
-        SkillManager = GetComponent<Player_SkillManager>();
+
         Vfx = GetComponent<Player_VFX>();
+        Health = GetComponent<Entity_Health>();
+        SkillManager = GetComponent<Player_SkillManager>();
+        StatusHandler = GetComponent<Entity_StatusHandler>();
 
         IdleState = new Player_IdleState(this, stateMachine, "idle");
         MoveState = new Player_MoveState(this, stateMachine, "move");
@@ -75,6 +83,7 @@ public class Player : Entity
         WallJumpState = new Player_WallJumpState(this, stateMachine, "jumpFall");
         DeadState = new Player_DeadState(this, stateMachine, "dead");
         CounterattackState = new Player_CounterattackState(this, stateMachine, "counterattack");
+        ThrowSwordState = new Player_ThrowSwordState(this, stateMachine, "throwSword");
     }
 
     protected override void Start()
@@ -162,6 +171,9 @@ public class Player : Entity
     private void OnEnable()
     {
         Input.Enable();
+
+        // Capture mouse position (used to calculate parabolic trajectory of sword throw).
+        Input.Player.Mouse.performed += ctx => MousePosition = ctx.ReadValue<Vector2>();
 
         // Subscribe to New Input System 'Movement' action map.
         Input.Player.Movement.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
