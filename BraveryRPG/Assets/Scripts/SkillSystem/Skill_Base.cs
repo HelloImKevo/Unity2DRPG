@@ -17,6 +17,14 @@ public class Skill_Base : MonoBehaviour
         SkillManager = GetComponentInParent<Player_SkillManager>();
         Player = GetComponentInParent<Player>();
         lastTimeUsed -= cooldown;
+
+        // If a Shard is created without the base Skill being unlocked,
+        // then the Damage Scale Data will likely be null.
+        if (damageScaleData == null)
+        {
+            Debug.Log($"{GetType().Name} -> Awake() -> damageScaleData is null - Has the corresponding Skill been unlocked?");
+            damageScaleData = new DamageScaleData();
+        }
     }
 
     public virtual void TryUseSkill()
@@ -35,6 +43,8 @@ public class Skill_Base : MonoBehaviour
     {
         // If the skill is not unlocked, you cannot use it.
         if (SkillUpgradeType.None == upgradeType) return false;
+
+        Debug.Log($"CanUseSkill() -> upgradeType = ${upgradeType}");
 
         if (OnCooldown())
         {

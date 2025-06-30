@@ -66,7 +66,9 @@ public class Enemy_BattleState : EnemyState
         }
         else
         {
-            if (enemy.BelowLedgeDetected)
+            if (enemy.BelowLedgeDetected
+                // Prevent enemy from continuously running into a wall.
+                && !enemy.WallDetected)
             {
                 // Pursue the player (aggro).
                 enemy.SetVelocity(enemy.battleMoveSpeed * DirectionToPlayer(), rb.linearVelocity.y);
