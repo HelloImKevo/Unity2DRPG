@@ -6,8 +6,10 @@ public class Skill_Base : MonoBehaviour
     public Player Player { get; private set; }
     public DamageScaleData damageScaleData { get; private set; }
 
-    [Header("General details")]
+    [Header("General Details")]
+    [Tooltip("Which core skill does this represent?")]
     [SerializeField] protected SkillType skillType;
+    [Tooltip("Which tier of Skill capability has been unlocked? Choose 'None' if the core Skill hasn't been unlocked.")]
     [SerializeField] protected SkillUpgradeType upgradeType;
     [SerializeField] protected float cooldown;
     private float lastTimeUsed;

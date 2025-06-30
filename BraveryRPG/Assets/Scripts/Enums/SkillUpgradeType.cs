@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public enum SkillUpgradeType
 {
     None,
@@ -52,5 +54,18 @@ public enum SkillUpgradeType
     /// <summary>
     /// When you swap places with shard, your HP % is same as it was when you created shard.
     /// </summary>
-    Shard_TeleportHpRewind
+    Shard_TeleportHpRewind,
+
+    // ------ Throw Sword Tree -------
+    [Tooltip("You can throw sword to damage enemies from range.")]
+    SwordThrow,
+
+    [Tooltip("Your sword will spin at one point and damage enemies. Like a chainsaw.")]
+    SwordThrow_Spin,
+
+    [Tooltip("Sword will pierce N targets.")]
+    SwordThrow_Pierce,
+
+    [Tooltip("Sword will bounce between enemies.")]
+    SwordThrow_Bounce,
 }
