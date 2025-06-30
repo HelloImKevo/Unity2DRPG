@@ -26,7 +26,7 @@ public class Player_JumpAttackState : PlayerState
             player.SetVelocity(0, rb.linearVelocity.y);
         }
 
-        if (onAnimationEndedTrigger && player.GroundDetected)
+        if (onAnimationEndTriggered && player.GroundDetected)
         {
             stateMachine.ChangeState(player.IdleState);
         }

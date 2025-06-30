@@ -97,7 +97,7 @@ public abstract class EntityState
     /// determine when to transition to new states, ensuring animations complete
     /// properly before state changes occur.
     /// </summary>
-    protected bool onAnimationEndedTrigger;
+    protected bool onAnimationEndTriggered;
 
     /// <summary>
     /// Constructs a new EntityState with required dependencies.
@@ -138,7 +138,7 @@ public abstract class EntityState
         // Every time state will be changed, enter will be called.
         anim.SetBool(animBoolName, true);
         onNextComboAttackReadyTrigger = false;
-        onAnimationEndedTrigger = false;
+        onAnimationEndTriggered = false;
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public abstract class EntityState
     /// </summary>
     public void CallOnAnimationEndedTrigger()
     {
-        onAnimationEndedTrigger = true;
+        onAnimationEndTriggered = true;
     }
 
     /// <summary>

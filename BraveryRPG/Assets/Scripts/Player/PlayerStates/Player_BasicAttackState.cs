@@ -68,7 +68,7 @@ public class Player_BasicAttackState : PlayerState
 
     private void HandleEndOfAttackExit()
     {
-        if (onNextComboAttackReadyTrigger || onAnimationEndedTrigger)
+        if (onNextComboAttackReadyTrigger || onAnimationEndTriggered)
         {
             if (comboAttackQueued)
             {
@@ -80,7 +80,7 @@ public class Player_BasicAttackState : PlayerState
                 player.EnterAttackStateWithDelay();
             }
             // If the animation hasn't ended, let it finish (ex: the player sheaths their sword).
-            else if (onAnimationEndedTrigger)
+            else if (onAnimationEndTriggered)
             {
                 stateMachine.ChangeState(player.IdleState);
             }
