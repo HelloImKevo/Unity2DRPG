@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class SkillObject_Shard : SkillObject_Base
 {
+    /// <summary>
+    /// Event triggered when the shard explodes, allowing observers to react to the explosion.
+    /// </summary>
+    /// <seealso cref="Explode"/>
     public event Action OnExplode;
     private Skill_Shard shardManager;
 
@@ -12,6 +16,11 @@ public class SkillObject_Shard : SkillObject_Base
     private Transform target;
     private float speed;
 
+    /// <summary>
+    /// Updates the shard's position each frame, moving it toward the target using frame-rate
+    /// independent movement. Uses <see cref="Vector3.MoveTowards"/> for smooth linear interpolation.
+    /// </summary>
+    /// <seealso cref="StartMovingTowardsClosestTarget"/>
     private void Update()
     {
         if (target == null) return;
@@ -20,12 +29,20 @@ public class SkillObject_Shard : SkillObject_Base
         transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Initiates movement toward the closest enemy target within detection range.
+    /// </summary>
+    /// <param name="speed">Movement speed in units per second.</param>
     public void StartMovingTowardsClosestTarget(float speed)
     {
         target = FindClosestTarget();
         this.speed = speed;
     }
 
+    /// <summary>
+    /// Configures the shard with basic parameters and schedules automatic detonation.
+    /// </summary>
+    /// <seealso cref="SetupShard(Skill_Shard, float, bool, float)"/>
     public void SetupShard(Skill_Shard shardManager)
     {
         this.shardManager = shardManager;
@@ -38,6 +55,15 @@ public class SkillObject_Shard : SkillObject_Base
         Invoke(nameof(Explode), detonationTime);
     }
 
+    /// <summary>
+    /// Configures the shard with extended parameters including movement and custom timing options.
+    /// </summary>
+    /// <param name="shardManager">The <see cref="Skill_Shard"/> instance managing this shard's behavior.</param>
+    /// <param name="detonationTime">Custom time in seconds before automatic explosion.</param>
+    /// <param name="canMove">Whether the shard should move toward targets automatically.</param>
+    /// <param name="shardSpeed">Movement speed when <paramref name="canMove"/> is true.</param>
+    /// <seealso cref="SetupShard(Skill_Shard)"/>
+    /// <seealso cref="StartMovingTowardsClosestTarget"/>
     public void SetupShard(Skill_Shard shardManager, float detonationTime, bool canMove, float shardSpeed)
     {
         this.shardManager = shardManager;
@@ -53,9 +79,11 @@ public class SkillObject_Shard : SkillObject_Base
     }
 
     /// <summary>
-    /// Deals damage to nearby enemies within the radius, creates a 'Shard Explosion'
-    /// VFX prefab, and then destroys self.
+    /// Detonates the shard, dealing area damage and creating VFX (visual effects) prefab
+    /// before self-destruction. Triggers the <see cref="OnExplode"/> event and uses
+    /// <see cref="SkillObject_Base.DamageEnemiesInRadius"/> for damage calculation.
     /// </summary>
+    /// <seealso cref="OnTriggerEnter2D"/>
     public void Explode()
     {
         DamageEnemiesInRadius(transform, damageRadius);
@@ -68,6 +96,12 @@ public class SkillObject_Shard : SkillObject_Base
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Handles collision detection with enemy entities, triggering immediate explosion
+    /// on contact. Only responds to objects with an <see cref="Enemy"/> component attached.
+    /// </summary>
+    /// <param name="collision">The collider that entered the shard's trigger zone.</param>
+    /// <seealso cref="Explode"/>
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // We only want to explode and damage Enemies that touch this Shard (exclude other collidable objects).
