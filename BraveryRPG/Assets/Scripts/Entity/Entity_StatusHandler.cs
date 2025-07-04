@@ -26,6 +26,14 @@ public class Entity_StatusHandler : MonoBehaviour
         entityVfx = GetComponent<Entity_VFX>();
     }
 
+    public void RemoveAllNegativeEffects()
+    {
+        // Stops all coroutines running on this behaviour.
+        StopAllCoroutines();
+        currentEffect = ElementType.None;
+        entityVfx.StopAllVfx();
+    }
+
     /// <summary>
     /// Applies the status effect associated with the input ElementType, to the this
     // StatusHandler, which is the Target of another entity's attack or skill.
@@ -54,7 +62,7 @@ public class Entity_StatusHandler : MonoBehaviour
     /// Builds up charge of electricity. If there are enough charges,
     /// perform a lightning strike.
     /// </summary>
-    public void ApplyShockEffect(float duration, float damage, float charge)
+    private void ApplyShockEffect(float duration, float damage, float charge)
     {
         // Dealer applies electrify effect to target (Charge build up: 25%, base damage: 43)
         // Target has 40% Lightning Resistance.
@@ -104,7 +112,7 @@ public class Entity_StatusHandler : MonoBehaviour
 
     #region Burn DoT Effect
 
-    public void ApplyBurnEffect(float duration, float fireDamage)
+    private void ApplyBurnEffect(float duration, float fireDamage)
     {
         float fireResistance = entityStats.GetElementalResistance(ElementType.Fire);
         // Fire resistance reduces damage dealt by burn effect.
@@ -142,7 +150,7 @@ public class Entity_StatusHandler : MonoBehaviour
 
     #region Chill Slow Effect
 
-    public void ApplyChillEffect(float duration, float slowMultiplier)
+    private void ApplyChillEffect(float duration, float slowMultiplier)
     {
         float iceResistance = entityStats.GetElementalResistance(ElementType.Ice);
         // Ice resistance reduces the duration of chill slow effects.

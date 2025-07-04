@@ -68,12 +68,11 @@ public class Skill_Base : MonoBehaviour
     /// </summary>
     public void SetSkillOnCooldown() => lastTimeUsed = Time.time;
 
-    // TODO: Rename this function to 'ReduceCooldownBy' for clarity.
     /// <summary>
     /// Reduce cooldown by a specific amount.
     /// </summary>
     /// <param name="cooldownReduction"></param>
-    public void ResetCooldownBy(float cooldownReduction) => lastTimeUsed += cooldownReduction;
+    public void ReduceCooldownBy(float cooldownReduction) => lastTimeUsed += cooldownReduction;
 
     public void ResetCooldown() => lastTimeUsed = Time.time;
 }

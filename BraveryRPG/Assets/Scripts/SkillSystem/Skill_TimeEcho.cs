@@ -12,41 +12,47 @@ public class Skill_TimeEcho : Skill_Base
     [Tooltip("Fractional percent chance that this Echo will create a duplicate Echo upon death and if an enemy was hit.")]
     [SerializeField] private float duplicateChance = 0.3f;
 
-    // [Header("Heal Wisp Upgrades")]
-    // [SerializeField] private float damagePercentHealed = 0.3f;
-    // [SerializeField] private float cooldownReducedInSeconds;
+    [Header("Heal Wisp Upgrades")]
+    [Tooltip("Fractional percent of damage inflicted by last enemy attack to Entity_Health, applied as healing to the player. Receiving heavy damage results in more healing.")]
+    [SerializeField] private float damagePercentHealed = 0.3f;
+    [SerializeField] private float cooldownReducedInSeconds;
 
-    // public float GetPercentOfDamageHealed()
-    // {
-    //     if (ShouldBeWisp() == false)
-    //     {
-    //         return 0;
-    //     }
+    public float GetPercentOfDamageHealed()
+    {
+        if (!ShouldBeWisp())
+        {
+            return 0f;
+        }
 
-    //     return damagePercentHealed;
-    // }
+        return damagePercentHealed;
+    }
 
-    // public float GetCooldownReduceInSeconds()
-    // {
-    //     if (upgradeType != SkillUpgradeType.TimeEcho_CooldownWisp)
-    //     {
-    //         return 0;
-    //     }
+    public float GetCooldownReduceInSeconds()
+    {
+        if (upgradeType != SkillUpgradeType.TimeEcho_CooldownWisp)
+        {
+            return 0f;
+        }
 
-    //     return cooldownReducedInSeconds;
-    // }
+        return cooldownReducedInSeconds;
+    }
 
-    // public bool CanRemoveNegativeEffects()
-    // {
-    //     return upgradeType == SkillUpgradeType.TimeEcho_CleanseWisp;
-    // }
+    public bool CanRemoveNegativeEffects()
+    {
+        return upgradeType == SkillUpgradeType.TimeEcho_CleanseWisp;
+    }
 
-    // public bool ShouldBeWisp()
-    // {
-    //     return upgradeType == SkillUpgradeType.TimeEcho_HealWisp
-    //         || upgradeType == SkillUpgradeType.TimeEcho_CleanseWisp
-    //         || upgradeType == SkillUpgradeType.TimeEcho_CooldownWisp;
-    // }
+    /// <summary>
+    /// The Wisp (a Trail Renderer) can fly back to the player and give them
+    /// a beneficial healing or cleansing effect.
+    /// </summary>
+    /// <returns></returns>
+    public bool ShouldBeWisp()
+    {
+        return upgradeType == SkillUpgradeType.TimeEcho_HealWisp
+            || upgradeType == SkillUpgradeType.TimeEcho_CleanseWisp
+            || upgradeType == SkillUpgradeType.TimeEcho_CooldownWisp;
+    }
 
     public float GetDuplicateChance()
     {
