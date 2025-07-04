@@ -90,4 +90,14 @@ public enum SkillUpgradeType
 
     [Tooltip("Wisp will reduce cooldown of all skills by N second. ")]
     TimeEcho_CooldownWisp,
+
+    // ------ Domain Expansion -------
+    [Tooltip("Create an area in which you slow down enemies by 90-100% . You can freely move and fight.")]
+    Domain_SlowingDown,
+
+    [Tooltip("You can no longer move, but you spam enemy with Time Echo ability.")]
+    Domain_EchoSpam,
+
+    [Tooltip("You can no longer move, but you spam enemy with Time Shard ability.")]
+    Domain_ShardSpam
 }

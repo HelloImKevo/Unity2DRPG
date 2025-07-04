@@ -32394,10 +32394,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 365024316}
-  - {fileID: 2106783200}
-  - {fileID: 1099504821}
   - {fileID: 491228001}
   - {fileID: 949960063}
+  - {fileID: 2106783200}
+  - {fileID: 1099504821}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -34144,6 +34144,7 @@ GameObject:
   - component: {fileID: 866725230}
   - component: {fileID: 866725231}
   - component: {fileID: 866725232}
+  - component: {fileID: 866725233}
   m_Layer: 8
   m_Name: Skills_Holder
   m_TagString: Untagged
@@ -34257,6 +34258,26 @@ MonoBehaviour:
   duplicateChance: 0.8
   damagePercentHealed: 0.3
   cooldownReducedInSeconds: 0
+--- !u!114 &866725233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866725227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e07e022d0b0a24aabbb3cbc91019cf12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillType: 4
+  upgradeType: 22
+  cooldown: 5
+  domainPrefab: {fileID: 0}
+  slowDownPercent: 0.8
+  slowDownDomainDuration: 5
+  maxDomainSize: 10
+  expandSpeed: 3
 --- !u!1 &867066399
 GameObject:
   m_ObjectHideFlags: 0
@@ -34517,12 +34538,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1245020436}
+  - {fileID: 490375149}
+  - {fileID: 288941556}
   - {fileID: 716054847}
   - {fileID: 206418521}
   - {fileID: 2113420233}
   - {fileID: 55338452}
-  - {fileID: 490375149}
-  - {fileID: 288941556}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -38268,9 +38289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def78211c84b94277b05086c586c318a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
   groundCheckDistance: 1.4
   wallCheckDistance: 0.36
   primaryGroundCheck: {fileID: 179699071}
@@ -38283,6 +38301,8 @@ MonoBehaviour:
   jumpAttackVelocity: {x: 3, y: 4}
   attackVelocityDuration: 0.1
   comboResetTime: 0.6
+  riseSpeed: 25
+  riseMaxDistance: 3
   moveSpeed: 8
   jumpForce: 16
   wallJumpForce: {x: 6, y: 12}
@@ -83124,9 +83144,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 590103732}
+  - {fileID: 1738595593}
   - {fileID: 449954777}
   - {fileID: 1902035485}
-  - {fileID: 1738595593}
   - {fileID: 1331991641}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

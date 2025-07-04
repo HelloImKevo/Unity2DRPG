@@ -29,6 +29,7 @@ public class Player : Entity
     public Player_DeadState DeadState { get; private set; }
     public Player_CounterattackState CounterattackState { get; private set; }
     public Player_ThrowSwordState ThrowSwordState { get; private set; }
+    public Player_DomainExpansionState domainExpansionState { get; private set; }
 
     #endregion
 
@@ -42,6 +43,10 @@ public class Player : Entity
     public float comboResetTime = 0.6f;
     // Reminder: Coroutines require MonoBehaviour (so we can't put this in the EntityState).
     private Coroutine queuedAttackWorker;
+
+    [Header("Ultimate ability details")]
+    public float riseSpeed = 25f;
+    public float riseMaxDistance = 3f;
 
     [Header("Player Movement Details")]
     public float moveSpeed = 8f;
@@ -84,6 +89,7 @@ public class Player : Entity
         DeadState = new Player_DeadState(this, stateMachine, "dead");
         CounterattackState = new Player_CounterattackState(this, stateMachine, "counterattack");
         ThrowSwordState = new Player_ThrowSwordState(this, stateMachine, "throwSword");
+        domainExpansionState = new Player_DomainExpansionState(this, stateMachine, "jumpFall");
     }
 
     protected override void Start()

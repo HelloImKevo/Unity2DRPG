@@ -19,7 +19,7 @@ public class Entity : MonoBehaviour
     public int FacingDir { get; private set; } = 1;
 
     [Header("Collision detection")]
-    [SerializeField] protected LayerMask whatIsGround;
+    public LayerMask whatIsGround { get; protected set; }
     [SerializeField] private float groundCheckDistance;
     // Part of our Wall-Slide system.
     [SerializeField] private float wallCheckDistance;
