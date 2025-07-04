@@ -180,10 +180,20 @@ public abstract class PlayerState : EntityState
             return false;
         }
 
-        if (player.WallDetected || stateMachine.CurrentState == player.DashState)
+        if (player.WallDetected)
         {
             return false;
         }
+
+        if (stateMachine.CurrentState == player.DashState
+            || stateMachine.CurrentState == player.domainExpansionState)
+        {
+            // Prevent the player from dashing out of the Ultimate Spell state,
+            // which is designed to suspend the player in a levitated state
+            // (otherwise, dashing will break the FSM - Finite State Machine).
+            return false;
+        }
+
         return true;
     }
 }

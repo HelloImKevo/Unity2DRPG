@@ -9,6 +9,9 @@ public class Enemy_Health : Entity_Health
 
     public override bool TakeDamage(float damage, float elementalDamage, ElementType element, Transform damageDealer)
     {
+        // Check whether the enemy is currently invulnerable / invincible.
+        if (!canTakeDamage) return false;
+
         bool wasHit = base.TakeDamage(damage, elementalDamage, element, damageDealer);
 
         if (!wasHit)

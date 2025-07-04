@@ -40,16 +40,6 @@ public class Entity_Health : MonoBehaviour, IDamageable
     [SerializeField] protected float currentHealth;
 
     /// <summary>
-    /// Flag indicating whether this entity has died.
-    /// 
-    /// Once set to true, this prevents the entity from taking additional damage
-    /// and can be used by other systems to check death state. The flag is
-    /// automatically set when health reaches zero and should not be manually
-    /// modified unless implementing resurrection mechanics.
-    /// </summary>
-    [SerializeField] protected bool isDead;
-
-    /// <summary>
     /// Health regeneration rate frequency, in seconds. Typically every 1 second.
     /// </summary>
     [Header("Health Regen")]
@@ -58,6 +48,17 @@ public class Entity_Health : MonoBehaviour, IDamageable
     [SerializeField] private bool canRegenerateHealth = true;
 
     public float lastDamageTaken { get; private set; }
+
+    /// <summary>
+    /// Flag indicating whether this entity has died.
+    /// 
+    /// Once set to true, this prevents the entity from taking additional damage
+    /// and can be used by other systems to check death state. The flag is
+    /// automatically set when health reaches zero and should not be manually
+    /// modified unless implementing resurrection mechanics.
+    /// </summary>
+    public bool isDead { get; private set; }
+    protected bool canTakeDamage = true;
 
     /// <summary>
     /// The knockback force applied when the entity receives normal damage.
@@ -201,6 +202,8 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         if (isDead) return false;
 
+        if (!canTakeDamage) return false;
+
         if (AttackEvaded())
         {
             Debug.Log($"{gameObject.name} evaded the attack!");
@@ -239,6 +242,12 @@ public class Entity_Health : MonoBehaviour, IDamageable
 
         return true;
     }
+
+    /// <summary>
+    /// Sets the entity invulnerable status, which affects whether the TakeDamage()
+    /// function will apply damage and status effects to the entity.
+    /// </summary>
+    public void SetCanTakeDamage(bool canTakeDamage) => this.canTakeDamage = canTakeDamage;
 
     private bool AttackEvaded()
     {
