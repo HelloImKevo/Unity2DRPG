@@ -31,4 +31,14 @@ public class Enemy_StunnedState : EnemyState
             stateMachine.ChangeState(enemy.IdleState);
         }
     }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+        // After an enemy becomes un-stunned, reset the attack window,
+        // so that the enemy doesn't immediately attack when transitioning
+        // back to the battle state.
+        enemy.AttackState.ResetAttackWindow();
+    }
 }

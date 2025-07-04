@@ -28,6 +28,11 @@ public class Enemy_AttackState : EnemyState
     {
         base.Exit();
 
+        ResetAttackWindow();
+    }
+
+    public void ResetAttackWindow()
+    {
         LastTimeAttackPerformed = Time.time;
     }
 }
