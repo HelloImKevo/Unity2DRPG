@@ -77,7 +77,7 @@ public class Enemy_BattleState : EnemyState
                 && !enemy.WallDetected)
             {
                 // Pursue the player (aggro).
-                enemy.SetVelocity(enemy.battleMoveSpeed * DirectionToPlayer(), rb.linearVelocity.y);
+                enemy.SetVelocity(enemy.GetBattleMoveSpeed() * DirectionToPlayer(), rb.linearVelocity.y);
             }
         }
     }
@@ -98,7 +98,7 @@ public class Enemy_BattleState : EnemyState
         }
     }
 
-    private bool CanPerformAttack() => Time.time > enemy.AttackState.LastTimeAttackPerformed + enemy.attackDelay;
+    private bool CanPerformAttack() => Time.time > enemy.AttackState.LastTimeAttackPerformed + enemy.GetAttackDelay();
 
     private void UpdateBattlePursuitTimer() => lastTimeWasInBattle = Time.time;
 

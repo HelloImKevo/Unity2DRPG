@@ -95,7 +95,7 @@ public class EnemyState : EntityState
         // When the enemy enters its Battle state (aggro), increase its move speed
         // to match the aggressive animation (so it looks like the enemy is walking
         // faster, rather than sliding across the floor).
-        float battleAnimSpeedMultiplier = enemy.battleMoveSpeed / enemy.moveSpeed;
+        float battleAnimSpeedMultiplier = enemy.GetBattleMoveSpeed() / enemy.GetMoveSpeed();
 
         anim.SetFloat("moveAnimSpeedMultiplier", enemy.moveAnimSpeedMultiplier);
         anim.SetFloat("battleAnimSpeedMultiplier", battleAnimSpeedMultiplier);

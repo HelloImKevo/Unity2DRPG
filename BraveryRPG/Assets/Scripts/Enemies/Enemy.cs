@@ -11,11 +11,11 @@ public class Enemy : Entity
     public Enemy_StunnedState StunnedState { get; protected set; }
 
     [Header("Enemy Battle Details")]
-    public float battleMoveSpeed = 3f;
+    [SerializeField] private float battleMoveSpeed = 3f;
     public float attackDistance = 2;
     // TODO: Consider adding a range, like random 0.5 - 2.0 second delay.
     [Tooltip("Delay (seconds) in between attacks while in Battle state (currently tracked at the start of an attack animation)")]
-    public float attackDelay = 1.5f;
+    [SerializeField] private float attackDelay = 1.5f;
     [Tooltip("How long the enemy remains engaged in pursuit of player, after losing Line of Sight")]
     public float battleTimeDuration = 5f;
     public float minRetreatDistance = 1f;
@@ -48,6 +48,19 @@ public class Enemy : Entity
     [SerializeField] private Transform playerCheck;
     [SerializeField] private float playerCheckDistance = 10;
     public Transform PlayerRef { get; private set; }
+
+    public float GetMoveSpeed() => moveSpeed * activeSlowMultiplier;
+
+    public float GetBattleMoveSpeed() => battleMoveSpeed * activeSlowMultiplier;
+
+    public float GetAttackDelay()
+    {
+        // Attack delay should be INCREASED to simulate enemy slowness.
+        // 80% Active Slow Multiplier means the enemy has been slowed
+        // by 20% and should increase attack delay to 120%
+        float appliedSlowMultiplier = 1 - activeSlowMultiplier;
+        return attackDelay * (1 + appliedSlowMultiplier);
+    }
 
     protected override void Awake()
     {
@@ -96,32 +109,23 @@ public class Enemy : Entity
 
     protected override IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)
     {
-        // Speeds should be DECREASED to simulate enemy slowness.
-        float originalMoveSpeed = moveSpeed;
-        float originalBattleMoveSpeed = battleMoveSpeed;
-        float originalAnimSpeed = Anim.speed;
-
+        // Movement Speeds should be DECREASED to simulate enemy slowness.
         // 20% Slow Multiplier should reduce speed to 80%
-        float speedMultiplier = 1 - slowMultiplier;
-        moveSpeed *= speedMultiplier;
-        battleMoveSpeed *= speedMultiplier;
-        Anim.speed *= speedMultiplier;
+        activeSlowMultiplier = 1 - slowMultiplier;
 
-        // Attack delay should be INCREASED to simulate enemy slowness.
-        float originalAttackDelay = attackDelay;
-
-        // 20% Slow Multiplier should increase attack delay to 120%
-        float delayMultiplier = 1 + slowMultiplier;
-        attackDelay *= delayMultiplier;
+        Anim.speed *= activeSlowMultiplier;
 
         yield return new WaitForSeconds(duration);
 
         // After slow effect has worn off, restore original values.
-        moveSpeed = originalMoveSpeed;
-        battleMoveSpeed = originalBattleMoveSpeed;
-        Anim.speed = originalAnimSpeed;
+        StopSlowDown();
+    }
 
-        attackDelay = originalAttackDelay;
+    public override void StopSlowDown()
+    {
+        activeSlowMultiplier = 1f;
+        Anim.speed = 1f;
+        base.StopSlowDown();
     }
 
     public override void EntityDeath()

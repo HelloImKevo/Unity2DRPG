@@ -6,13 +6,16 @@ public class Skill_DomainExpansion : Skill_Base
     [SerializeField] private GameObject domainPrefab;
 
     [Header("Slowing Down Upgrade")]
-    [SerializeField] private float slowDownPercent = .8f;
+    [Range(0f, 1f)]
+    [Tooltip("Percentage of slowing applied to all nearby enemies.")]
+    [SerializeField] private float slowDownPercent = 0.8f;
+    [Tooltip("How many seconds this ultimate spell lasts.")]
     [SerializeField] private float slowDownDomainDuration = 5f;
 
-    // [Header("Shard Cast Upgrade")]
-    // [SerializeField] private int shardsToCast = 10;
-    // [SerializeField] private float shardCastDomainSlow = 1f;
-    // [SerializeField] private float shardCastDomainDuration = 8f;
+    [Header("Shard Cast Upgrade")]
+    [SerializeField] private int shardsToCast = 10;
+    [SerializeField] private float shardCastDomainSlow = 1f;
+    [SerializeField] private float shardCastDomainDuration = 8f;
     // private float spellCastTimer;
     // private float spellsPerSecond;
 
@@ -22,7 +25,7 @@ public class Skill_DomainExpansion : Skill_Base
     // [SerializeField] private float echoCastDomainDuration = 6f;
     // [SerializeField] private float healthToRestoreWithEcho = 0.05f;
 
-    [Header("Domain details")]
+    [Header("Domain Details")]
     public float maxDomainSize = 10;
     public float expandSpeed = 3;
 
@@ -33,8 +36,8 @@ public class Skill_DomainExpansion : Skill_Base
     {
         // spellsPerSecond = GetSpellsToCast() / GetDomainDuration();
 
-        // GameObject domain = Instantiate(domainPrefab, transform.position, Quaternion.identity);
-        // domain.GetComponent<SkillObject_DomainExpansion>().SetupDomain(this);
+        GameObject domain = Instantiate(domainPrefab, transform.position, Quaternion.identity);
+        domain.GetComponent<SkillObject_DomainExpansion>().SetupDomain(this);
     }
 
     public void DoSpellCasting()

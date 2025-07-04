@@ -19,7 +19,7 @@ public class Entity : MonoBehaviour
     public int FacingDir { get; private set; } = 1;
 
     [Header("Collision detection")]
-    public LayerMask whatIsGround { get; protected set; }
+    public LayerMask whatIsGround;
     [SerializeField] private float groundCheckDistance;
     // Part of our Wall-Slide system.
     [SerializeField] private float wallCheckDistance;
@@ -31,6 +31,8 @@ public class Entity : MonoBehaviour
 
     private Coroutine knockbackCoroutine;
     private bool isKnockedBack;
+
+    public float activeSlowMultiplier { get; protected set; } = 1f;
 
     private Coroutine slowDownCoroutine;
 
@@ -70,11 +72,23 @@ public class Entity : MonoBehaviour
         // Override in subclasses as needed.
     }
 
-    public void SlowDownEntity(float duration, float slowMultiplier)
+    public void SlowDownEntity(float duration, float slowMultiplier, bool canOverrideSlowEffect = false)
     {
-        if (slowDownCoroutine != null) StopCoroutine(slowDownCoroutine);
+        if (slowDownCoroutine != null)
+        {
+            if (canOverrideSlowEffect)
+            {
+                StopCoroutine(slowDownCoroutine);
+            }
+            else
+            {
+                // There is an existing slow-down effect applied to this entity,
+                // and the existing effect cannot be overridden.
+                return;
+            }
+        }
 
-        Debug.Log($"{gameObject.name} -> Starting 'SlowDownEntityCo' Coroutine ...");
+        Debug.Log($"{gameObject.name} -> Starting 'SlowDownEntityCo' Coroutine, Multiplier = {slowMultiplier} ...");
         slowDownCoroutine = StartCoroutine(SlowDownEntityCo(duration, slowMultiplier));
     }
 
@@ -83,6 +97,15 @@ public class Entity : MonoBehaviour
         // Should override in subclasses.
         // By default, yield return null just waits for the next frame.
         yield return null;
+    }
+
+    /// <summary>
+    /// Immediately stops the 'Slow Down the Entity' coroutine, alleviating
+    /// effects from chill, freeze, and time dilation.
+    /// </summary>
+    public virtual void StopSlowDown()
+    {
+        slowDownCoroutine = null;
     }
 
     #region: Knockback Effect When Damaged

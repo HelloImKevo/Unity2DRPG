@@ -32394,10 +32394,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 365024316}
-  - {fileID: 491228001}
-  - {fileID: 949960063}
   - {fileID: 2106783200}
   - {fileID: 1099504821}
+  - {fileID: 949960063}
+  - {fileID: 491228001}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -34272,10 +34272,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillType: 4
   upgradeType: 22
-  cooldown: 5
-  domainPrefab: {fileID: 0}
+  cooldown: 8
+  domainPrefab: {fileID: 8578793570240846509, guid: 46770b3707dd34c6ca46e50c4e0e07b5, type: 3}
   slowDownPercent: 0.8
-  slowDownDomainDuration: 5
+  slowDownDomainDuration: 8
+  shardsToCast: 10
+  shardCastDomainSlow: 1
+  shardCastDomainDuration: 8
   maxDomainSize: 10
   expandSpeed: 3
 --- !u!1 &867066399
@@ -34540,10 +34543,10 @@ RectTransform:
   - {fileID: 1245020436}
   - {fileID: 490375149}
   - {fileID: 288941556}
-  - {fileID: 716054847}
-  - {fileID: 206418521}
   - {fileID: 2113420233}
   - {fileID: 55338452}
+  - {fileID: 716054847}
+  - {fileID: 206418521}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -38289,6 +38292,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def78211c84b94277b05086c586c318a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
   groundCheckDistance: 1.4
   wallCheckDistance: 0.36
   primaryGroundCheck: {fileID: 179699071}
