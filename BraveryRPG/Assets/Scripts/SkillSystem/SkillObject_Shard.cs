@@ -33,9 +33,9 @@ public class SkillObject_Shard : SkillObject_Base
     /// Initiates movement toward the closest enemy target within detection range.
     /// </summary>
     /// <param name="speed">Movement speed in units per second.</param>
-    public void StartMovingTowardsClosestTarget(float speed)
+    public void StartMovingTowardsClosestTarget(float speed, Transform newTarget = null)
     {
-        target = FindClosestTarget();
+        target = newTarget == null ? FindClosestTarget() : newTarget;
         this.speed = speed;
     }
 
@@ -64,7 +64,7 @@ public class SkillObject_Shard : SkillObject_Base
     /// <param name="shardSpeed">Movement speed when <paramref name="canMove"/> is true.</param>
     /// <seealso cref="SetupShard(Skill_Shard)"/>
     /// <seealso cref="StartMovingTowardsClosestTarget"/>
-    public void SetupShard(Skill_Shard shardManager, float detonationTime, bool canMove, float shardSpeed)
+    public void SetupShard(Skill_Shard shardManager, float detonationTime, bool canMove, float shardSpeed, Transform target = null)
     {
         this.shardManager = shardManager;
         playerStats = shardManager.Player.Stats;
@@ -74,7 +74,7 @@ public class SkillObject_Shard : SkillObject_Base
 
         if (canMove)
         {
-            StartMovingTowardsClosestTarget(shardSpeed);
+            StartMovingTowardsClosestTarget(shardSpeed, target);
         }
     }
 

@@ -69,6 +69,7 @@ public class Player_DomainExpansionState : PlayerState
         rb.gravityScale = 0;
 
         stateTimer = skillManager.DomainExpansion.GetDomainDuration();
+        Debug.Log($"Player_DomainExpansionState - Levitating! duration = {stateTimer}");
 
         // Check whether the player has created the Black Hole / Gravity Well effect.
         if (!createdDomain)

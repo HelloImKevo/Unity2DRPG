@@ -45,7 +45,7 @@ public class Player : Entity
     private Coroutine queuedAttackWorker;
 
     [Header("Ultimate ability details")]
-    public float riseSpeed = 25f;
+    public float riseSpeed = 20f;
     public float riseMaxDistance = 3f;
 
     [Header("Player Movement Details")]
