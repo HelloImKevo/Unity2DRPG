@@ -73,9 +73,7 @@ public class SkillObject_DomainExpansion : SkillObject_Base
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Enemy enemy = collision.GetComponent<Enemy>();
-
-        if (enemy == null) return;
+        if (!collision.TryGetComponent<Enemy>(out var enemy)) return;
 
         domainManager.AddTarget(enemy);
         enemy.SlowDownEntity(duration, slowDownPercent, true);
@@ -83,9 +81,7 @@ public class SkillObject_DomainExpansion : SkillObject_Base
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Enemy enemy = collision.GetComponent<Enemy>();
-
-        if (enemy == null) return;
+        if (!collision.TryGetComponent<Enemy>(out var enemy)) return;
 
         enemy.StopSlowDown();
     }
