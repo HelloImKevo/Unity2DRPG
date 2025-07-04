@@ -3,6 +3,11 @@ using UnityEngine;
 public class Enemy_BattleState : EnemyState
 {
     private Transform player;
+
+    /// <summary>
+    /// Support target switching between the Player and its Time Echo mirror clones.
+    /// </summary>
+    private Transform lastTarget;
     private float lastTimeWasInBattle;
 
     public Enemy_BattleState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
@@ -43,6 +48,7 @@ public class Enemy_BattleState : EnemyState
         // the ledge. We want the enemy to eventually go back into its Patrol state.
         if (enemy.PlayerDetected() && enemy.BelowLedgeDetected)
         {
+            UpdateTargetIfNeeded();
             UpdateBattlePursuitTimer();
         }
 
@@ -73,6 +79,22 @@ public class Enemy_BattleState : EnemyState
                 // Pursue the player (aggro).
                 enemy.SetVelocity(enemy.battleMoveSpeed * DirectionToPlayer(), rb.linearVelocity.y);
             }
+        }
+    }
+
+    /// <summary>
+    /// Handle target switching between Player and its Time Echo mirror clones.
+    /// </summary>
+    private void UpdateTargetIfNeeded()
+    {
+        if (!enemy.PlayerDetected()) return;
+
+        Transform newTarget = enemy.PlayerDetected().transform;
+
+        if (newTarget != lastTarget)
+        {
+            lastTarget = newTarget;
+            player = newTarget;
         }
     }
 

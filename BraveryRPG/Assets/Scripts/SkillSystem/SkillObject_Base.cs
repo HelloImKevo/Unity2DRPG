@@ -9,6 +9,7 @@ public class SkillObject_Base : MonoBehaviour
     /// <summary>VFX prefab spawned when hitting targets.</summary>
     [Tooltip("Prefab with a contact sparks animation.")]
     [SerializeField] protected GameObject onHitVfx;
+
     [Space]
 
     /// <summary>Layer mask defining what counts as an enemy for collision detection.</summary>
@@ -16,9 +17,11 @@ public class SkillObject_Base : MonoBehaviour
     [SerializeField] protected LayerMask whatIsEnemy;
 
     /// <summary>Transform used as center point for damage radius calculations.</summary>
+    [Tooltip("Transform used as center point for damage radius calculations.")]
     [SerializeField] protected Transform targetCheck;
 
     /// <summary>Radius around the skill object where enemies take damage.</summary>
+    [Tooltip("Radius around the skill object where enemies take damage.")]
     [SerializeField] protected float damageRadius = 1f;
 
     /// <summary>Detection radius for finding nearby enemies for targeting behaviors.</summary>

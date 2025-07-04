@@ -1694,11 +1694,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: battleMoveSpeed
-      value: 1.2
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -30963,11 +30963,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: battleMoveSpeed
-      value: 1.2
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -31993,8 +31993,8 @@ RectTransform:
   - {fileID: 365024316}
   - {fileID: 2106783200}
   - {fileID: 1099504821}
-  - {fileID: 491228001}
   - {fileID: 949960063}
+  - {fileID: 491228001}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -33664,6 +33664,7 @@ GameObject:
   - component: {fileID: 866725229}
   - component: {fileID: 866725230}
   - component: {fileID: 866725231}
+  - component: {fileID: 866725232}
   m_Layer: 8
   m_Name: Skills_Holder
   m_TagString: Untagged
@@ -33756,6 +33757,23 @@ MonoBehaviour:
   predictionDot: {fileID: 4444862548797276397, guid: 40b536790733f41819245988dad965a8, type: 3}
   numberOfDots: 20
   spaceBetweenDots: 0.05
+--- !u!114 &866725232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866725227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 337a9b098dc9c455b834bb682befb7ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillType: 1
+  upgradeType: 15
+  cooldown: 1
+  timeEchoPrefab: {fileID: 4453593416109140261, guid: c3f2e39ae55824ee99491055bb999ba5, type: 3}
+  timeEchoDuration: 8
 --- !u!1 &867066399
 GameObject:
   m_ObjectHideFlags: 0
@@ -33897,11 +33915,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: battleMoveSpeed
-      value: 1.2
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -34012,10 +34030,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1245020436}
-  - {fileID: 716054847}
-  - {fileID: 206418521}
   - {fileID: 2113420233}
   - {fileID: 55338452}
+  - {fileID: 716054847}
+  - {fileID: 206418521}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -38970,11 +38988,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: battleMoveSpeed
-      value: 1.2
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -39730,11 +39748,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: battleMoveSpeed
-      value: 1.2
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -40549,11 +40567,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: battleMoveSpeed
-      value: 1.2
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -82072,9 +82090,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 590103732}
+  - {fileID: 1738595593}
   - {fileID: 449954777}
   - {fileID: 1902035485}
-  - {fileID: 1738595593}
   - {fileID: 1331991641}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -82520,11 +82538,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: battleMoveSpeed
-      value: 1.2
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

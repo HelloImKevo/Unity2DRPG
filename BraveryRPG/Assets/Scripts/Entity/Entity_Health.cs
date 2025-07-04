@@ -152,6 +152,14 @@ public class Entity_Health : MonoBehaviour, IDamageable
 
         healthBar = GetComponentInChildren<Slider>();
 
+        SetupHealth();
+    }
+
+    private void SetupHealth()
+    {
+        // Time Echo mirror clones currently do not have "Stats".
+        if (entityStats == null) return;
+
         currentHealth = entityStats.GetMaxHealth();
         UpdateHealthBar();
 
@@ -200,11 +208,11 @@ public class Entity_Health : MonoBehaviour, IDamageable
         Entity_Stats attackerStats = damageDealer.GetComponent<Entity_Stats>();
         float armorReduction = attackerStats != null ? attackerStats.GetArmorPenetration() : 0;
 
-        float mitigation = entityStats.GetArmorMitigation(armorReduction);
+        float mitigation = entityStats != null ? entityStats.GetArmorMitigation(armorReduction) : 0f;
         // 85% mitigation -> Receive 15% of damage
         float physicalDamageTaken = damage * (1 - mitigation);
 
-        float resistance = entityStats.GetElementalResistance(element);
+        float resistance = entityStats != null ? entityStats.GetElementalResistance(element) : 0f;
         float elementalDamageTaken = elementalDamage * (1 - resistance);
 
         // Play "Damaged" visual effect whenever HP is reduced.
@@ -228,11 +236,16 @@ public class Entity_Health : MonoBehaviour, IDamageable
         return true;
     }
 
-    private bool AttackEvaded() => Random.Range(0, 100) < entityStats.GetEvasion();
+    private bool AttackEvaded()
+    {
+        if (entityStats == null) return false;
+
+        return Random.Range(0, 100) < entityStats.GetEvasion();
+    }
 
     private void RegenerateHealth()
     {
-        if (!canRegenerateHealth) return;
+        if (!canRegenerateHealth || entityStats == null) return;
 
         float regenAmount = entityStats.resources.healthRegen.GetValue();
         IncreaseHealth(regenAmount);
@@ -240,7 +253,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
 
     public void IncreaseHealth(float healAmount)
     {
-        if (isDead) return;
+        if (isDead || entityStats == null) return;
 
         float newHealth = currentHealth + healAmount;
         float maxHealth = entityStats.GetMaxHealth();
@@ -278,23 +291,30 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// The Entity.EntityDeath() call allows for entity-specific death behaviors
     /// like animation triggers, loot drops, or state machine changes.
     /// </summary>
-    private void Die()
+    protected virtual void Die()
     {
         isDead = true;
         entity.EntityDeath();
     }
 
-    public float GetHealthPercent() => currentHealth / entityStats.GetMaxHealth();
+    public float GetHealthPercent()
+    {
+        if (entityStats == null) return 0f;
+
+        return currentHealth / entityStats.GetMaxHealth();
+    }
 
     public void SetHealthToPercent(float percent)
     {
+        if (entityStats == null) return;
+
         currentHealth = entityStats.GetMaxHealth() * Mathf.Clamp01(percent);
         UpdateHealthBar();
     }
 
     private void UpdateHealthBar()
     {
-        if (healthBar == null) return;
+        if (healthBar == null || entityStats == null) return;
 
         healthBar.value = currentHealth / entityStats.GetMaxHealth();
     }
@@ -380,5 +400,10 @@ public class Entity_Health : MonoBehaviour, IDamageable
     /// True if the damage exceeds the heavy damage threshold percentage,
     /// false otherwise.
     /// </returns>
-    private bool IsHeavyDamage(float damage) => damage / entityStats.GetMaxHealth() > heavyDamageThreshold;
+    private bool IsHeavyDamage(float damage)
+    {
+        if (entityStats == null) return false;
+
+        return damage / entityStats.GetMaxHealth() > heavyDamageThreshold;
+    }
 }

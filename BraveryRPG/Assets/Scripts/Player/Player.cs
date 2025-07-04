@@ -180,7 +180,12 @@ public class Player : Entity
         Input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
 
         Input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI();
+
+        // Currently, you can only have one of these spells unlocked:
+        // Shard or Time Echo - if this system changes, we need to implement
+        // a spell cycle system to keep track of which spell is selected.
         Input.Player.Spell.performed += ctx => SkillManager.Shard.TryUseSkill();
+        Input.Player.Spell.performed += ctx => SkillManager.TimeEcho.TryUseSkill();
     }
 
     private void OnDisable()

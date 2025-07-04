@@ -68,4 +68,26 @@ public enum SkillUpgradeType
 
     [Tooltip("Sword will bounce between enemies.")]
     SwordThrow_Bounce,
+
+    // ------ Time Echo -------
+    [Tooltip("Create a clone of a player. It can take damage from enemies.")]
+    TimeEcho,
+
+    [Tooltip("Time Echo can perform a single attack.")]
+    TimeEcho_SingleAttack,
+
+    [Tooltip("Time Echo can perform N attacks.")]
+    TimeEcho_MultiAttack,
+
+    [Tooltip("Time Echo has a chance to create another time echo when attacks.")]
+    TimeEcho_ChanceToDuplicate,
+
+    [Tooltip("When time echo dies it creates a wips that flies towards the player to heal it. Heal is = to percantage of damage taken when died.")]
+    TimeEcho_HealWisp,
+
+    [Tooltip("Wisp will now remove negative effects from player.")]
+    TimeEcho_CleanseWisp,
+
+    [Tooltip("Wisp will reduce cooldown of all skills by N second. ")]
+    TimeEcho_CooldownWisp,
 }
