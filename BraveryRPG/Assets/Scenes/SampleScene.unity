@@ -1638,7 +1638,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1093958159845319205, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 122.375
+      value: 109.375
       objectReference: {fileID: 0}
     - target: {fileID: 1093958159845319205, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1694,7 +1694,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
+      propertyPath: battleMoveSpeed
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -30959,7 +30963,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
+      propertyPath: battleMoveSpeed
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -31487,7 +31495,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 532274302, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  m_Sprite: {fileID: 1333734788, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -32006,7 +32014,7 @@ GameObject:
   - component: {fileID: 584547791}
   - component: {fileID: 584547792}
   m_Layer: 5
-  m_Name: UI_TreeNode - Mirror Shard
+  m_Name: UI_TreeNode - The Xenablade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32051,9 +32059,9 @@ MonoBehaviour:
   conflictNodes: []
   isUnlocked: 0
   isLocked: 0
-  skillData: {fileID: 11400000, guid: 17d79229980704303b7ef5fc962622c9, type: 2}
-  skillName: Mirror Shard
-  skillCost: 3
+  skillData: {fileID: 11400000, guid: dea0d7724dcee476db79fe2f5a81290d, type: 2}
+  skillName: The Xenablade
+  skillCost: 2
   skillIcon: {fileID: 497563992}
   lockedColorHex: '#808080'
 --- !u!114 &584547792
@@ -33740,6 +33748,11 @@ MonoBehaviour:
   maxDistance: 6
   attacksPerSecond: 4
   maxSpinDuration: 3
+  spinThrowPower: 5
+  bounceSwordPrefab: {fileID: 1188364017339288703, guid: 0acf5a88c693f4ed38ad36f061966491, type: 3}
+  bounceCount: 5
+  bounceSpeed: 18
+  bounceThrowPower: 5
   predictionDot: {fileID: 4444862548797276397, guid: 40b536790733f41819245988dad965a8, type: 3}
   numberOfDots: 20
   spaceBetweenDots: 0.05
@@ -33828,7 +33841,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1093958159845319205, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 131.44101
+      value: 112.44101
       objectReference: {fileID: 0}
     - target: {fileID: 1093958159845319205, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: m_LocalPosition.y
@@ -33884,7 +33897,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
+      propertyPath: battleMoveSpeed
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -38953,7 +38970,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
+      propertyPath: battleMoveSpeed
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -39709,7 +39730,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
+      propertyPath: battleMoveSpeed
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -40524,7 +40549,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
+      propertyPath: battleMoveSpeed
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -82491,7 +82520,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726873959807303315, guid: 880085a5dcfbf4ada9fc0498ca8b4874, type: 3}
+      propertyPath: battleMoveSpeed
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

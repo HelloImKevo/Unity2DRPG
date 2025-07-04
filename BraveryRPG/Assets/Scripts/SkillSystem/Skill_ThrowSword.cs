@@ -3,7 +3,7 @@ using UnityEngine;
 public class Skill_ThrowSword : Skill_Base
 {
     private SkillObject_Sword currentSword;
-    // private float currentThrowPower;
+    private float currentThrowPower;
 
     [Header("Regular Sword Uprgade")]
     [SerializeField] private GameObject regularSwordPrefab;
@@ -23,15 +23,17 @@ public class Skill_ThrowSword : Skill_Base
     public float attacksPerSecond = 4f;
     [Tooltip("How many seconds the sword will spin in its deployed position.")]
     public float maxSpinDuration = 3f;
-    // [Range(0, 10)]
-    // [SerializeField] private float spinThrowPower = 5f;
+    [Range(0, 10)]
+    [SerializeField] private float spinThrowPower = 5f;
 
-    // [Header("Bounce Sword Upgrade")]
-    // [SerializeField] private GameObject bounceSwordPrefab;
-    // public int bounceCount = 5;
-    // public float bounceSpeed = 12f;
-    // [Range(0, 10)]
-    // [SerializeField] private float bounceThrowPower = 5f;
+    [Header("Bounce Sword Upgrade")]
+    [SerializeField] private GameObject bounceSwordPrefab;
+    [Tooltip("Maximum number of times the Bounce Sword upgrade will bounce between enemies to deal damage.")]
+    public int bounceCount = 5;
+    [Tooltip("Movement speed of the Bounce Sword skill object.")]
+    public float bounceSpeed = 18f;
+    [Range(0, 10)]
+    [SerializeField] private float bounceThrowPower = 5f;
 
     [Header("Trajectory prediction")]
     [Tooltip("Trajectory prediction dot SkillObject prefab.")]
@@ -55,7 +57,7 @@ public class Skill_ThrowSword : Skill_Base
 
     public override bool CanUseSkill()
     {
-        // UpdateThrowPower();
+        UpdateThrowPower();
 
         if (currentSword != null)
         {
@@ -90,39 +92,39 @@ public class Skill_ThrowSword : Skill_Base
 
         if (Unlocked(SkillUpgradeType.SwordThrow_Spin)) return spinSwordPrefab;
 
-        // if (Unlocked(SkillUpgradeType.SwordThrow_Bounce)) return bounceSwordPrefab;
+        if (Unlocked(SkillUpgradeType.SwordThrow_Bounce)) return bounceSwordPrefab;
 
         Debug.Log("GetSwordPrefab() -> No valid sword upgrade selected!");
         return null;
     }
 
-    // private void UpdateThrowPower()
-    // {
-    //     switch (upgradeType)
-    //     {
-    //         case SkillUpgradeType.SwordThrow:
-    //             currentThrowPower = regularThrowPower;
-    //             break;
+    private void UpdateThrowPower()
+    {
+        switch (upgradeType)
+        {
+            case SkillUpgradeType.SwordThrow:
+                currentThrowPower = regularThrowPower;
+                break;
 
-    //         case SkillUpgradeType.SwordThrow_Pierce:
-    //             currentThrowPower = pierceThrowPower;
-    //             break;
+            case SkillUpgradeType.SwordThrow_Pierce:
+                currentThrowPower = pierceThrowPower;
+                break;
 
-    //         case SkillUpgradeType.SwordThrow_Spin:
-    //             currentThrowPower = spinThrowPower;
-    //             break;
+            case SkillUpgradeType.SwordThrow_Spin:
+                currentThrowPower = spinThrowPower;
+                break;
 
-    //         case SkillUpgradeType.SwordThrow_Bounce:
-    //             currentThrowPower = bounceThrowPower;
-    //             break;
+            case SkillUpgradeType.SwordThrow_Bounce:
+                currentThrowPower = bounceThrowPower;
+                break;
 
-    //         default:
-    //             Debug.Log($"UpdateThrowPower() -> Upgrade type {upgradeType} not supported!");
-    //             break;
-    //     }
-    // }
+            default:
+                Debug.Log($"UpdateThrowPower() -> Upgrade type {upgradeType} not supported!");
+                break;
+        }
+    }
 
-    private Vector2 GetThrowVelocity() => confirmedDirection * (regularThrowPower * 10);
+    private Vector2 GetThrowVelocity() => confirmedDirection * (currentThrowPower * 10);
 
     /// <summary>
     /// Moves the dots to positions along a predicted trajectory parabola by
@@ -142,7 +144,7 @@ public class Skill_ThrowSword : Skill_Base
     /// <returns>Predicted trajectory point with factored time as distance traveled.</returns>
     private Vector2 GetTrajectoryPoint(Vector2 direction, float t)
     {
-        float scaledThrowPower = regularThrowPower * 10;
+        float scaledThrowPower = currentThrowPower * 10;
 
         // This gives us the initial velocity — the starting speed and direction of the throw.
         Vector2 initialVelocity = direction * scaledThrowPower;
