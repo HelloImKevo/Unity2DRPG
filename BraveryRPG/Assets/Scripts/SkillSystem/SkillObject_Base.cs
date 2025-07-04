@@ -87,6 +87,8 @@ public class SkillObject_Base : MonoBehaviour
 
             if (wasTargetHit)
             {
+                // Keep track of the last target that this skill hit.
+                lastTarget = target.transform;
                 // Create On-Hit visual effect.
                 Instantiate(onHitVfx, target.transform.position, Quaternion.identity);
             }

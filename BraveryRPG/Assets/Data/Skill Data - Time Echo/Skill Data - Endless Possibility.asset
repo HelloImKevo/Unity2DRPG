@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3749fe0fc0f944fe2ac8db88705d596a, type: 3}
-  m_Name: Skill Data - Timeless Attack
+  m_Name: Skill Data - Endless Possibility
   m_EditorClassIdentifier: 
-  displayName: Timeless Attack
-  description: The echo can perform 1 attack.
-  icon: {fileID: 1100082596, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  displayName: Endless Possibility
+  description: The Time Echo has a 30% chance to duplicate itself.
+  icon: {fileID: -1361760658, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   cost: 2
   unlockedByDefault: 0
   skillType: 1
   upgradeData:
-    upgradeType: 16
+    upgradeType: 18
     cooldown: 0
     damageScaleData:
       physical: 1

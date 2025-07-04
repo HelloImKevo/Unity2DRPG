@@ -22,7 +22,7 @@ public class SkillObject_TimeEcho : SkillObject_Base
         this.echoManager = echoManager;
         playerStats = echoManager.Player.Stats;
         damageScaleData = echoManager.damageScaleData;
-        // maxAttacks = echoManager.GetMaxAttacks();
+        maxAttacks = echoManager.GetMaxAttacks();
         playerTransform = echoManager.transform.root;
         // playerhealth = echoManager.Player.Health;
         // skillManager = echoManager.SkillManager;
@@ -35,7 +35,7 @@ public class SkillObject_TimeEcho : SkillObject_Base
         // wispTrail = GetComponentInChildren<TrailRenderer>();
         // wispTrail.gameObject.SetActive(false);
 
-        // anim.SetBool("canAttack", maxAttacks > 0);
+        anim.SetBool("canAttack", maxAttacks > 0);
     }
 
     private void Update()
@@ -97,15 +97,20 @@ public class SkillObject_TimeEcho : SkillObject_Base
     {
         DamageEnemiesInRadius(targetCheck, damageRadius);
 
+        // Do not replicate a duplicate Echo if an enemy was not hit.
         if (!wasTargetHit) return;
 
-        // bool canDuplicate = Random.value < echoManager.GetDuplicateChance();
-        // float xOffset = transform.position.x < lastTarget.position.x ? 1 : -1;
+        bool canDuplicate = Random.value < echoManager.GetDuplicateChance();
 
-        // if (canDuplicate)
-        // {
-        //     echoManager.CreateTimeEcho(lastTarget.position + new Vector3(xOffset, 0));
-        // }
+        // Determine whether this Time Echo is on the left or right side
+        // of the targeted enemy.
+        float xOffset = transform.position.x < lastTarget.position.x ? 1 : -1;
+
+        if (canDuplicate)
+        {
+            // Create another Time Echo at this clone's position.
+            echoManager.CreateTimeEcho(lastTarget.position + new Vector3(xOffset, 0f));
+        }
     }
 
     public void HandleDeath()

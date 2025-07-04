@@ -7,9 +7,10 @@ public class Skill_TimeEcho : Skill_Base
     [SerializeField] private GameObject timeEchoPrefab;
     [SerializeField] private float timeEchoDuration;
 
-    // [Header("Attack Upgrades")]
-    // [SerializeField] private int maxAttacks = 3;
-    // [SerializeField] private float duplicateChance = 0.3f;
+    [Header("Time Echo Attack Upgrades")]
+    [SerializeField] private int maxAttacks = 3;
+    [Tooltip("Fractional percent chance that this Echo will create a duplicate Echo upon death and if an enemy was hit.")]
+    [SerializeField] private float duplicateChance = 0.3f;
 
     // [Header("Heal Wisp Upgrades")]
     // [SerializeField] private float damagePercentHealed = 0.3f;
@@ -47,30 +48,31 @@ public class Skill_TimeEcho : Skill_Base
     //         || upgradeType == SkillUpgradeType.TimeEcho_CooldownWisp;
     // }
 
-    // public float GetDuplicateChance()
-    // {
-    //     if (upgradeType != SkillUpgradeType.TimeEcho_ChanceToDuplicate)
-    //     {
-    //         return 0;
-    //     }
+    public float GetDuplicateChance()
+    {
+        if (upgradeType != SkillUpgradeType.TimeEcho_ChanceToDuplicate)
+        {
+            return 0f;
+        }
 
-    //     return duplicateChance;
-    // }
+        return duplicateChance;
+    }
 
-    // public int GetMaxAttacks()
-    // {
-    //     if (upgradeType == SkillUpgradeType.TimeEcho_SingleAttack || upgradeType == SkillUpgradeType.TimeEcho_ChanceToDuplicate)
-    //     {
-    //         return 1;
-    //     }
+    public int GetMaxAttacks()
+    {
+        if (SkillUpgradeType.TimeEcho_SingleAttack == upgradeType
+            || SkillUpgradeType.TimeEcho_ChanceToDuplicate == upgradeType)
+        {
+            return 1;
+        }
 
-    //     if (upgradeType == SkillUpgradeType.TimeEcho_MultiAttack)
-    //     {
-    //         return maxAttacks;
-    //     }
+        if (SkillUpgradeType.TimeEcho_MultiAttack == upgradeType)
+        {
+            return maxAttacks;
+        }
 
-    //     return 0;
-    // }
+        return 0;
+    }
 
     public float GetEchoDuration()
     {

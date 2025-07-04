@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4022216827246970114}
   - component: {fileID: 2327644958703988656}
   - component: {fileID: 6298508809385462814}
+  - component: {fileID: 3010610463122905542}
   m_Layer: 0
   m_Name: Animator
   m_TagString: Untagged
@@ -74,9 +75,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 547063809
-  m_SortingLayer: -1
-  m_SortingOrder: 0
+  m_SortingLayerID: -511347249
+  m_SortingLayer: -2
+  m_SortingOrder: -1
   m_Sprite: {fileID: -1840505252, guid: b48a958ed57f74537b722cee84da6e5f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -110,6 +111,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3010610463122905542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3781668642297185251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 098baa09fbfd94907a4a5cf2595af430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4453593416109140261
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +240,7 @@ MonoBehaviour:
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 128
-  targetCheck: {fileID: 325975622673188182}
+  targetCheck: {fileID: 3406189285494454481}
   damageRadius: 1
   detectionRadius: 10
   onDeathVfx: {fileID: 7628245079934006353, guid: 05769c4235b6f45bc99b92cfeafe1272, type: 3}
