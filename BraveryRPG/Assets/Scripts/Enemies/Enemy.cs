@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
+    public Enemy_Health health { get; private set; }
+
     public Enemy_IdleState IdleState { get; protected set; }
     public Enemy_MoveState MoveState { get; protected set; }
     public Enemy_AttackState AttackState { get; protected set; }
@@ -65,6 +67,8 @@ public class Enemy : Entity
     protected override void Awake()
     {
         base.Awake();
+
+        health = GetComponent<Enemy_Health>();
     }
 
     protected override void Start()

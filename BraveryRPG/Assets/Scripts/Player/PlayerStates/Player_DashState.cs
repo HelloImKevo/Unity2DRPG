@@ -27,6 +27,9 @@ public class Player_DashState : PlayerState
         // Prevent player from gradually descending while dashing (this maintains
         // a constant horizontal linear movement from ledges).
         rb.gravityScale = 0;
+
+        // Make the player invulnerable while dashing.
+        player.Health.SetCanTakeDamage(false);
     }
 
     public override void Update()
@@ -60,6 +63,8 @@ public class Player_DashState : PlayerState
         // and we transition to the Falling state.
         player.SetVelocity(0, 0);
         rb.gravityScale = originalGravityScale;
+
+        player.Health.SetCanTakeDamage(true);
     }
 
     private void CancelDashIfNeeded()

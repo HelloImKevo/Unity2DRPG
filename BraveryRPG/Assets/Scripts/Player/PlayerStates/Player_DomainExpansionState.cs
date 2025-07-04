@@ -26,7 +26,9 @@ public class Player_DomainExpansionState : PlayerState
 
         // Apply upward velocity movement.
         player.SetVelocity(0, player.riseSpeed);
-        // player.Health.SetCanTakeDamage(false);
+
+        // Make the player invulnerable while the Ultimate Spell sequence is playing out.
+        player.Health.SetCanTakeDamage(false);
     }
 
     public override void Update()
@@ -58,7 +60,7 @@ public class Player_DomainExpansionState : PlayerState
     {
         base.Exit();
         createdDomain = false;
-        // player.Health.SetCanTakeDamage(true);
+        player.Health.SetCanTakeDamage(true);
     }
 
     private void Levitate()

@@ -76,10 +76,10 @@ public class Skill_DomainExpansion : Skill_Base
     /// <summary>
     /// Pick a random target from the enemies trapped in the Black Hole.
     /// </summary>
-    /// <returns></returns>
     private Transform FindTargetInDomain()
     {
-        // trappedTargets.RemoveAll(target => target == null || target.Health.isDead);
+        // Remove dead enemies to prevent spells from continuing to target and damage them.
+        trappedTargets.RemoveAll(target => target == null || target.health.isDead);
 
         if (trappedTargets.Count == 0) return null;
 
@@ -137,6 +137,11 @@ public class Skill_DomainExpansion : Skill_Base
         return 0;
     }
 
+    /// <summary>
+    /// Checks if this is just the base 'Time Warp' spell tier, which behaves
+    /// like an instant-cast. The two upgrade paths cause the player to rise
+    /// and levitate.
+    /// </summary>
     public bool IsInstantDomain()
     {
         return upgradeType != SkillUpgradeType.Domain_EchoSpam

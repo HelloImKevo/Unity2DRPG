@@ -39,6 +39,9 @@ public class Skill_Base : MonoBehaviour
         upgradeType = upgrade.upgradeType;
         cooldown = upgrade.cooldown;
         damageScaleData = upgrade.damageScaleData;
+
+        // Allow skills to be immediately used when they are first unlocked.
+        ResetCooldown();
     }
 
     public virtual bool CanUseSkill()
@@ -74,5 +77,5 @@ public class Skill_Base : MonoBehaviour
     /// <param name="cooldownReduction"></param>
     public void ReduceCooldownBy(float cooldownReduction) => lastTimeUsed += cooldownReduction;
 
-    public void ResetCooldown() => lastTimeUsed = Time.time;
+    public void ResetCooldown() => lastTimeUsed = Time.time - cooldown;
 }
