@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Unity Scriptable Object (SO) that defines a blueprint for Player skills
-// that can be unlocked through a Skill Tree progression system.
+/// that can be unlocked through a Skill Tree progression system.
 /// 
 /// To create a new instance in Unity, Right click, then navigate to:
 /// Create > RPG Setup > Skill Data
