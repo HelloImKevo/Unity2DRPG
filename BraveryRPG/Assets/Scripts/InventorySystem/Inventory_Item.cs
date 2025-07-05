@@ -54,9 +54,9 @@ public class Inventory_Item
     //     return null;
     // }
 
-    // public bool CanAddStack() => stackSize < itemData.maxStackSize;
+    public bool CanAddStack() => stackSize < itemData.maxStackSize;
 
-    // public void AddStack() => stackSize++;
+    public void AddStack() => stackSize++;
 
-    // public void RemoveStack() => stackSize--;
+    public void RemoveStack() => stackSize--;
 }

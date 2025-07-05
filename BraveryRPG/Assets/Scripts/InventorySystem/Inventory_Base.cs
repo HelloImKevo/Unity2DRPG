@@ -35,37 +35,37 @@ public class Inventory_Base : MonoBehaviour
 
     public bool CanAddItem() => itemList.Count < maxInventorySize;
 
-    // public Inventory_Item FindStackable(Inventory_Item itemToAdd)
-    // {
-    //     List<Inventory_Item> stackableItems = itemList.FindAll(item => item.itemData == itemToAdd.itemData);
+    public Inventory_Item FindStackableWithSpace(Inventory_Item itemToFind)
+    {
+        // Find list of existing stackable items in the inventory.
+        List<Inventory_Item> stackableItems = itemList.FindAll(item => item.itemData == itemToFind.itemData);
 
-    //     foreach (var stackableItem in stackableItems)
-    //     {
-    //         if (stackableItem.CanAddStack())
-    //         {
-    //             return stackableItem;
-    //         }
-    //     }
+        // Identify which stackable inventory elements have room for more stacks.
+        foreach (var stackableItem in stackableItems)
+        {
+            if (stackableItem.CanAddStack())
+            {
+                return stackableItem;
+            }
+        }
 
-    //     return null;
-    // }
+        return null;
+    }
 
     public void AddItem(Inventory_Item itemToAdd)
     {
         Debug.Log("Inventory_Base -> Player picked up item -> " + itemToAdd.itemData.itemName);
 
-        itemList.Add(itemToAdd);
+        Inventory_Item itemInInventory = FindStackableWithSpace(itemToAdd);
 
-        // Inventory_Item itemInInventory = FindStackable(itemToAdd);
-
-        // if (itemInInventory != null)
-        // {
-        //     itemInInventory.AddStack();
-        // }
-        // else
-        // {
-        //     itemList.Add(itemToAdd);
-        // }
+        if (itemInInventory != null)
+        {
+            itemInInventory.AddStack();
+        }
+        else
+        {
+            itemList.Add(itemToAdd);
+        }
 
         OnInventoryChange?.Invoke();
     }
