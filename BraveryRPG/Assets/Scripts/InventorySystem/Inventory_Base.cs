@@ -56,11 +56,11 @@ public class Inventory_Base : MonoBehaviour
     {
         Debug.Log("Inventory_Base.AddItem() -> Item added to inventory: " + itemToAdd.itemData.itemName);
 
-        Inventory_Item itemInInventory = FindStackableWithSpace(itemToAdd);
+        Inventory_Item existingStackable = FindStackableWithSpace(itemToAdd);
 
-        if (itemInInventory != null)
+        if (existingStackable != null)
         {
-            itemInInventory.AddStack();
+            existingStackable.AddStack();
         }
         else
         {
