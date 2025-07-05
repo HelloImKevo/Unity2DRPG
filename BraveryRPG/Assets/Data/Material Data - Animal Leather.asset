@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968a2aa91201749c797c6e8f7f37d7cc, type: 3}
   m_Name: Material Data - Animal Leather
   m_EditorClassIdentifier: 
-  itemName: 
-  itemIcon: {fileID: 0}
+  itemName: Animal Leather
+  itemIcon: {fileID: -1368519568, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   itemType: 0
