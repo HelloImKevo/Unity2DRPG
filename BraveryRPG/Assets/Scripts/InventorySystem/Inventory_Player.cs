@@ -17,13 +17,16 @@ public class Inventory_Player : Inventory_Base
     public void TryEquipItem(Inventory_Item item)
     {
         var inventoryItem = FindItem(item.itemData);
-        var matchingSlots = equipmentList.FindAll(slot => slot.slotType == item.itemData.itemType);
+        List<Inventory_EquipmentSlot> matchingSlots = equipmentList.FindAll(
+            slot => slot.slotType == item.itemData.itemType
+        );
 
         // STEP 1: Try to find empty slot and equip item
         foreach (var slot in matchingSlots)
         {
             if (!slot.HasItem())
             {
+                Debug.Log($"TryEquipItem() -> Matching slot: {slot.slotName} {slot.slotType} - Equipping: {inventoryItem.itemData?.itemName}");
                 EquipItem(inventoryItem, slot);
                 return;
             }
@@ -31,13 +34,14 @@ public class Inventory_Player : Inventory_Base
 
         if (matchingSlots.Count == 0)
         {
-            Debug.LogWarning($"Inventory_Player -> TryEquipItem() -> No matching equipment slots for item: {item}");
+            Debug.LogWarning($"Inventory_Player -> TryEquipItem() -> No matching equipment slots for item: {item.itemData?.itemName}");
             return;
         }
 
         // STEP 2: No empty slots? Replace first one
         var slotToReplace = matchingSlots[0];
         var itemToUnequip = slotToReplace.equippedItem;
+        Debug.Log($"TryEquipItem() -> Slot to replace: {slotToReplace.slotName} - Unequipping: {itemToUnequip.itemData?.itemName}");
 
         UnequipItem(itemToUnequip, slotToReplace != null);
         EquipItem(inventoryItem, slotToReplace);
@@ -45,6 +49,8 @@ public class Inventory_Player : Inventory_Base
 
     private void EquipItem(Inventory_Item itemToEquip, Inventory_EquipmentSlot slot)
     {
+        Debug.Log($"EquipItem() -> Equipping: {itemToEquip.itemData?.itemName} in Slot: {slot.slotName} - Unequipping: ");
+
         // float savaedHealthPercent = player.Health.GetHealthPercent();
 
         slot.equippedItem = itemToEquip;

@@ -54,7 +54,7 @@ public class Inventory_Base : MonoBehaviour
 
     public void AddItem(Inventory_Item itemToAdd)
     {
-        Debug.Log("Inventory_Base -> Player picked up item -> " + itemToAdd.itemData.itemName);
+        Debug.Log("Inventory_Base.AddItem() -> Item added to inventory: " + itemToAdd.itemData.itemName);
 
         Inventory_Item itemInInventory = FindStackableWithSpace(itemToAdd);
 
