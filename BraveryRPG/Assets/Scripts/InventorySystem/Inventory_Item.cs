@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class Inventory_Item
 {
-    // private string itemId;
+    private string itemId;
 
     public Item_DataSO itemData;
     public int stackSize = 1;
@@ -19,7 +19,9 @@ public class Inventory_Item
         // itemEffect = itemData.itemEffect;
 
         modifiers = EquipmentData()?.modifiers;
-        // itemId = itemData.itemName + " - " + Guid.NewGuid();
+        // Allows modifiers from multiple instances of the same item
+        // (such as two "Ring of Luck") to be applied to the entity Stats.
+        itemId = itemData.itemName + " - " + Guid.NewGuid();
     }
 
     public void AddModifiers(Entity_Stats playerStats)
@@ -27,8 +29,7 @@ public class Inventory_Item
         foreach (var mod in modifiers)
         {
             Stat statToModify = playerStats.GetStatByType(mod.statType);
-            statToModify.AddModifier(mod.value, itemData.itemName);
-            // statToModify.AddModifier(mod.value, itemId);
+            statToModify.AddModifier(mod.value, itemId);
         }
     }
 
@@ -37,8 +38,7 @@ public class Inventory_Item
         foreach (var mod in modifiers)
         {
             Stat statToModify = playerStats.GetStatByType(mod.statType);
-            statToModify.RemoveModifier(itemData.itemName);
-            // statToModify.RemoveModifier(itemId);
+            statToModify.RemoveModifier(itemId);
         }
     }
 
