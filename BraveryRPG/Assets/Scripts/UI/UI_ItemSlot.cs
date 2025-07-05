@@ -7,7 +7,7 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 {
     public Inventory_Item itemInSlot { get; private set; }
 
-    // protected Inventory_Player inventory;
+    protected Inventory_Player inventory;
     protected UI ui;
     protected RectTransform rect;
 
@@ -19,15 +19,17 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     {
         ui = GetComponentInParent<UI>();
         rect = GetComponent<RectTransform>();
-        // inventory = FindAnyObjectByType<Inventory_Player>();
+        inventory = FindAnyObjectByType<Inventory_Player>();
     }
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        // if (itemInSlot == null || itemInSlot.itemData.itemType == ItemType.Material)
-        // {
-        //     return;
-        // }
+        if (itemInSlot == null || ItemType.Material == itemInSlot.itemData.itemType)
+        {
+            return;
+        }
+
+        inventory.TryEquipItem(itemInSlot);
 
         // if (itemInSlot.itemData.itemType == ItemType.Consumable)
         // {
