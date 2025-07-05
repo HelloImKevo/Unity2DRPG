@@ -70,11 +70,11 @@ public class Inventory_Base : MonoBehaviour
         OnInventoryChange?.Invoke();
     }
 
-    // public void RemoveItem(Inventory_Item itemToRemove)
-    // {
-    //     itemList.Remove(itemToRemove);
-    //     OnInventoryChange?.Invoke();
-    // }
+    public void RemoveItem(Inventory_Item itemToRemove)
+    {
+        itemList.Remove(itemToRemove);
+        OnInventoryChange?.Invoke();
+    }
 
     public Inventory_Item FindItem(Item_DataSO itemData)
     {
