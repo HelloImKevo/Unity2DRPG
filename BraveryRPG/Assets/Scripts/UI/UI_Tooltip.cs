@@ -25,14 +25,19 @@ public class UI_Tooltip : MonoBehaviour
     {
         if (!show)
         {
-            // Hide the tooltip by moving it way off-screen in an area that
-            // should never be visible to the user.
-            rect.position = new Vector2(9999f, 9999f);
+            HideTooltip();
             return;
         }
 
         // Move the tooltip into view for the user.
         UpdatePosition(targetRect);
+    }
+
+    public void HideTooltip()
+    {
+        // Hide the tooltip by moving it way off-screen in an area that
+        // should never be visible to the user.
+        rect.position = new Vector2(9999f, 9999f);
     }
 
     /// <summary>

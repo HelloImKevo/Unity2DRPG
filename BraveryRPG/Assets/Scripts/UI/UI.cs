@@ -9,6 +9,8 @@ public class UI : MonoBehaviour
     public UI_SkillTree skillTree;
     public UI_SkillTooltip skillTooltip;
 
+    public UI_ItemTooltip itemTooltip;
+
     private bool skillTreeEnabled;
 
     /// <summary>
@@ -19,6 +21,8 @@ public class UI : MonoBehaviour
         skillTree = GetComponentInChildren<UI_SkillTree>(true);
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
 
+        itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
+
         if (skillTree == null)
         {
             Debug.LogWarning("Skill Tree component is null, did you forget to assign it to the UI script?");
@@ -27,6 +31,11 @@ public class UI : MonoBehaviour
         if (skillTooltip == null)
         {
             Debug.LogWarning("Skill Tooltip component is null, did you forget to assign it to the UI script?");
+        }
+
+        if (itemTooltip == null)
+        {
+            Debug.LogWarning("Item Tooltip component is null, did you forget to assign it to the UI script?");
         }
     }
 

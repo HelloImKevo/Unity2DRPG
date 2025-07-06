@@ -216,9 +216,8 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     /// <param name="eventData">Pointer event data from the UI system.</param>
     public void OnPointerExit(PointerEventData eventData)
     {
-        // The 2nd argument doesn't really matter, it could be null,
-        // since we are just moving the Tooltip way off-screen.
-        ui.skillTooltip.ShowTooltip(false, rect);
+        // Move the tooltip way off-screen.
+        ui.skillTooltip.HideTooltip();
 
         if (CanBeUnlocked())
         {

@@ -26,12 +26,14 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     {
         if (itemInSlot == null || ItemType.Material == itemInSlot.itemData.itemType)
         {
+            // You cannot equip a Crafting Material!
             return;
         }
 
+        // Equip the item to the player equipment list.
         inventory.TryEquipItem(itemInSlot);
 
-        // if (itemInSlot.itemData.itemType == ItemType.Consumable)
+        // if (ItemType.Consumable == itemInSlot.itemData.itemType)
         // {
         //     if (!itemInSlot.itemEffect.CanBeUsed()) return;
 
@@ -42,10 +44,10 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         //     inventory.TryEquipItem(itemInSlot);
         // }
 
-        // if (itemInSlot == null)
-        // {
-        //     ui.itemToolTip.ShowToolTip(false, null);
-        // }
+        if (itemInSlot == null)
+        {
+            ui.itemTooltip.HideTooltip();
+        }
     }
 
     public void UpdateSlot(Inventory_Item item)
@@ -72,11 +74,11 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     {
         if (itemInSlot == null) return;
 
-        // ui.itemToolTip.ShowToolTip(true, rect, itemInSlot);
+        ui.itemTooltip.ShowTooltip(true, rect, itemInSlot);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // ui.itemToolTip.ShowToolTip(false, null);
+        ui.itemTooltip.HideTooltip();
     }
 }
