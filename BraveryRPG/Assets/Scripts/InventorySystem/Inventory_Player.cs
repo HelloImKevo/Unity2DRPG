@@ -77,6 +77,8 @@ public class Inventory_Player : Inventory_Base
             slotToUnequip.equippedItem = null;
         }
 
+        // IMPORTANT: Prevents equipment modifiers from accumulating, which
+        // would allow the stats to continue to increase indefinitely.
         itemToUnequip.RemoveModifiers(player.Stats);
         // itemToUnequip.RemoveItemEffect();
 

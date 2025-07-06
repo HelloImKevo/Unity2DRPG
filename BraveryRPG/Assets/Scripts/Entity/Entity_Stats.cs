@@ -12,6 +12,11 @@ public class Entity_Stats : MonoBehaviour
     public Stat_DefenseGroup defense;
     public Stat_MajorGroup major;
 
+    protected virtual void Awake()
+    {
+        // Override where needed.
+    }
+
     public AttackData GetAttackData(DamageScaleData scaleData)
     {
         return new AttackData(this, scaleData);
@@ -118,25 +123,32 @@ public class Entity_Stats : MonoBehaviour
     /// <param name="scaleFactor">Fractional percentage value between 0.0 - 2.0 (200%).</param>
     public float GetPhysicalDamage(out bool isCrit, float scaleFactor = 1f)
     {
-        float baseDamage = offense.damage.GetValue();
-        float bonusDamage = major.strength.GetValue();
-        float totalBaseDamage = baseDamage + bonusDamage;
+        float baseDamage = GetBaseDamage();
+        float critChance = GetCritChance();
 
-        float baseCritChance = offense.critChance.GetValue();
-        float bonusCritChance = major.agility.GetValue() * 0.3f;
-        float critChance = baseCritChance + bonusCritChance;
-
-        float baseCritPower = offense.critPower.GetValue();
-        // Bonus crit power from strength: +0.5% per STR
-        float bonusCritPower = major.strength.GetValue() * 0.5f;
         // Total crit power as multiplier (ex: 150 / 100 = 1.5f)
-        float critPower = (baseCritPower + bonusCritPower) / 100f;
+        float critPower = GetCritPower() / 100f;
 
         isCrit = Random.Range(0, 100) < critChance;
-        float finalDamage = isCrit ? totalBaseDamage * critPower : totalBaseDamage;
+        float finalDamage = isCrit ? baseDamage * critPower : baseDamage;
 
         return finalDamage * scaleFactor;
     }
+
+    /// <summary>
+    /// Bonus damage from Strength: +1 per STR.
+    /// </summary>
+    public float GetBaseDamage() => offense.damage.GetValue() + major.strength.GetValue();
+
+    /// <summary>
+    ///  Bonus crit chance from Agility: +0.3% per AGI.
+    /// </summary>
+    public float GetCritChance() => offense.critChance.GetValue() + (major.agility.GetValue() * 0.3f);
+
+    /// <summary>
+    /// Bonus crit chance from Strength: +0.5% per STR.
+    /// </summary>
+    public float GetCritPower() => offense.critPower.GetValue() + (major.strength.GetValue() * 0.5f);
 
     /// <summary>
     /// Calculates armor mitigation percentage for this entity.
@@ -145,9 +157,7 @@ public class Entity_Stats : MonoBehaviour
     /// <returns>Armor mitigation as a fractional percentage. 0.85 is 85%</returns>
     public float GetArmorMitigation(float armorReduction)
     {
-        float baseArmor = defense.armor.GetValue();
-        float bonusArmor = major.vitality.GetValue() * 1.0f;
-        float totalArmor = baseArmor + bonusArmor;
+        float totalArmor = GetBaseArmor();
 
         // Cap armor reduction to 100% (handle situations where you receive a 100% armor reduction debuff)
         float reductionMultiplier = Mathf.Clamp01(1 - armorReduction); // 1 - 0.4 = 0.6
@@ -164,6 +174,11 @@ public class Entity_Stats : MonoBehaviour
 
         return finalMitigation;
     }
+
+    /// <summary>
+    /// Bonus armor from Vitality: +1 per VIT 
+    /// </summary>
+    public float GetBaseArmor() => defense.armor.GetValue() + major.vitality.GetValue();
 
     /// <returns>
     /// Fractional percentage of armor penetration, which reduces the effective armor

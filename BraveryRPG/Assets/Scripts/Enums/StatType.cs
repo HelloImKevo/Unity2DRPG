@@ -25,5 +25,9 @@ public enum StatType
     Evasion,
     IceResistance,
     FireResistance,
-    LightningResistance
+    LightningResistance,
+
+    // If you don't add this to the end, it will offset ScriptableObject
+    // data and you'll need to do a lot of game object refactoring.
+    ElementalDamage
 }
