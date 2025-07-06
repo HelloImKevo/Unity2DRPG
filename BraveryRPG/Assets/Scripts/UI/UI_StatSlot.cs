@@ -29,12 +29,12 @@ public class UI_StatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // ui.statTooltip.ShowTooltip(true, rect, statSlotType);
+        ui.statTooltip.ShowTooltip(true, rect, statSlotType);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // ui.statTooltip.HideTooltip();
+        ui.statTooltip.HideTooltip();
     }
 
     public void UpdateStatValue()

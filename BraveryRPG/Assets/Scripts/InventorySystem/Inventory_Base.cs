@@ -38,7 +38,9 @@ public class Inventory_Base : MonoBehaviour
     public Inventory_Item FindStackableWithSpace(Inventory_Item itemToFind)
     {
         // Find list of existing stackable items in the inventory.
-        List<Inventory_Item> stackableItems = itemList.FindAll(item => item.itemData == itemToFind.itemData);
+        List<Inventory_Item> stackableItems = itemList.FindAll(
+            item => item.itemData == itemToFind.itemData
+        );
 
         // Identify which stackable inventory elements have room for more stacks.
         foreach (var stackableItem in stackableItems)

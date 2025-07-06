@@ -10,6 +10,7 @@ public class UI : MonoBehaviour
     public UI_SkillTooltip skillTooltip;
 
     public UI_ItemTooltip itemTooltip;
+    public UI_StatTooltip statTooltip;
 
     private bool skillTreeEnabled;
 
@@ -22,6 +23,7 @@ public class UI : MonoBehaviour
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
 
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
+        statTooltip = GetComponentInChildren<UI_StatTooltip>(true);
 
         if (skillTree == null)
         {
@@ -37,6 +39,11 @@ public class UI : MonoBehaviour
         {
             Debug.LogWarning("Item Tooltip component is null, did you forget to assign it to the UI script?");
         }
+
+        if (statTooltip == null)
+        {
+            Debug.LogWarning("Stat Tooltip component is null, did you forget to assign it to the UI script?");
+        }
     }
 
     public void ToggleSkillTreeUI()
@@ -45,6 +52,6 @@ public class UI : MonoBehaviour
         // Activate / Deactivate game objects.
         skillTree.gameObject.SetActive(skillTreeEnabled);
         // Hide the tooltip (move it into outer space).
-        skillTooltip.ShowTooltip(false, null);
+        skillTooltip.HideTooltip();
     }
 }
