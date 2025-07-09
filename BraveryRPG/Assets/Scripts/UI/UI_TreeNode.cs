@@ -73,14 +73,18 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void Refund()
     {
+        if (!isUnlocked || skillData.unlockedByDefault)
+        {
+            // Do not refund skill points for skills that haven't been unlocked.
+            return;
+        }
+
         isUnlocked = false;
         isLocked = false;
         UpdateIconColor(GetColorByHex(lockedColorHex));
 
         skillTree.AddSkillPoints(skillData.cost);
         connectHandler.UnlockConnectionImage(false);
-
-        // Later - Skill Manager and reset skill
     }
 
     /// <summary>

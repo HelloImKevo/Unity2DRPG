@@ -13,25 +13,25 @@ public class Inventory_Base : MonoBehaviour
     {
     }
 
-    // public void TryUseItem(Inventory_Item itemToUse)
-    // {
-    //     Inventory_Item consumable = itemList.Find(item => item == itemToUse);
+    public void TryUseItem(Inventory_Item itemToUse)
+    {
+        Inventory_Item consumable = itemList.Find(item => item == itemToUse);
 
-    //     if (consumable == null) return;
+        if (consumable == null) return;
 
-    //     consumable.itemEffect.ExecuteEffect();
+        consumable.itemEffect.ExecuteEffect();
 
-    //     if (consumable.stackSize > 1)
-    //     {
-    //         consumable.RemoveStack();
-    //     }
-    //     else
-    //     {
-    //         RemoveItem(consumable);
-    //     }
+        if (consumable.stackSize > 1)
+        {
+            consumable.RemoveStack();
+        }
+        else
+        {
+            RemoveItem(consumable);
+        }
 
-    //     OnInventoryChange?.Invoke();
-    // }
+        OnInventoryChange?.Invoke();
+    }
 
     public bool CanAddItem() => itemList.Count < maxInventorySize;
 
