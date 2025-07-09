@@ -46,4 +46,12 @@ public class Player_SkillManager : MonoBehaviour
                 return null;
         }
     }
+
+    public void ResetAllSkills()
+    {
+        foreach (var skill in allSkills)
+        {
+            skill.RefundSkill();
+        }
+    }
 }

@@ -24,10 +24,10 @@ public class UI_ItemTooltip : UI_Tooltip
             return "Used for crafting.";
         }
 
-        // if (ItemType.Consumable == item.itemData.itemType)
-        // {
-        //     return item.itemData.itemEffect.effectDescription;
-        // }
+        if (ItemType.Consumable == item.itemData.itemType)
+        {
+            return item.itemData.itemEffect.effectDescription;
+        }
 
         StringBuilder sb = new();
 
@@ -40,12 +40,12 @@ public class UI_ItemTooltip : UI_Tooltip
             sb.AppendLine("+ " + modValue + " " + modType);
         }
 
-        // if (item.itemEffect != null)
-        // {
-        //     sb.AppendLine("");
-        //     sb.AppendLine("Unique effect:");
-        //     sb.AppendLine(item.itemEffect.effectDescription);
-        // }
+        if (item.itemEffect != null)
+        {
+            sb.AppendLine("");
+            sb.AppendLine("Unique effect:");
+            sb.AppendLine(item.itemEffect.effectDescription);
+        }
 
         sb.AppendLine("");
         sb.AppendLine("");

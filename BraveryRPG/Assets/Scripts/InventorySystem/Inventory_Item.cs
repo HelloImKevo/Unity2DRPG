@@ -11,12 +11,12 @@ public class Inventory_Item
     public int stackSize = 1;
 
     public ItemModifier[] modifiers { get; private set; }
-    // public ItemEffect_DataSO itemEffect;
+    public ItemEffect_DataSO itemEffect;
 
     public Inventory_Item(Item_DataSO itemData)
     {
         this.itemData = itemData;
-        // itemEffect = itemData.itemEffect;
+        itemEffect = itemData.itemEffect;
 
         modifiers = EquipmentData()?.modifiers;
         // Allows modifiers from multiple instances of the same item

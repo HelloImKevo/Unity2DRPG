@@ -78,4 +78,11 @@ public class Skill_Base : MonoBehaviour
     public void ReduceCooldownBy(float cooldownReduction) => lastTimeUsed += cooldownReduction;
 
     public void ResetCooldown() => lastTimeUsed = Time.time - cooldown;
+
+    // TODO: Need to enforce that 'Unlocked By Default' skills cannot be refunded!
+    public void RefundSkill()
+    {
+        upgradeType = SkillUpgradeType.None;
+        ResetCooldown();
+    }
 }

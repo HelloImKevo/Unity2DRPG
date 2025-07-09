@@ -6,11 +6,13 @@ using UnityEngine;
 /// </summary>
 public class UI : MonoBehaviour
 {
-    public UI_SkillTree skillTree;
+    public UI_SkillTree skillTreeUI;
     public UI_SkillTooltip skillTooltip;
 
     public UI_ItemTooltip itemTooltip;
     public UI_StatTooltip statTooltip;
+
+    // public UI_Inventory inventoryUI;
 
     private bool skillTreeEnabled;
 
@@ -19,13 +21,13 @@ public class UI : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        skillTree = GetComponentInChildren<UI_SkillTree>(true);
+        skillTreeUI = GetComponentInChildren<UI_SkillTree>(true);
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
 
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
         statTooltip = GetComponentInChildren<UI_StatTooltip>(true);
 
-        if (skillTree == null)
+        if (skillTreeUI == null)
         {
             Debug.LogWarning("Skill Tree component is null, did you forget to assign it to the UI script?");
         }
@@ -50,7 +52,7 @@ public class UI : MonoBehaviour
     {
         skillTreeEnabled = !skillTreeEnabled;
         // Activate / Deactivate game objects.
-        skillTree.gameObject.SetActive(skillTreeEnabled);
+        skillTreeUI.gameObject.SetActive(skillTreeEnabled);
         // Hide the tooltip (move it into outer space).
         skillTooltip.HideTooltip();
     }

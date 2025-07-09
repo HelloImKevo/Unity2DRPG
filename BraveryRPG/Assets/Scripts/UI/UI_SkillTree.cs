@@ -37,6 +37,11 @@ public class UI_SkillTree : MonoBehaviour
         {
             node.Refund();
         }
+
+        // TODO: This does not account for 'Unlocked By Default' skills. We could potentially pass
+        // in an Array. But it would probably be better for the SkillManager to know which Skills are
+        // unlocked by default, rather than the UI managing this behavior.
+        SkillManager.ResetAllSkills();
     }
 
     /// <summary>

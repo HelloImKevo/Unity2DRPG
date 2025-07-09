@@ -30,19 +30,17 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             return;
         }
 
-        // Equip the item to the player equipment list.
-        inventory.TryEquipItem(itemInSlot);
+        if (ItemType.Consumable == itemInSlot.itemData.itemType)
+        {
+            if (!itemInSlot.itemEffect.CanBeUsed()) return;
 
-        // if (ItemType.Consumable == itemInSlot.itemData.itemType)
-        // {
-        //     if (!itemInSlot.itemEffect.CanBeUsed()) return;
-
-        //     inventory.TryUseItem(itemInSlot);
-        // }
-        // else
-        // {
-        //     inventory.TryEquipItem(itemInSlot);
-        // }
+            inventory.TryUseItem(itemInSlot);
+        }
+        else
+        {
+            // Equip the item to the player equipment list.
+            inventory.TryEquipItem(itemInSlot);
+        }
 
         if (itemInSlot == null)
         {
