@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49c27364e46d34fe9ace16de54a0c350, type: 3}
-  m_Name: Item Effect Eata - Refund All Skills
+  m_Script: {fileID: 11500000, guid: 869e43b1ad8444454ad079ac33a80a46, type: 3}
+  m_Name: Item Effect Data - Grant Skill Point
   m_EditorClassIdentifier: 
-  effectDescription: 'Reset all skills.
-
-    Refund all skill points.'
+  effectDescription: Grants 1 skill point to the player.
+  pointsToAdd: 1

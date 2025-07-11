@@ -51,13 +51,18 @@ public class Inventory_Player : Inventory_Base
     {
         Debug.Log($"EquipItem() -> Equipping: {itemToEquip.itemData?.itemName} in Slot: {slot.slotName} - Unequipping: ");
 
-        // float savaedHealthPercent = player.Health.GetHealthPercent();
+        // When equipping / unequipping items that modify the player's health,
+        // we want to adjust their current health accordingly, since this is
+        // a fast-paced sidescrolling platformer game; otherwise, the player
+        // would have like 25% of their remaining health when equipping an
+        // item that adds +250 Max Health.
+        float savedHealthPercent = player.Health.GetHealthPercent();
 
         slot.equippedItem = itemToEquip;
         slot.equippedItem.AddModifiers(player.Stats);
         // slot.equipedItem.AddItemEffect(player);
 
-        // player.Health.SetHealthToPercent(savaedHealthPercent);
+        player.Health.SetHealthToPercent(savedHealthPercent);
         RemoveItem(itemToEquip);
     }
 
@@ -82,6 +87,7 @@ public class Inventory_Player : Inventory_Base
         itemToUnequip.RemoveModifiers(player.Stats);
         // itemToUnequip.RemoveItemEffect();
 
+        // It's critical that we update the Health percent AFTER removing modifiers.
         player.Health.SetHealthToPercent(savedHealthPercent);
         AddItem(itemToUnequip);
     }

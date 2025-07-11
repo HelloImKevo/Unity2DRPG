@@ -11,6 +11,7 @@ public class Player : Entity
     public PlayerInputSet Input { get; private set; }
 
     public Player_VFX Vfx { get; private set; }
+    public Player_Stats Stats { get; private set; }
     public Entity_Health Health { get; private set; }
     public Player_SkillManager SkillManager { get; private set; }
     public Entity_StatusHandler StatusHandler { get; private set; }
@@ -73,6 +74,7 @@ public class Player : Entity
         Input = new PlayerInputSet();
 
         Vfx = GetComponent<Player_VFX>();
+        Stats = GetComponent<Player_Stats>();
         Health = GetComponent<Entity_Health>();
         SkillManager = GetComponent<Player_SkillManager>();
         StatusHandler = GetComponent<Entity_StatusHandler>();
@@ -186,7 +188,10 @@ public class Player : Entity
         Input.Player.Movement.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
         Input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
 
+        // Keyboard: L
         Input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI();
+        // Keyboard: C
+        Input.Player.ToggleInventoryUI.performed += ctx => ui.ToggleInventoryUI();
 
         // Currently, you can only have one of these spells unlocked:
         // Shard or Time Echo - if this system changes, we need to implement

@@ -10,7 +10,6 @@ public class Entity : MonoBehaviour
 
     public Animator Anim { get; protected set; }
     public Rigidbody2D Rb { get; protected set; }
-    public Entity_Stats Stats { get; private set; }
 
     protected StateMachine stateMachine;
 
@@ -41,7 +40,6 @@ public class Entity : MonoBehaviour
         // Must be initialized before the StateMachine.
         Anim = GetComponentInChildren<Animator>();
         Rb = GetComponent<Rigidbody2D>();
-        Stats = GetComponent<Entity_Stats>();
 
         stateMachine = new StateMachine();
     }

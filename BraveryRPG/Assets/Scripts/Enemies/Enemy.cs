@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
+    public Entity_Stats Stats { get; private set; }
     public Enemy_Health health { get; private set; }
 
     public Enemy_IdleState IdleState { get; protected set; }
@@ -68,6 +69,7 @@ public class Enemy : Entity
     {
         base.Awake();
 
+        Stats = GetComponent<Entity_Stats>();
         health = GetComponent<Enemy_Health>();
     }
 

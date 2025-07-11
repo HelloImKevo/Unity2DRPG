@@ -6,11 +6,14 @@ public class Inventory_Base : MonoBehaviour
 {
     public event Action OnInventoryChange;
 
+    protected Player player;
+
     public int maxInventorySize = 10;
     public List<Inventory_Item> itemList = new();
 
     protected virtual void Awake()
     {
+        player = GetComponent<Player>();
     }
 
     public void TryUseItem(Inventory_Item itemToUse)
@@ -18,6 +21,8 @@ public class Inventory_Base : MonoBehaviour
         Inventory_Item consumable = itemList.Find(item => item == itemToUse);
 
         if (consumable == null) return;
+
+        if (!consumable.itemEffect.CanBeUsed(player)) return;
 
         consumable.itemEffect.ExecuteEffect();
 
@@ -83,5 +88,5 @@ public class Inventory_Base : MonoBehaviour
         return itemList.Find(item => item.itemData == itemData);
     }
 
-    // public void TriggerUpdateUI() => OnInventoryChange?.Invoke();
+    public void TriggerUpdateUI() => OnInventoryChange?.Invoke();
 }

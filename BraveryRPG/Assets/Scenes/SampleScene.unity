@@ -4183,10 +4183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b9524dcd0aa4251a9c2cb25bd27f6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillTreeUI: {fileID: 0}
-  skillTooltip: {fileID: 774263347}
-  itemTooltip: {fileID: 1500607253}
-  statTooltip: {fileID: 108398770}
 --- !u!1 &257100271
 GameObject:
   m_ObjectHideFlags: 0
@@ -39008,7 +39004,7 @@ GameObject:
   - component: {fileID: 601888625}
   - component: {fileID: 601888624}
   m_Layer: 9
-  m_Name: Object_ItemPickup - Small Potion
+  m_Name: Object_ItemPickup - Book of Knowledge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39104,7 +39100,7 @@ SpriteRenderer:
   m_SortingLayerID: -758218943
   m_SortingLayer: -3
   m_SortingOrder: 1
-  m_Sprite: {fileID: 1897372277, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  m_Sprite: {fileID: -2109061406, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -39127,7 +39123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d1d6378702f24c9eb0d346d628c2571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: c416dc9e98a62422185eeb2c06d17c81, type: 2}
+  itemData: {fileID: 11400000, guid: 8f499965f14d743b2a62129828aa105f, type: 2}
 --- !u!4 &601888627
 Transform:
   m_ObjectHideFlags: 0
@@ -39137,7 +39133,7 @@ Transform:
   m_GameObject: {fileID: 601888623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 90, y: 10, z: 0}
+  m_LocalPosition: {x: 89, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41021,7 +41017,7 @@ GameObject:
   - component: {fileID: 721219868}
   - component: {fileID: 721219867}
   m_Layer: 9
-  m_Name: Object_ItemPickup - Small Potion
+  m_Name: Object_ItemPickup - Book of Knowledge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41117,7 +41113,7 @@ SpriteRenderer:
   m_SortingLayerID: -758218943
   m_SortingLayer: -3
   m_SortingOrder: 1
-  m_Sprite: {fileID: 1897372277, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  m_Sprite: {fileID: -2109061406, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -41140,7 +41136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d1d6378702f24c9eb0d346d628c2571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: c416dc9e98a62422185eeb2c06d17c81, type: 2}
+  itemData: {fileID: 11400000, guid: 8f499965f14d743b2a62129828aa105f, type: 2}
 --- !u!4 &721219870
 Transform:
   m_ObjectHideFlags: 0
@@ -41150,7 +41146,7 @@ Transform:
   m_GameObject: {fileID: 721219866}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 90, y: 11, z: 0}
+  m_LocalPosition: {x: 89, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43659,12 +43655,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1245020436}
+  - {fileID: 716054847}
+  - {fileID: 206418521}
   - {fileID: 490375149}
   - {fileID: 288941556}
   - {fileID: 2113420233}
   - {fileID: 55338452}
-  - {fileID: 716054847}
-  - {fileID: 206418521}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -44808,7 +44804,7 @@ GameObject:
   - component: {fileID: 996361532}
   - component: {fileID: 996361531}
   m_Layer: 9
-  m_Name: Object_ItemPickup - Small Potion
+  m_Name: Object_ItemPickup - Winter's Touch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44904,7 +44900,7 @@ SpriteRenderer:
   m_SortingLayerID: -758218943
   m_SortingLayer: -3
   m_SortingOrder: 1
-  m_Sprite: {fileID: 1897372277, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  m_Sprite: {fileID: -341841845, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -44927,7 +44923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d1d6378702f24c9eb0d346d628c2571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: c416dc9e98a62422185eeb2c06d17c81, type: 2}
+  itemData: {fileID: 11400000, guid: 19b27480825a94d3ab30fadbb754a2b1, type: 2}
 --- !u!4 &996361534
 Transform:
   m_ObjectHideFlags: 0
@@ -47527,7 +47523,7 @@ GameObject:
   - component: {fileID: 1134029648}
   - component: {fileID: 1134029647}
   m_Layer: 9
-  m_Name: Object_ItemPickup - Animal Leather
+  m_Name: Object_ItemPickup - Scroll of Vengeance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47623,7 +47619,7 @@ SpriteRenderer:
   m_SortingLayerID: -758218943
   m_SortingLayer: -3
   m_SortingOrder: 1
-  m_Sprite: {fileID: -1368519568, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  m_Sprite: {fileID: -1922542664, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -47646,7 +47642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d1d6378702f24c9eb0d346d628c2571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: f89fcb8f14f824351beb1f848f8673ed, type: 2}
+  itemData: {fileID: 11400000, guid: 7b3c3a83fbbdf4a07a39ffec99397354, type: 2}
 --- !u!4 &1134029650
 Transform:
   m_ObjectHideFlags: 0
@@ -55770,7 +55766,7 @@ GameObject:
   - component: {fileID: 1543203942}
   - component: {fileID: 1543203941}
   m_Layer: 9
-  m_Name: Object_ItemPickup - Animal Leather
+  m_Name: Object_ItemPickup - Scroll of Vengeance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55866,7 +55862,7 @@ SpriteRenderer:
   m_SortingLayerID: -758218943
   m_SortingLayer: -3
   m_SortingOrder: 1
-  m_Sprite: {fileID: -1368519568, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  m_Sprite: {fileID: -1922542664, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -55889,7 +55885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d1d6378702f24c9eb0d346d628c2571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: f89fcb8f14f824351beb1f848f8673ed, type: 2}
+  itemData: {fileID: 11400000, guid: 7b3c3a83fbbdf4a07a39ffec99397354, type: 2}
 --- !u!4 &1543203944
 Transform:
   m_ObjectHideFlags: 0
@@ -104113,10 +104109,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 590103732}
-  - {fileID: 1738595593}
-  - {fileID: 1331991641}
   - {fileID: 449954777}
   - {fileID: 1902035485}
+  - {fileID: 1738595593}
+  - {fileID: 1331991641}
   m_Father: {fileID: 607846946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -105521,6 +105517,7 @@ SceneRoots:
   - {fileID: 1354038919}
   - {fileID: 251975467}
   - {fileID: 1134029650}
+  - {fileID: 1543203944}
   - {fileID: 996361534}
   - {fileID: 601888627}
   - {fileID: 721219870}
@@ -105537,7 +105534,6 @@ SceneRoots:
   - {fileID: 5615468}
   - {fileID: 1233275566}
   - {fileID: 74306478}
-  - {fileID: 1543203944}
   - {fileID: 2041765024}
   - {fileID: 1021503023}
   - {fileID: 460902819}
