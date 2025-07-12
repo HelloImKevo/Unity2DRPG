@@ -42,9 +42,9 @@ public class Inventory_Item
         }
     }
 
-    // public void AddItemEffect(Player player) => itemEffect?.Subscribe(player);
+    public void AddItemEffect(Player player) => itemEffect?.Subscribe(player);
 
-    // public void RemoveItemEffect() => itemEffect?.Unsubscribe();
+    public void RemoveItemEffect() => itemEffect?.Unsubscribe();
 
     /// <summary>
     /// Checks whether the <see cref="itemData"/> is of type <see cref="Equipment_DataSO"/>

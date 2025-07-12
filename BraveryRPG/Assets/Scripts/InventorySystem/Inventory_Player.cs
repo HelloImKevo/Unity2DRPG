@@ -60,7 +60,7 @@ public class Inventory_Player : Inventory_Base
 
         slot.equippedItem = itemToEquip;
         slot.equippedItem.AddModifiers(player.Stats);
-        // slot.equipedItem.AddItemEffect(player);
+        slot.equippedItem.AddItemEffect(player);
 
         player.Health.SetHealthToPercent(savedHealthPercent);
         RemoveItem(itemToEquip);
@@ -85,7 +85,7 @@ public class Inventory_Player : Inventory_Base
         // IMPORTANT: Prevents equipment modifiers from accumulating, which
         // would allow the stats to continue to increase indefinitely.
         itemToUnequip.RemoveModifiers(player.Stats);
-        // itemToUnequip.RemoveItemEffect();
+        itemToUnequip.RemoveItemEffect();
 
         // It's critical that we update the Health percent AFTER removing modifiers.
         player.Health.SetHealthToPercent(savedHealthPercent);
