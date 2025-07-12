@@ -43,6 +43,9 @@ public class Inventory_Player : Inventory_Base
         var itemToUnequip = slotToReplace.equippedItem;
         Debug.Log($"TryEquipItem() -> Slot to replace: {slotToReplace.slotName} - Unequipping: {itemToUnequip.itemData?.itemName}");
 
+        // Prevents a bug where if you have a full inventory, and swap equipment
+        // for items that have the same item effect, then the ItemEffect Player
+        // reference will trigger a NullReference exception.
         UnequipItem(itemToUnequip, slotToReplace != null);
         EquipItem(inventoryItem, slotToReplace);
     }
@@ -66,6 +69,9 @@ public class Inventory_Player : Inventory_Base
         RemoveItem(itemToEquip);
     }
 
+    /// <param name="replacingItem">Part of a fix to prevent a NullReference when re-equipping
+    /// items that have the same special effect, resulting in the ItemEffect.Unsubscribe
+    /// function call triggering the Player reference to be nullified.</param>
     public void UnequipItem(Inventory_Item itemToUnequip, bool replacingItem = false)
     {
         if (!CanAddItem() && !replacingItem)
