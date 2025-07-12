@@ -178,6 +178,32 @@ public class Player : Entity
         base.OnDrawGizmos();
     }
 
+    private void TryInteract()
+    {
+        Transform closest = null;
+        float closestDistance = Mathf.Infinity;
+        Collider2D[] objectsAround = Physics2D.OverlapCircleAll(transform.position, 1.5f);
+
+        foreach (var target in objectsAround)
+        {
+            IInteractable interactable = target.GetComponent<IInteractable>();
+
+            if (interactable == null) continue;
+
+            float distance = Vector2.Distance(transform.position, target.transform.position);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = target.transform;
+            }
+        }
+
+        if (closest == null) return;
+
+        closest.GetComponent<IInteractable>().Interact();
+    }
+
     // Entry point for the new Unity Input System.
     private void OnEnable()
     {
@@ -200,6 +226,9 @@ public class Player : Entity
         // a spell cycle system to keep track of which spell is selected.
         Input.Player.Spell.performed += ctx => SkillManager.Shard.TryUseSkill();
         Input.Player.Spell.performed += ctx => SkillManager.TimeEcho.TryUseSkill();
+
+        // Interact with NPCs, Chests, Doors, Environment Objects, etc.
+        Input.Player.Interact.performed += ctx => TryInteract();
     }
 
     private void OnDisable()
