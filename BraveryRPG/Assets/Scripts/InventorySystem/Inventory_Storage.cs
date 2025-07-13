@@ -140,6 +140,9 @@ public class Inventory_Storage : Inventory_Base
     {
         int transferAmount = transferFullStack ? item.stackSize : 1;
 
+        // If we are transferring the whole stack, traverse each item instance
+        // in the Stack and transfer it. Otherwise, just transfer one instance
+        // of the item using 1 loop iteration.
         for (int i = 0; i < transferAmount; i++)
         {
             if (CanAddItem(item))
@@ -175,6 +178,8 @@ public class Inventory_Storage : Inventory_Base
 
         TriggerUpdateUI();
     }
+
+    #region Save & Load Data
 
     // public override void SaveData(ref GameData data)
     // {
@@ -262,4 +267,6 @@ public class Inventory_Storage : Inventory_Base
     //         }
     //     }
     // }
+
+    #endregion
 }

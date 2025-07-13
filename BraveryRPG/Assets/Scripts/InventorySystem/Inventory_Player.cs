@@ -3,16 +3,47 @@ using UnityEngine;
 
 public class Inventory_Player : Inventory_Base
 {
-    private Player player;
+    public Inventory_Storage storage { get; private set; }
 
     [Tooltip("Equipment that the player is currently wearing.")]
     public List<Inventory_EquipmentSlot> equipmentList;
 
+    // [Header("Quick Item Slots")]
+    // public Inventory_Item[] quickItems = new Inventory_Item[2];
+
+    // [Header("Gold Info")]
+    // public int gold = 10000;
+
     protected override void Awake()
     {
         base.Awake();
-        player = GetComponent<Player>();
+        storage = FindFirstObjectByType<Inventory_Storage>();
     }
+
+    // public void SetQuickItemInSlot(int slotNumber, Inventory_Item itemToSet)
+    // {
+    //     quickItems[slotNumber - 1] = itemToSet;
+    //     TriggerUpdateUI();
+    // }
+
+    // public void TryUseQuickItemInSlot(int passedSlotNumber)
+    // {
+    //     int slotNumber = passedSlotNumber - 1;
+    //     var itemToUse = quickItems[slotNumber];
+
+    //     if (itemToUse == null)
+    //         return;
+
+    //     TryUseItem(itemToUse);
+
+    //     if (FindItem(itemToUse) == null)
+    //     {
+    //         quickItems[slotNumber] = FindSameItem(itemToUse);
+    //     }
+
+    //     TriggerUpdateUI();
+    //     OnQuickSlotUsed?.Invoke(slotNumber);
+    // }
 
     public void TryEquipItem(Inventory_Item item)
     {
@@ -97,4 +128,79 @@ public class Inventory_Player : Inventory_Base
         player.Health.SetHealthToPercent(savedHealthPercent);
         AddItem(itemToUnequip);
     }
+
+    // public override void SaveData(ref GameData data)
+    // {
+    //     data.gold = gold;
+    //     data.inventory.Clear();
+    //     data.equipedItems.Clear();
+
+    //     foreach (var item in itemList)
+    //     {
+    //         if (item != null && item.itemData != null)
+    //         {
+    //             string saveId = item.itemData.saveId;
+
+    //             if (!data.inventory.ContainsKey(saveId))
+    //             {
+    //                 data.inventory[saveId] = 0;
+    //             }
+
+    //             data.inventory[saveId] += item.stackSize;
+    //         }
+    //     }
+
+    //     foreach (var slot in equipList)
+    //     {
+    //         if (slot.HasItem())
+    //         {
+    //             data.equipedItems[slot.equipedItem.itemData.saveId] = slot.slotType;
+    //         }
+    //     }
+    // }
+
+    // public override void LoadData(GameData data)
+    // {
+    //     gold = data.gold;
+
+    //     foreach (var entry in data.inventory)
+    //     {
+    //         string saveId = entry.Key;
+    //         int stackSize = entry.Value;
+
+    //         ItemDataSO itemData = itemDataBase.GetItemData(saveId);
+
+    //         if (itemData == null)
+    //         {
+    //             Debug.LogWarning("Item not found: " + saveId);
+    //             continue;
+    //         }
+
+    //         Inventory_Item itemToLoad = new Inventory_Item(itemData);
+
+    //         for (int i = 0; i < stackSize; i++)
+    //         {
+    //             AddItem(itemToLoad);
+    //         }
+    //     }
+
+    //     foreach (var entry in data.equipedItems)
+    //     {
+    //         string saveId = entry.Key;
+    //         ItemType equipemntSlotType = entry.Value;
+
+    //         Item_DataSO itemData = itemDataBase.GetItemData(saveId);
+    //         Inventory_Item itemToLoad = new Inventory_Item(itemData);
+
+    //         var slot = equipmentList.Find(
+    //             slot => slot.slotType == equipemntSlotType && !slot.HasItem()
+    //         );
+
+    //         slot.equippedItem = itemToLoad;
+    //         slot.equippedItem.AddModifiers(player.Stats);
+    //         slot.equippedItem.AddItemEffect(player);
+    //     }
+
+    //     TriggerUpdateUI();
+    // }
 }

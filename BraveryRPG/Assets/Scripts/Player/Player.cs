@@ -182,7 +182,9 @@ public class Player : Entity
     {
         Transform closest = null;
         float closestDistance = Mathf.Infinity;
-        Collider2D[] objectsAround = Physics2D.OverlapCircleAll(transform.position, 1.5f);
+        // NOTE: This detection radius should roughly match the Collision Box 2D
+        // for interactive NPCs like the Blacksmith and Merchant.
+        Collider2D[] objectsAround = Physics2D.OverlapCircleAll(transform.position, 1f);
 
         foreach (var target in objectsAround)
         {

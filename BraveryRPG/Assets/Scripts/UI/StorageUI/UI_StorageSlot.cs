@@ -18,6 +18,9 @@ public class UI_StorageSlot : UI_ItemSlot
     {
         if (itemInSlot == null) return;
 
+        // TODO: Use old Unity Input system as a temporary Proof-of-Concept.
+        // This will allow the player to hold LEFT CONTROL key to transfer
+        // a full stack of items.
         bool transferFullStack = Input.GetKey(KeyCode.LeftControl);
 
         if (StorageSlotType.StorageSlot == slotType)
