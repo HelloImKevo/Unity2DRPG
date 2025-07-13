@@ -13,7 +13,7 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
     [Header("UI Slot Setup")]
     [SerializeField] private Image itemIcon;
-    [SerializeField] private TextMeshProUGUI itemStackSize;
+    [SerializeField] private TextMeshProUGUI itemStackSizeLabel;
 
     protected virtual void Awake()
     {
@@ -52,7 +52,7 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
         if (itemInSlot == null)
         {
-            itemStackSize.text = "";
+            itemStackSizeLabel.text = "";
             itemIcon.color = Color.clear;
             return;
         }
@@ -63,7 +63,7 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         itemIcon.color = color;
 
         itemIcon.sprite = itemInSlot.itemData.itemIcon;
-        itemStackSize.text = item.stackSize > 1 ? item.stackSize.ToString() : "";
+        itemStackSizeLabel.text = item.stackSize > 1 ? item.stackSize.ToString() : "";
     }
 
     public virtual void OnPointerEnter(PointerEventData eventData)

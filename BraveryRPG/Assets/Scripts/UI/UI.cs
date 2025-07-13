@@ -9,6 +9,7 @@ public class UI : MonoBehaviour
     // User Interface View Controllers
     public UI_SkillTree skillTreeUI { get; private set; }
     public UI_Inventory inventoryUI { get; private set; }
+    public UI_Storage storageUI { get; private set; }
 
     // Tooltips
     public UI_SkillTooltip skillTooltip { get; private set; }
@@ -25,6 +26,7 @@ public class UI : MonoBehaviour
     {
         skillTreeUI = GetComponentInChildren<UI_SkillTree>(true);
         inventoryUI = GetComponentInChildren<UI_Inventory>(true);
+        storageUI = GetComponentInChildren<UI_Storage>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
@@ -32,12 +34,17 @@ public class UI : MonoBehaviour
 
         if (skillTreeUI == null)
         {
-            Debug.LogWarning("Skill Tree component is null, did you forget to assign it to the UI script?");
+            Debug.LogWarning("Skill Tree UI component is null, did you forget to assign it to the UI script?");
         }
 
         if (inventoryUI == null)
         {
-            Debug.LogWarning("Inventory component is null, did you forget to assign it to the UI script?");
+            Debug.LogWarning("Inventory UI component is null, did you forget to assign it to the UI script?");
+        }
+
+        if (storageUI == null)
+        {
+            Debug.LogWarning("Storage UI component is null, did you forget to assign it to the UI script?");
         }
 
         if (skillTooltip == null)
@@ -77,6 +84,25 @@ public class UI : MonoBehaviour
         inventoryUI.gameObject.SetActive(inventoryEnabled);
         // Hide the tooltips (move them into outer space).
         itemTooltip.HideTooltip();
+        statTooltip.HideTooltip();
+    }
+
+    public void OpenStorageUI(bool openStorageUI)
+    {
+        storageUI.gameObject.SetActive(openStorageUI);
+        // StopPlayerControls(openStorageUI);
+
+        if (openStorageUI == false)
+        {
+            // craftUI.gameObject.SetActive(false);
+            // HideAllTooltips();
+        }
+    }
+
+    public void HideAllTooltips()
+    {
+        itemTooltip.HideTooltip();
+        skillTooltip.HideTooltip();
         statTooltip.HideTooltip();
     }
 }

@@ -66,7 +66,7 @@ public class Inventory_Player : Inventory_Base
         slot.equippedItem.AddItemEffect(player);
 
         player.Health.SetHealthToPercent(savedHealthPercent);
-        RemoveItem(itemToEquip);
+        RemoveOneItem(itemToEquip);
     }
 
     /// <param name="replacingItem">Part of a fix to prevent a NullReference when re-equipping
@@ -74,7 +74,7 @@ public class Inventory_Player : Inventory_Base
     /// function call triggering the Player reference to be nullified.</param>
     public void UnequipItem(Inventory_Item itemToUnequip, bool replacingItem = false)
     {
-        if (!CanAddItem() && !replacingItem)
+        if (!CanAddItem(itemToUnequip) && !replacingItem)
         {
             Debug.Log("UnequipItem -> No space in inventory!");
             return;

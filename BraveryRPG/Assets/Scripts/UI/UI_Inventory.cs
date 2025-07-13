@@ -4,17 +4,16 @@ using UnityEngine;
 public class UI_Inventory : MonoBehaviour
 {
     private Inventory_Player inventory;
-    private UI_ItemSlot[] uiItemSlots;
     private UI_EquipSlot[] uiEquipSlots;
 
-    [Tooltip("The UI_Inventory object containing all of the UI_ItemSlot children.")]
-    [SerializeField] private Transform uiItemSlotsParent;
+    [Tooltip("The UI_Inventory object containing all of the UI_ItemSlot children for the Inventory.")]
+    [SerializeField] private UI_ItemSlotParent inventorySlotsParent;
+
     [Tooltip("The UI_Equipment object containing all of the UI_EquipSlot children.")]
     [SerializeField] private Transform uiEquipSlotsParent;
 
     private void Awake()
     {
-        uiItemSlots = uiItemSlotsParent.GetComponentsInChildren<UI_ItemSlot>();
         uiEquipSlots = uiEquipSlotsParent.GetComponentsInChildren<UI_EquipSlot>();
 
         inventory = FindFirstObjectByType<Inventory_Player>();
@@ -25,7 +24,7 @@ public class UI_Inventory : MonoBehaviour
 
     private void UpdateUI()
     {
-        UpdateInventorySlots();
+        inventorySlotsParent.UpdateSlots(inventory.itemList);
         UpdateEquipmentSlots();
     }
 
@@ -64,27 +63,6 @@ public class UI_Inventory : MonoBehaviour
             {
                 // There is no item - empty equipment slot.
                 uiEquipSlot.UpdateSlot(null);
-            }
-        }
-    }
-
-    private void UpdateInventorySlots()
-    {
-        List<Inventory_Item> itemsList = inventory.itemList;
-
-        // The number of items in our inventory can be less than the number
-        // of UI slots in our Inventory UI.
-        for (int i = 0; i < uiItemSlots.Length; i++)
-        {
-            if (i < itemsList.Count)
-            {
-                // Update the slot with the contents of our item data.
-                uiItemSlots[i].UpdateSlot(itemsList[i]);
-            }
-            else
-            {
-                // Empty item slot.
-                uiItemSlots[i].UpdateSlot(null);
             }
         }
     }

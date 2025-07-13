@@ -32,13 +32,17 @@ public class Inventory_Base : MonoBehaviour
         }
         else
         {
-            RemoveItem(consumable);
+            RemoveOneItem(consumable);
         }
 
         OnInventoryChange?.Invoke();
     }
 
-    public bool CanAddItem() => itemList.Count < maxInventorySize;
+    public bool CanAddItem(Inventory_Item itemToAdd)
+    {
+        bool hasStackable = FindStackableWithSpace(itemToAdd) != null;
+        return hasStackable || itemList.Count < maxInventorySize;
+    }
 
     public Inventory_Item FindStackableWithSpace(Inventory_Item itemToFind)
     {
@@ -61,7 +65,7 @@ public class Inventory_Base : MonoBehaviour
 
     public void AddItem(Inventory_Item itemToAdd)
     {
-        Debug.Log("Inventory_Base.AddItem() -> Item added to inventory: " + itemToAdd.itemData.itemName);
+        Debug.Log($"Inventory_Base.AddItem() -> Item added to {gameObject.name}: {itemToAdd.itemData.itemName}");
 
         Inventory_Item existingStackable = FindStackableWithSpace(itemToAdd);
 
@@ -77,10 +81,28 @@ public class Inventory_Base : MonoBehaviour
         OnInventoryChange?.Invoke();
     }
 
-    public void RemoveItem(Inventory_Item itemToRemove)
+    public void RemoveOneItem(Inventory_Item itemToRemove)
     {
-        itemList.Remove(itemToRemove);
+        Inventory_Item itemInInventory = itemList.Find(item => item == itemToRemove);
+
+        if (itemInInventory.stackSize > 1)
+        {
+            itemInInventory.RemoveStack();
+        }
+        else
+        {
+            itemList.Remove(itemToRemove);
+        }
+
         OnInventoryChange?.Invoke();
+    }
+
+    public void RemoveFullStack(Inventory_Item itemToRemove)
+    {
+        for (int i = 0; i < itemToRemove.stackSize; i++)
+        {
+            RemoveOneItem(itemToRemove);
+        }
     }
 
     public Inventory_Item FindItem(Item_DataSO itemData)
