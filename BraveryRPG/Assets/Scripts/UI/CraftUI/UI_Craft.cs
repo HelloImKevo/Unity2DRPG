@@ -6,22 +6,19 @@ using UnityEngine;
 /// </summary>
 public class UI_Craft : MonoBehaviour
 {
-    [SerializeField] private UI_ItemSlotParent inventoryParent;
-    private Inventory_Player inventory;
+    [Tooltip("UI_MiniInventory object, with a UI_ItemSlotParent script, within the Crafting Window.")]
+    [SerializeField] private UI_ItemSlotParent miniInventoryParent;
+    private Inventory_Player playerInventory;
 
     private UI_CraftCategoryTabButton[] craftListButtons;
     private UI_CraftRecipeListButton[] craftSlots;
     private UI_CraftPreview craftPreviewUI;
 
-    private void Awake()
-    {
-        SetupCraftListButtons();
-    }
-
     public void SetupCraftUI(Inventory_Storage storage)
     {
-        inventory = storage.playerInventory;
-        inventory.OnInventoryChange += UpdateUI;
+        playerInventory = storage.playerInventory;
+        // Subscribe and observe for changes to the inventory.
+        playerInventory.OnInventoryChange += UpdateUI;
         UpdateUI();
 
         craftPreviewUI = GetComponentInChildren<UI_CraftPreview>(true);
@@ -45,5 +42,13 @@ public class UI_Craft : MonoBehaviour
         }
     }
 
-    private void UpdateUI() => inventoryParent.UpdateSlots(inventory.itemList);
+    private void UpdateUI()
+    {
+        if (playerInventory == null)
+        {
+            Debug.LogWarning("UI_Craft.UpdateUI() -> playerInventory reference is null - did you call SetupCraftUI?");
+        }
+        // Update the mini-inventory that is visible within the Crafting Window.
+        miniInventoryParent.UpdateSlots(playerInventory.itemList);
+    }
 }

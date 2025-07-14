@@ -43,7 +43,7 @@ public class ToastManager : MonoBehaviour
         string message,
         ToastStyle style,
         ToastAnchor anchor,
-        RectTransform relativeTo = null
+        Transform relativeTo = null
     )
     {
         RectTransform parent = canvasTransform != null

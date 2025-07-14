@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UI_Storage : MonoBehaviour
 {
-    private Inventory_Player inventory;
+    private Inventory_Player playerInventory;
     private Inventory_Storage storage;
 
     [SerializeField] private UI_ItemSlotParent storageParent;
@@ -12,7 +12,7 @@ public class UI_Storage : MonoBehaviour
     public void SetupStorageUI(Inventory_Storage storage)
     {
         this.storage = storage;
-        inventory = storage.playerInventory;
+        playerInventory = storage.playerInventory;
 
         // Subscribe to listen to events when the Storage Inventory changes.
         storage.OnInventoryChange += UpdateUI;
@@ -36,7 +36,7 @@ public class UI_Storage : MonoBehaviour
         if (storage == null) return;
 
         storageParent.UpdateSlots(storage.itemList);
-        playerInventoryParent.UpdateSlots(inventory.itemList);
+        playerInventoryParent.UpdateSlots(playerInventory.itemList);
         materialStashParent.UpdateSlots(storage.materialStash);
     }
 }
