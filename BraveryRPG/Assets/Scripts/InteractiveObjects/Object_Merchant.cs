@@ -18,6 +18,17 @@ public class Object_Merchant : Object_NPC, IInteractable
         if (Input.GetKeyDown(KeyCode.Z))
         {
             // merchant.FillShopList();
+
+            // Demonstrate Toast Usage:
+            ToastStyle toastStyle = new()
+            {
+                textColor = Color.white,
+                backgroundColor = new Color(0.2f, 0, 0),
+                blinkColor = Color.seaGreen,
+                enableBlink = true,
+                duration = 2f
+            };
+            ToastManager.Instance.ShowToast("Welcome to my Shop!", toastStyle, ToastAnchor.BottomCenter);
         }
     }
 

@@ -32,6 +32,17 @@ public class Object_Blacksmith : Object_NPC, IInteractable
         // ui.craftUI.SetupCraftUI(storage);
 
         ui.OpenStorageUI(true);
+
+        // Demonstrate Toast Usage:
+        ToastStyle toastStyle = new()
+        {
+            textColor = Color.white,
+            backgroundColor = new Color(0.2f, 0, 0),
+            blinkColor = Color.seaGreen,
+            enableBlink = true,
+            duration = 4f
+        };
+        ToastManager.Instance.ShowToast("Welcome to the Blacksmith Shop!", toastStyle, ToastAnchor.BottomCenter);
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
