@@ -15,10 +15,18 @@ public class Inventory_Item
     public ItemModifier[] modifiers { get; private set; }
     public ItemEffect_DataSO itemEffect;
 
+    public int buyPrice { get; private set; }
+    public float sellPrice { get; private set; }
+
     public Inventory_Item(Item_DataSO itemData)
     {
         this.itemData = itemData;
         itemEffect = itemData.itemEffect;
+
+        // Establish item price values.
+        buyPrice = itemData.itemPrice;
+        // Items sell for 35% of their purchase price.
+        sellPrice = itemData.itemPrice * 0.35f;
 
         modifiers = EquipmentData()?.modifiers;
         // Allows modifiers from multiple instances of the same item

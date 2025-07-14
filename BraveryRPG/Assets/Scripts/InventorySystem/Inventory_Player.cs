@@ -11,8 +11,8 @@ public class Inventory_Player : Inventory_Base
     // [Header("Quick Item Slots")]
     // public Inventory_Item[] quickItems = new Inventory_Item[2];
 
-    // [Header("Gold Info")]
-    // public int gold = 10000;
+    [Header("Gold Info")]
+    public int gold = 10000;
 
     protected override void Awake()
     {

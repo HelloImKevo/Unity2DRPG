@@ -11,6 +11,7 @@ public class UI : MonoBehaviour
     public UI_Inventory inventoryUI { get; private set; }
     public UI_Storage storageUI { get; private set; }
     public UI_Craft craftUI { get; private set; }
+    public UI_Merchant merchantUI { get; private set; }
 
     // Tooltips
     public UI_SkillTooltip skillTooltip { get; private set; }
@@ -29,6 +30,7 @@ public class UI : MonoBehaviour
         inventoryUI = GetComponentInChildren<UI_Inventory>(true);
         storageUI = GetComponentInChildren<UI_Storage>(true);
         craftUI = GetComponentInChildren<UI_Craft>(true);
+        merchantUI = GetComponentInChildren<UI_Merchant>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
@@ -53,6 +55,11 @@ public class UI : MonoBehaviour
         if (craftUI == null)
         {
             Debug.LogWarning("Craft UI component is null, did you forget to assign it to the UI script?");
+        }
+
+        if (merchantUI == null)
+        {
+            Debug.LogWarning("Merchant UI component is null, did you forget to assign it to the UI script?");
         }
 
         // User Interface Tooltips
@@ -105,6 +112,17 @@ public class UI : MonoBehaviour
         if (openStorageUI == false)
         {
             craftUI.gameObject.SetActive(false);
+            HideAllTooltips();
+        }
+    }
+
+    public void OpenMerchantUI(bool openMerchantUI)
+    {
+        merchantUI.gameObject.SetActive(openMerchantUI);
+        // StopPlayerControls(openMerchantUI);
+
+        if (!openMerchantUI)
+        {
             HideAllTooltips();
         }
     }
