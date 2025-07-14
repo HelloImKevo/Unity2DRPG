@@ -10,6 +10,7 @@ public class UI : MonoBehaviour
     public UI_SkillTree skillTreeUI { get; private set; }
     public UI_Inventory inventoryUI { get; private set; }
     public UI_Storage storageUI { get; private set; }
+    public UI_Craft craftUI { get; private set; }
 
     // Tooltips
     public UI_SkillTooltip skillTooltip { get; private set; }
@@ -27,11 +28,13 @@ public class UI : MonoBehaviour
         skillTreeUI = GetComponentInChildren<UI_SkillTree>(true);
         inventoryUI = GetComponentInChildren<UI_Inventory>(true);
         storageUI = GetComponentInChildren<UI_Storage>(true);
+        craftUI = GetComponentInChildren<UI_Craft>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
         statTooltip = GetComponentInChildren<UI_StatTooltip>(true);
 
+        // User Interface Panels
         if (skillTreeUI == null)
         {
             Debug.LogWarning("Skill Tree UI component is null, did you forget to assign it to the UI script?");
@@ -47,6 +50,12 @@ public class UI : MonoBehaviour
             Debug.LogWarning("Storage UI component is null, did you forget to assign it to the UI script?");
         }
 
+        if (craftUI == null)
+        {
+            Debug.LogWarning("Craft UI component is null, did you forget to assign it to the UI script?");
+        }
+
+        // User Interface Tooltips
         if (skillTooltip == null)
         {
             Debug.LogWarning("Skill Tooltip component is null, did you forget to assign it to the UI script?");

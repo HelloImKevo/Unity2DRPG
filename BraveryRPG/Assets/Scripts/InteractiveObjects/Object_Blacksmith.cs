@@ -29,7 +29,7 @@ public class Object_Blacksmith : Object_NPC, IInteractable
     public virtual void Interact()
     {
         ui.storageUI.SetupStorageUI(storage);
-        // ui.craftUI.SetupCraftUI(storage);
+        ui.craftUI.SetupCraftUI(storage);
 
         ui.OpenStorageUI(true);
 

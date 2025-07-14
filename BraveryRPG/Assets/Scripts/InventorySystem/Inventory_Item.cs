@@ -8,6 +8,8 @@ public class Inventory_Item
     private string itemId;
 
     public Item_DataSO itemData;
+
+    [Tooltip("Quantity of the same item that can fit into a stack.")]
     public int stackSize = 1;
 
     public ItemModifier[] modifiers { get; private set; }
@@ -65,4 +67,40 @@ public class Inventory_Item
     public void AddStack() => stackSize++;
 
     public void RemoveStack() => stackSize--;
+
+    public string GetItemInfo()
+    {
+        if (ItemType.Material == itemData.itemType)
+        {
+            return "Used for crafting.";
+        }
+
+        if (ItemType.Consumable == itemData.itemType)
+        {
+            return itemData.itemEffect.effectDescription;
+        }
+
+        StringBuilder sb = new();
+
+        sb.AppendLine("");
+
+        foreach (var mod in modifiers)
+        {
+            string modType = StatUtils.GetStatNameByType(mod.statType);
+            string modValue = StatUtils.IsPercentageStat(mod.statType) ? mod.value.ToString() + "%" : mod.value.ToString();
+            sb.AppendLine("+ " + modValue + " " + modType);
+        }
+
+        if (itemEffect != null)
+        {
+            sb.AppendLine("");
+            sb.AppendLine("Unique effect:");
+            sb.AppendLine(itemEffect.effectDescription);
+        }
+
+        sb.AppendLine("");
+        sb.AppendLine("");
+
+        return sb.ToString();
+    }
 }

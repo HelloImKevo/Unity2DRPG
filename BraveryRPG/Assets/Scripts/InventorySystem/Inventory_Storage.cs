@@ -80,6 +80,10 @@ public class Inventory_Storage : Inventory_Base
     //     return true;
     // }
 
+    /// <summary>
+    /// Calculate the total number of materials (items) that the player has across
+    /// all inventory options (player inventory and stored stash items).
+    /// </summary>
     public int GetAvailableAmountOf(Item_DataSO requiredItem)
     {
         int amount = 0;
