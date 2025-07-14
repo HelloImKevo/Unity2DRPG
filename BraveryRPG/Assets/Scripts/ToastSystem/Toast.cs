@@ -17,7 +17,7 @@ public class Toast : MonoBehaviour
         string message,
         ToastStyle style,
         ToastAnchor anchor,
-        RectTransform relativeTo,
+        Transform relativeTo,
         float screenMargin
     )
     {
@@ -34,7 +34,7 @@ public class Toast : MonoBehaviour
         StartCoroutine(HandleLifecycle());
     }
 
-    private void SetAnchorPosition(ToastAnchor anchor, RectTransform relativeTo, float screenMargin)
+    private void SetAnchorPosition(ToastAnchor anchor, Transform relativeTo, float screenMargin)
     {
         RectTransform rt = GetComponent<RectTransform>();
 
@@ -44,10 +44,23 @@ public class Toast : MonoBehaviour
 
             switch (anchor)
             {
-                case ToastAnchor.Above: rt.anchoredPosition += new Vector2(0, screenMargin); break;
-                case ToastAnchor.Below: rt.anchoredPosition += new Vector2(0, -screenMargin); break;
-                case ToastAnchor.Left: rt.anchoredPosition += new Vector2(-screenMargin, 0); break;
-                case ToastAnchor.Right: rt.anchoredPosition += new Vector2(screenMargin, 0); break;
+                case ToastAnchor.Above:
+                    rt.anchoredPosition += new Vector2(0, screenMargin);
+                    break;
+                case ToastAnchor.Below:
+                    rt.anchoredPosition += new Vector2(0, -screenMargin);
+                    break;
+                case ToastAnchor.Left:
+                    rt.anchoredPosition += new Vector2(-screenMargin, 0);
+                    break;
+                case ToastAnchor.Right:
+                    rt.anchoredPosition += new Vector2(screenMargin, 0);
+                    break;
+
+                default:
+                    Debug.LogWarning($"[Toast] Relative positioning only supports Above, Below, Left, Right. " +
+                                     $"'{anchor}' was provided — defaulting to centered overlay.");
+                    break;
             }
         }
         else

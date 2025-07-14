@@ -101,10 +101,11 @@ public class UI : MonoBehaviour
         storageUI.gameObject.SetActive(openStorageUI);
         // StopPlayerControls(openStorageUI);
 
+        // TODO: Clean up the readability of this logic.
         if (openStorageUI == false)
         {
-            // craftUI.gameObject.SetActive(false);
-            // HideAllTooltips();
+            craftUI.gameObject.SetActive(false);
+            HideAllTooltips();
         }
     }
 

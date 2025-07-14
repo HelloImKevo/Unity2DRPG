@@ -14,7 +14,8 @@ public class UI_CraftPreview : MonoBehaviour
     [SerializeField] private Sprite defaultItemIcon;
     [SerializeField] private TextMeshProUGUI itemName;
     [SerializeField] private TextMeshProUGUI itemInfo;
-    [SerializeField] private TextMeshProUGUI buttonText;
+    [Tooltip("Must have a child object that implements TextMeshProUGUI.")]
+    [SerializeField] private Button craftButton;
 
     void Awake()
     {
@@ -41,18 +42,50 @@ public class UI_CraftPreview : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Invoked by the Button.OnClick() event for the CRAFT button.
+    /// </summary>
     public void ConfirmCraft()
     {
         if (itemToCraft == null)
         {
-            buttonText.text = "Pick an item.";
+            craftButton.GetComponentInChildren<TextMeshProUGUI>().text = "Pick an item.";
             return;
         }
 
-        // if (storage.CanCraftItem(itemToCraft))
-        // {
-        //     storage.CraftItem(itemToCraft);
-        // }
+        if (storage.CanCraftItem(itemToCraft))
+        {
+            storage.CraftItem(itemToCraft);
+        }
+        else
+        {
+            // You cannot craft the selected recipe - show an error Toast.
+            string validationMessage = "";
+
+            if (!storage.HasEnoughMaterials(itemToCraft))
+            {
+                validationMessage = "Not enough materials!";
+            }
+            else if (!storage.playerInventory.CanAddItem(itemToCraft))
+            {
+                validationMessage = "No space in inventory!";
+            }
+
+            ToastStyle errorStyle = new()
+            {
+                textColor = Color.white,
+                backgroundColor = new Color(0.2f, 0, 0),
+                blinkColor = Color.red,
+                enableBlink = true,
+                duration = 2f
+            };
+            ToastManager.Instance.ShowToast(
+                validationMessage,
+                errorStyle,
+                ToastAnchor.Below,
+                craftButton.transform
+            );
+        }
 
         UpdateCraftPreviewSlots();
     }
@@ -69,15 +102,22 @@ public class UI_CraftPreview : MonoBehaviour
 
     private void UpdateCraftPreviewSlots()
     {
+        Debug.Log($"UI_CraftPreview.UpdateCraftPreviewSlots() -> Hiding {craftPreviewSlots.Length} ingredient list items.");
+
         // Hide all the required materials list elements.
         foreach (var slot in craftPreviewSlots)
         {
             slot.gameObject.SetActive(false);
         }
 
-        for (int i = 0; i < itemToCraft.itemData.craftRecipe.Length; i++)
+        Inventory_RecipeIngredient[] requiredIngredients = itemToCraft.itemData.craftRecipe;
+
+        Debug.Log($"UI_CraftPreview.UpdateCraftPreviewSlots() -> There are {requiredIngredients.Length} " +
+                  $"distinct ingredients required to craft {itemToCraft.itemData.name}.");
+
+        for (int i = 0; i < requiredIngredients.Length; i++)
         {
-            Inventory_RecipeIngredient requiredIngredient = itemToCraft.itemData.craftRecipe[i];
+            Inventory_RecipeIngredient requiredIngredient = requiredIngredients[i];
             int avaliableAmount = storage.GetAvailableAmountOf(requiredIngredient.itemData);
             int requiredAmount = requiredIngredient.RequiredQuantity;
 

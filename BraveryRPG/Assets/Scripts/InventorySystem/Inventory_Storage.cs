@@ -9,48 +9,64 @@ public class Inventory_Storage : Inventory_Base
 
     public void SetInventory(Inventory_Player inventory) => this.playerInventory = inventory;
 
+    public List<Inventory_Item> GetItemsInStorage() => itemList;
+
+    /// <summary>
+    /// Consume ingredients from the player inventory, storage and stash,
+    /// create the item, and then add it to the player inventory.
+    /// </summary>
     public void CraftItem(Inventory_Item itemToCraft)
     {
-        // ConsumeMaterials(itemToCraft);
+        ConsumeMaterials(itemToCraft);
         playerInventory.AddItem(itemToCraft);
     }
 
-    // public bool CanCraftItem(Inventory_Item itemToCraft)
-    // {
-    //     return HasEnoughMaterials(itemToCraft)
-    //         && playerInventory.CanAddItem(itemToCraft);
-    // }
-
-    // private void ConsumeMaterials(Inventory_Item itemToCraft)
-    // {
-    //     foreach (var requiredItem in itemToCraft.itemData.craftRecipe)
-    //     {
-    //         int amountToConsume = requiredItem.stackSize;
-
-    //         amountToConsume = amountToConsume - ConsumedMaterialsAmount(
-    //             playerInventory.itemList, requiredItem
-    //         );
-
-    //         if (amountToConsume > 0)
-    //         {
-    //             amountToConsume -= ConsumedMaterialsAmount(itemList, requiredItem);
-    //         }
-
-    //         if (amountToConsume > 0)
-    //         {
-    //             amountToConsume -= ConsumedMaterialsAmount(materialStash, requiredItem);
-    //         }
-    //     }
-    // }
-
-    private int ConsumedMaterialsAmount(List<Inventory_Item> itemList, Inventory_Item neededItem)
+    public bool CanCraftItem(Inventory_Item itemToCraft)
     {
-        int amountNeeded = neededItem.stackSize;
+        return HasEnoughMaterials(itemToCraft)
+            && playerInventory.CanAddItem(itemToCraft);
+    }
+
+    private void ConsumeMaterials(Inventory_Item itemToCraft)
+    {
+        foreach (var requiredIngredient in itemToCraft.itemData.craftRecipe)
+        {
+            int amountToConsume = requiredIngredient.RequiredQuantity;
+
+            // Consume items from the player's inventory first, to try and
+            // free up available space for the crafted item.
+            amountToConsume -= ConsumedMaterialsAmount(
+                playerInventory.itemList, requiredIngredient
+            );
+
+            // Then try to consume ingredients from the player's Storage.
+            if (amountToConsume > 0)
+            {
+                amountToConsume -= ConsumedMaterialsAmount(
+                    GetItemsInStorage(), requiredIngredient
+                );
+            }
+
+            // Lastly, try to consume ingredients from the Stash.
+            if (amountToConsume > 0)
+            {
+                amountToConsume -= ConsumedMaterialsAmount(
+                    materialStash, requiredIngredient
+                );
+            }
+        }
+    }
+
+    private int ConsumedMaterialsAmount(List<Inventory_Item> itemList, Inventory_RecipeIngredient ingredient)
+    {
+        int amountNeeded = ingredient.RequiredQuantity;
         int consumedAmount = 0;
 
-        foreach (var item in itemList)
+        for (int i = itemList.Count - 1; i >= 0; i--)
         {
-            if (item.itemData != neededItem.itemData) continue;
+            var item = itemList[i];
+
+            if (item.itemData != ingredient.itemData) continue;
 
             int removeAmount = Mathf.Min(item.stackSize, amountNeeded - consumedAmount);
             item.stackSize -= removeAmount;
@@ -58,7 +74,9 @@ public class Inventory_Storage : Inventory_Base
 
             if (item.stackSize <= 0)
             {
-                itemList.Remove(item);
+                // C# requires indexed-based iteration to safely remove
+                // elements from a collection, while iterating it.
+                itemList.RemoveAt(i);
             }
 
             if (consumedAmount >= amountNeeded) break;
@@ -67,18 +85,18 @@ public class Inventory_Storage : Inventory_Base
         return consumedAmount;
     }
 
-    // private bool HasEnoughMaterials(Inventory_Item itemToCraft)
-    // {
-    //     foreach (var requiredMaterial in itemToCraft.itemData.craftRecipe)
-    //     {
-    //         if (GetAvailableAmountOf(requiredMaterial.itemData) < requiredMaterial.stackSize)
-    //         {
-    //             return false;
-    //         }
-    //     }
+    public bool HasEnoughMaterials(Inventory_Item itemToCraft)
+    {
+        foreach (var requiredMaterial in itemToCraft.itemData.craftRecipe)
+        {
+            if (GetAvailableAmountOf(requiredMaterial.itemData) < requiredMaterial.RequiredQuantity)
+            {
+                return false;
+            }
+        }
 
-    //     return true;
-    // }
+        return true;
+    }
 
     /// <summary>
     /// Calculate the total number of materials (items) that the player has across
@@ -117,6 +135,8 @@ public class Inventory_Storage : Inventory_Base
 
     public void AddMaterialToStash(Inventory_Item itemToAdd)
     {
+        Debug.Log($"Inventory_Storage.AddMaterialToStash() -> {gameObject.name} storing Material: {itemToAdd.itemData.itemName}");
+
         var stackableItem = StackableInStash(itemToAdd);
 
         if (stackableItem != null)

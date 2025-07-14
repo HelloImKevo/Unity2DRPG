@@ -40,9 +40,9 @@ public class Object_Blacksmith : Object_NPC, IInteractable
             backgroundColor = new Color(0.2f, 0, 0),
             blinkColor = Color.seaGreen,
             enableBlink = true,
-            duration = 4f
+            duration = 3f
         };
-        ToastManager.Instance.ShowToast("Welcome to the Blacksmith Shop!", toastStyle, ToastAnchor.BottomCenter);
+        ToastManager.Instance.ShowToast("Welcome to the Blacksmith Storage & Crafting!", toastStyle, ToastAnchor.BottomCenter);
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
