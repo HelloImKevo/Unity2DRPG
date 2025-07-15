@@ -16,7 +16,7 @@ MonoBehaviour:
   itemIcon: {fileID: 982908667, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
   itemType: 0
   maxStackSize: 4
-  itemPrice: 100
+  itemPrice: 60
   minStackSizeAtShop: 1
   maxStackSizeAtShop: 10
   itemEffect: {fileID: 0}

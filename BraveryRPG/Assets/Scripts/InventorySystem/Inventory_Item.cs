@@ -78,17 +78,25 @@ public class Inventory_Item
 
     public string GetItemInfo()
     {
+        StringBuilder sb = new();
+
         if (ItemType.Material == itemData.itemType)
         {
-            return "Used for crafting.";
+            sb.AppendLine("");
+            sb.AppendLine("Used for crafting.");
+            sb.AppendLine("");
+            sb.AppendLine("");
+            return sb.ToString();
         }
 
         if (ItemType.Consumable == itemData.itemType)
         {
-            return itemData.itemEffect.effectDescription;
+            sb.AppendLine("");
+            sb.AppendLine(itemEffect.effectDescription);
+            sb.AppendLine("");
+            sb.AppendLine("");
+            return sb.ToString();
         }
-
-        StringBuilder sb = new();
 
         sb.AppendLine("");
 

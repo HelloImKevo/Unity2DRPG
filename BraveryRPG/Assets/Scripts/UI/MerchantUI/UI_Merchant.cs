@@ -6,12 +6,17 @@ public class UI_Merchant : MonoBehaviour
     private Inventory_Player inventory;
     private Inventory_Merchant merchant;
 
-    // [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI goldText;
 
     [Space]
+    [Tooltip("The UI_MerchantSlots object in the Merchant UI containing all of the UI_ItemSlot children.")]
     [SerializeField] private UI_ItemSlotParent merchantSlots;
+
+    [Tooltip("The UI_InventorySlots object in the Merchant UI containing all of the UI_ItemSlot children.")]
     [SerializeField] private UI_ItemSlotParent inventorySlots;
-    // [SerializeField] private UI_EquipSlotParent equipSlots;
+
+    [Tooltip("The UI_Equipment object in the Merchant UI containing all of the UI_EquipSlot children.")]
+    [SerializeField] private UI_EquipSlotParent equipSlots;
 
     public void SetupMerchantUI(Inventory_Merchant merchant, Inventory_Player inventory)
     {
@@ -36,7 +41,7 @@ public class UI_Merchant : MonoBehaviour
 
         merchantSlots.UpdateSlots(merchant.itemList);
         inventorySlots.UpdateSlots(inventory.itemList);
-        // equipSlots.UpdateEquipmentSlots(inventory.equipList);
+        equipSlots.UpdateEquipmentSlots(inventory.equipmentList);
 
         // goldText.text = inventory.gold.ToString("N0") + "g.";
     }
