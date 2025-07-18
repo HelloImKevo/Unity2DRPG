@@ -142,6 +142,9 @@ public class Entity_Health : MonoBehaviour, IDamageable
 
     private Entity_Stats entityStats;
 
+    /// <summary>Handles item drops upon death in <see cref="Die"/>.</summary>
+    private Entity_DropManager dropManager;
+
     /// <summary>
     /// Initializes component references during the Awake lifecycle phase.
     /// 
@@ -155,6 +158,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
         entity = GetComponent<Entity>();
         entityVfx = GetComponent<Entity_VFX>();
         entityStats = GetComponent<Entity_Stats>();
+        dropManager = GetComponent<Entity_DropManager>();
 
         healthBar = GetComponentInChildren<Slider>();
 
@@ -312,6 +316,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         isDead = true;
         entity.EntityDeath();
+        dropManager?.DropItems();
     }
 
     public float GetHealthPercent()

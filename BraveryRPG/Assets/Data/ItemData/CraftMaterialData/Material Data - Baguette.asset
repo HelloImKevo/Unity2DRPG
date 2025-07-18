@@ -19,5 +19,8 @@ MonoBehaviour:
   itemPrice: 40
   minStackSizeAtShop: 1
   maxStackSizeAtShop: 2
+  itemRarity: 500
+  dropChance: 50.1
+  maxDropChance: 65
   itemEffect: {fileID: 0}
   craftRecipe: []

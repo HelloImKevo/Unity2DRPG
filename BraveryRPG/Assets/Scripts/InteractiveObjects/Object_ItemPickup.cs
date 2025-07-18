@@ -7,7 +7,6 @@ public class Object_ItemPickup : MonoBehaviour
 
     [Space]
     [SerializeField] private SpriteRenderer sr;
-    // TODO: Kevin - In the Editor, I set isTrigger = false, which doesn't match tutorial!
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Collider2D col;
 
@@ -32,6 +31,9 @@ public class Object_ItemPickup : MonoBehaviour
 
         float xDropForce = Random.Range(-dropForce.x, dropForce.x);
         rb.linearVelocity = new Vector2(xDropForce, dropForce.y);
+        // This will enable physics collisions, so that items drop and stick
+        // to the ground (rather than falling through the ground and flying off
+        // the bottom of the screen).
         col.isTrigger = false;
     }
 

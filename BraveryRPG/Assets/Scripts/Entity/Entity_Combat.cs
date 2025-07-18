@@ -82,7 +82,8 @@ public class Entity_Combat : MonoBehaviour
     /// For more information about Unity layer masks:
     /// https://docs.unity3d.com/Manual/Layers.html
     /// </summary>
-    [SerializeField] private LayerMask whatIsTarget;
+    [Tooltip("Layers that can be targeted by this entity's attacks., like Enemies and Destructible Objects.")]
+    [SerializeField] private LayerMask targetableLayers;
 
     private void Awake()
     {
@@ -107,8 +108,6 @@ public class Entity_Combat : MonoBehaviour
     /// </summary>
     public void PerformAttack()
     {
-        GetDetectedColliders();
-
         foreach (var target in GetDetectedColliders())
         {
             if (target.TryGetComponent<IDamageable>(out var damageable))
@@ -152,7 +151,11 @@ public class Entity_Combat : MonoBehaviour
     /// </returns>
     protected Collider2D[] GetDetectedColliders()
     {
-        return Physics2D.OverlapCircleAll(targetCheckPoint.position, targetCheckRadius, whatIsTarget);
+        return Physics2D.OverlapCircleAll(
+            targetCheckPoint.position,
+            targetCheckRadius,
+            targetableLayers
+        );
     }
 
     /// <summary>

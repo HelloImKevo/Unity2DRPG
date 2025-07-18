@@ -24,13 +24,14 @@ public class Item_DataSO : ScriptableObject
     public int minStackSizeAtShop = 1;
     public int maxStackSizeAtShop = 1;
 
-    // [Header("Drop Details")]
-    // [Range(0, 1000)]
-    // public int itemRarity = 100;
-    // [Range(0, 100)]
-    // public float dropChance;
-    // [Range(0, 100)]
-    // public float maxDropChance = 65f;
+    [Header("Drop Details")]
+    [Range(0, 1000)]
+    [Tooltip("Item power: 0 = Common, low value item, 1000 = Legendary, very rare item.")]
+    public int itemRarity = 100;
+    [Range(0, 100)]
+    public float dropChance;
+    [Range(0, 100)]
+    public float maxDropChance = 65f;
 
     [Header("Item Effect")]
     public ItemEffect_DataSO itemEffect;
@@ -40,7 +41,7 @@ public class Item_DataSO : ScriptableObject
 
     private void OnValidate()
     {
-        // dropChance = GetDropChance();
+        dropChance = GetDropChance();
 
         // #if UNITY_EDITOR
         //         string path = AssetDatabase.GetAssetPath(this);
@@ -48,11 +49,11 @@ public class Item_DataSO : ScriptableObject
         // #endif
     }
 
-    // public float GetDropChance()
-    // {
-    //     float maxRarity = 1000;
-    //     float chance = (maxRarity - itemRarity + 1) / maxRarity * 100;
+    public float GetDropChance()
+    {
+        float maxRarity = 1000;
+        float chance = (maxRarity - itemRarity + 1) / maxRarity * 100;
 
-    //     return Mathf.Min(chance, maxDropChance);
-    // }
+        return Mathf.Min(chance, maxDropChance);
+    }
 }

@@ -541,7 +541,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  isDead: 0
   regenInterval: 1
   canRegenerateHealth: 1
   onDamageKnockback: {x: 2.5, y: 2}
@@ -561,14 +560,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159d59b1d4f134a4a866c93115b727d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basicAttackScale:
+    physical: 1
+    elemental: 1
+    chillDuration: 3
+    chillSlowMulitplier: 0.2
+    burnDuration: 3
+    burnDamageScale: 1
+    shockDuration: 3
+    shockDamageScale: 1
+    shockChargeBuildup: 0.4
   targetCheckPoint: {fileID: 2806022160396674404}
   targetCheckRadius: 1.1
-  defaultDuration: 3
-  chillSlowMultiplier: 0.3
-  electrifyChargeBuildup: 0.4
-  fireScaling: 0.8
-  lightningScaling: 2.5
-  whatIsTarget:
+  targetableLayers:
     serializedVersion: 2
     m_Bits: 256
 --- !u!114 &1635378202421532268
@@ -606,7 +610,7 @@ MonoBehaviour:
   critHitVfx: {fileID: 9223007503879583146, guid: 6233fc37e47eb4615bdfdb2ac0b0c8f3, type: 3}
   chillVfx: {r: 0, g: 1, b: 1, a: 1}
   burnVfx: {r: 1, g: 0.47962806, b: 0.062745094, a: 1}
-  electrifyVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  shockVfx: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   attackAlert: {fileID: 9181149559963320901}
 --- !u!50 &1109264179806564754
 Rigidbody2D:
@@ -1198,7 +1202,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -511347249
-  m_SortingLayer: -3
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 7928858964255100155, guid: db2fa9be5e8c143a1827e751f5fc9526, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1297,7 +1301,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -511347249
-  m_SortingLayer: -3
+  m_SortingLayer: -2
   m_SortingOrder: -1
   m_Sprite: {fileID: 4764648476105080483, guid: b33c65c7db3514dbc825440fe1527b10, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

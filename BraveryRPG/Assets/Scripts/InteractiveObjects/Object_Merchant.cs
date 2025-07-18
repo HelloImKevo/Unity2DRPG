@@ -24,6 +24,12 @@ public class Object_Merchant : Object_NPC, IInteractable
 
     public void Interact()
     {
+        if (merchant == null || inventory == null)
+        {
+            Debug.LogWarning($"{gameObject.name}.Interact() -> merchant or inventory" +
+                              " is null - Check Layer Collision Map for Player+NPC");
+        }
+
         ui.merchantUI.SetupMerchantUI(merchant, inventory);
         ui.OpenMerchantUI(true);
 
