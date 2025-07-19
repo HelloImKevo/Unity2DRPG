@@ -23,7 +23,7 @@ public class Entity_DropManager : MonoBehaviour
     {
         if (dropData == null)
         {
-            Debug.Log("You need to assign drop data on entity" + gameObject.name);
+            Debug.Log("You need to assign drop data on entity: " + gameObject.name);
             return;
         }
 

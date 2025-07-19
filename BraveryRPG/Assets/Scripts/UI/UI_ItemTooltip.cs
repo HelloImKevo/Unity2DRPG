@@ -10,7 +10,7 @@ public class UI_ItemTooltip : UI_Tooltip
     [SerializeField] private TextMeshProUGUI itemPrice;
     [Tooltip("Text label that displays special Merchant controls, like 'LMB = Sell the item'")]
     [SerializeField] private Transform merchantInfo;
-    // [SerializeField] private Transform inventoryInfo;
+    [SerializeField] private Transform inventoryInfo;
 
     public void ShowTooltip(
         bool show,
@@ -22,8 +22,9 @@ public class UI_ItemTooltip : UI_Tooltip
     {
         base.ShowTooltip(show, targetRect);
 
+        // Toggle the Displayed 'Special Controls' (Equip Item, Buy Stack, Delete Item, etc.)
         merchantInfo.gameObject.SetActive(showMerchantInfo);
-        // inventoryInfo.gameObject.SetActive(!showMerchantInfo);
+        inventoryInfo.gameObject.SetActive(!showMerchantInfo);
 
         int price = buyPrice ? itemToShow.buyPrice : Mathf.FloorToInt(itemToShow.sellPrice);
         int totalPrice = price * itemToShow.stackSize;

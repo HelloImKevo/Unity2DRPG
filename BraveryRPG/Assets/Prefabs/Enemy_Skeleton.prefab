@@ -376,6 +376,7 @@ GameObject:
   - component: {fileID: 6726873959807303315}
   - component: {fileID: 3233328228463144976}
   - component: {fileID: 2007085016756485118}
+  - component: {fileID: 6416517340377611078}
   - component: {fileID: 394961156779673307}
   - component: {fileID: 1635378202421532268}
   - component: {fileID: 2350621097154451321}
@@ -548,6 +549,22 @@ MonoBehaviour:
   heavyDamageThreshold: 0.3
   heavyKnockbackDuration: 0.5
   onHeavyDamageKnockback: {x: 6, y: 4}
+--- !u!114 &6416517340377611078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4482187794004870783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1cda2bd37eaa40aab7bbc07b33a02f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDropPrefab: {fileID: 850436157251815792, guid: fef4bf139cbb34049bab6ac524b440ae, type: 3}
+  dropData: {fileID: 11400000, guid: f737a5dc850f64cc4b1eb0eccd94b1ad, type: 2}
+  maxRarityAmount: 900
+  maxItemsToDrop: 2
 --- !u!114 &394961156779673307
 MonoBehaviour:
   m_ObjectHideFlags: 0

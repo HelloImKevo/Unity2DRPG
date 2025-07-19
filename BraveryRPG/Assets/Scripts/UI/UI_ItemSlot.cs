@@ -30,14 +30,23 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             return;
         }
 
-        if (ItemType.Consumable == itemInSlot.itemData.itemType)
+        bool alternativeInput = Input.GetKey(KeyCode.LeftControl);
+
+        if (alternativeInput)
         {
-            inventory.TryUseItem(itemInSlot);
+            inventory.RemoveOneItem(itemInSlot);
         }
         else
         {
-            // Equip the item to the player equipment list.
-            inventory.TryEquipItem(itemInSlot);
+            if (ItemType.Consumable == itemInSlot.itemData.itemType)
+            {
+                inventory.TryUseItem(itemInSlot);
+            }
+            else
+            {
+                // Equip the item to the player equipment list.
+                inventory.TryEquipItem(itemInSlot);
+            }
         }
 
         if (itemInSlot == null)
