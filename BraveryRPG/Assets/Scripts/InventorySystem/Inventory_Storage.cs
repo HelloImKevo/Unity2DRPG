@@ -150,6 +150,7 @@ public class Inventory_Storage : Inventory_Base
         }
 
         TriggerUpdateUI();
+        // Sort Materials By Name.
         materialStash = materialStash.OrderBy(item => item.itemData.name).ToList();
     }
 

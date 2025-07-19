@@ -122,7 +122,12 @@ public class Entity_Combat : MonoBehaviour
 
                 if (element != ElementType.None)
                 {
-                    target.GetComponent<Entity_StatusHandler>().ApplyStatusEffect(element, attackData.effectData);
+                    // NOTE: Attackable Objects like Chests and Destructible Environments
+                    // cannot have status effects applied.
+                    if (target.TryGetComponent<Entity_StatusHandler>(out var statusHandler))
+                    {
+                        statusHandler.ApplyStatusEffect(element, attackData.effectData);
+                    }
                 }
 
                 if (targetDamaged)
