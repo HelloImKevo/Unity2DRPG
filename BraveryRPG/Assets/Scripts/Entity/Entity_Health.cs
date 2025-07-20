@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Manages health, damage reception, and death mechanics for game entities.
@@ -31,7 +30,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     public event Action OnTakingDamage;
     public event Action OnHealthUpdate;
 
-    private Slider healthBar;
+    [SerializeField] private UI_MiniHealthBar healthBar;
 
     /// <summary>
     /// The entity's current health points.
@@ -160,8 +159,6 @@ public class Entity_Health : MonoBehaviour, IDamageable
         entityVfx = GetComponent<Entity_VFX>();
         entityStats = GetComponent<Entity_Stats>();
         dropManager = GetComponent<Entity_DropManager>();
-
-        healthBar = GetComponentInChildren<Slider>();
 
         SetupHealth();
     }
@@ -342,10 +339,14 @@ public class Entity_Health : MonoBehaviour, IDamageable
 
     private void UpdateHealthBar()
     {
+        if (healthBar == null || !healthBar.gameObject.activeSelf) return;
+
         if (healthBar == null || entityStats == null) return;
 
-        healthBar.value = currentHealth / entityStats.GetMaxHealth();
+        healthBar.slider.value = currentHealth / entityStats.GetMaxHealth();
     }
+
+    public void EnableHealthBar(bool enable) => healthBar.gameObject.SetActive(enable);
 
     #region Knockback
 

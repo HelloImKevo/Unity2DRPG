@@ -1,12 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_MiniHealthBar : MonoBehaviour
 {
     private Entity entityRef;
+    public Slider slider { get; private set; }
 
     void Awake()
     {
         entityRef = GetComponentInParent<Entity>();
+        slider = GetComponentInChildren<Slider>();
 
         // TODO: The health bar is scaling to match the parent scale,
         //  so for enemies, it will be 130% size. Can also explore
