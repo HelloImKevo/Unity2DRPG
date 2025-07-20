@@ -16,6 +16,7 @@ public class Player : Entity
     public Player_SkillManager SkillManager { get; private set; }
     public Entity_StatusHandler StatusHandler { get; private set; }
     public Player_Combat Combat { get; private set; }
+    public Inventory_Player Inventory { get; private set; }
 
     #region State Variables
 
@@ -80,6 +81,7 @@ public class Player : Entity
         SkillManager = GetComponent<Player_SkillManager>();
         StatusHandler = GetComponent<Entity_StatusHandler>();
         Combat = GetComponent<Player_Combat>();
+        Inventory = GetComponent<Inventory_Player>();
 
         IdleState = new Player_IdleState(this, stateMachine, "idle");
         MoveState = new Player_MoveState(this, stateMachine, "move");

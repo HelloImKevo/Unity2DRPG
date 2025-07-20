@@ -29,6 +29,7 @@ using UnityEngine.UI;
 public class Entity_Health : MonoBehaviour, IDamageable
 {
     public event Action OnTakingDamage;
+    public event Action OnHealthUpdate;
 
     private Slider healthBar;
 
@@ -171,6 +172,8 @@ public class Entity_Health : MonoBehaviour, IDamageable
         if (entityStats == null) return;
 
         currentHealth = entityStats.GetMaxHealth();
+        OnHealthUpdate += UpdateHealthBar;
+
         UpdateHealthBar();
 
         // Note: This approach will only work if the entity is created with a starting
@@ -282,7 +285,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
         // Disallow "overheal" (regenerating higher health than the maximum).
         currentHealth = Mathf.Min(newHealth, maxHealth);
 
-        UpdateHealthBar();
+        OnHealthUpdate?.Invoke();
     }
 
     /// <summary>
@@ -299,7 +302,8 @@ public class Entity_Health : MonoBehaviour, IDamageable
     public void ReduceHealth(float damage)
     {
         currentHealth -= damage;
-        UpdateHealthBar();
+
+        OnHealthUpdate?.Invoke();
 
         if (currentHealth <= 0) Die();
     }
@@ -331,8 +335,10 @@ public class Entity_Health : MonoBehaviour, IDamageable
         if (entityStats == null) return;
 
         currentHealth = entityStats.GetMaxHealth() * Mathf.Clamp01(percent);
-        UpdateHealthBar();
+        OnHealthUpdate?.Invoke();
     }
+
+    public float GetCurrentHealth() => currentHealth;
 
     private void UpdateHealthBar()
     {
