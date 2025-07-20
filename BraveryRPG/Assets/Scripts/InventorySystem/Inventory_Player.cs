@@ -1,15 +1,18 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory_Player : Inventory_Base
 {
+    public event Action<int> OnQuickSlotUsed;
+
     public Inventory_Storage storage { get; private set; }
 
     [Tooltip("Equipment that the player is currently wearing.")]
     public List<Inventory_EquipmentSlot> equipmentList;
 
-    // [Header("Quick Item Slots")]
-    // public Inventory_Item[] quickItems = new Inventory_Item[2];
+    [Header("Quick Item Slots")]
+    public Inventory_Item[] quickItems = new Inventory_Item[2];
 
     [Header("Gold Info")]
     public int gold = 10000;
@@ -20,30 +23,31 @@ public class Inventory_Player : Inventory_Base
         storage = FindFirstObjectByType<Inventory_Storage>();
     }
 
-    // public void SetQuickItemInSlot(int slotNumber, Inventory_Item itemToSet)
-    // {
-    //     quickItems[slotNumber - 1] = itemToSet;
-    //     TriggerUpdateUI();
-    // }
+    public void SetQuickItemInSlot(int slotNumber, Inventory_Item itemToSet)
+    {
+        quickItems[slotNumber - 1] = itemToSet;
+        TriggerUpdateUI();
+    }
 
-    // public void TryUseQuickItemInSlot(int passedSlotNumber)
-    // {
-    //     int slotNumber = passedSlotNumber - 1;
-    //     var itemToUse = quickItems[slotNumber];
+    public void TryUseQuickItemInSlot(int passedSlotNumber)
+    {
+        int slotNumber = passedSlotNumber - 1;
+        var itemToUse = quickItems[slotNumber];
 
-    //     if (itemToUse == null)
-    //         return;
+        if (itemToUse == null) return;
 
-    //     TryUseItem(itemToUse);
+        TryUseItem(itemToUse);
 
-    //     if (FindItem(itemToUse) == null)
-    //     {
-    //         quickItems[slotNumber] = FindSameItem(itemToUse);
-    //     }
+        // If this was the last item used, check if another item of the same type
+        // exists in the player's inventory, and automatically assign it for QoL.
+        if (FindItem(itemToUse) == null)
+        {
+            quickItems[slotNumber] = FindSameItem(itemToUse);
+        }
 
-    //     TriggerUpdateUI();
-    //     OnQuickSlotUsed?.Invoke(slotNumber);
-    // }
+        TriggerUpdateUI();
+        OnQuickSlotUsed?.Invoke(slotNumber);
+    }
 
     public void TryEquipItem(Inventory_Item item)
     {

@@ -110,5 +110,18 @@ public class Inventory_Base : MonoBehaviour
         return itemList.Find(item => item == itemToFind);
     }
 
+    public Inventory_Item FindSameItem(Inventory_Item itemToFind)
+    {
+        return itemList.Find(item => item.itemData == itemToFind.itemData);
+    }
+
     public void TriggerUpdateUI() => OnInventoryChange?.Invoke();
+
+    // public virtual void LoadData(GameData data)
+    // {
+    // }
+
+    // public virtual void SaveData(ref GameData data)
+    // {
+    // }
 }

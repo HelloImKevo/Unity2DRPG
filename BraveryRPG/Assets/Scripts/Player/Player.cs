@@ -18,7 +18,7 @@ public class Player : Entity
     public Player_Combat Combat { get; private set; }
     public Inventory_Player Inventory { get; private set; }
 
-    #region State Variables
+    #region FSM State Variables
 
     public Player_IdleState IdleState { get; private set; }
     public Player_MoveState MoveState { get; private set; }
@@ -208,6 +208,8 @@ public class Player : Entity
         closest.GetComponent<IInteractable>().Interact();
     }
 
+    #region Input Controls
+
     // Entry point for the new Unity Input System.
     private void OnEnable()
     {
@@ -233,10 +235,16 @@ public class Player : Entity
 
         // Interact with NPCs, Chests, Doors, Environment Objects, etc.
         Input.Player.Interact.performed += ctx => TryInteract();
+
+        // Quick Slot Items - Potions, Scrolls, etc.
+        Input.Player.QuickItemSlot_1.performed += ctx => Inventory.TryUseQuickItemInSlot(1);
+        Input.Player.QuickItemSlot_2.performed += ctx => Inventory.TryUseQuickItemInSlot(2);
     }
 
     private void OnDisable()
     {
         Input.Disable();
     }
+
+    #endregion
 }
