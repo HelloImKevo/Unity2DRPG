@@ -12,17 +12,23 @@ public class UI_SkillTree : MonoBehaviour
 
     public Player_SkillManager SkillManager { get; private set; }
 
-    void Awake()
-    {
-        SkillManager = FindAnyObjectByType<Player_SkillManager>();
-    }
+    private UI_TreeNode[] allTreeNodes;
 
-    /// <summary>
-    /// Initializes the skill tree on start.
-    /// </summary>
+    /// <summary>Initializes the skill tree on start.</summary>
     private void Start()
     {
         UpdateAllConnections();
+    }
+
+    public void UnlockDefaultSkills()
+    {
+        SkillManager = FindAnyObjectByType<Player_SkillManager>();
+        allTreeNodes = GetComponentsInChildren<UI_TreeNode>(true);
+
+        foreach (var node in allTreeNodes)
+        {
+            node.UnlockDefaultSkill();
+        }
     }
 
     /// <summary>

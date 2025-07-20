@@ -25,13 +25,13 @@ public class SkillObject_TimeEcho : SkillObject_Base
     public void SetupEcho(Skill_TimeEcho echoManager)
     {
         this.echoManager = echoManager;
-        playerStats = echoManager.Player.Stats;
+        playerStats = echoManager.PlayerRef.Stats;
         damageScaleData = echoManager.damageScaleData;
         maxAttacks = echoManager.GetMaxAttacks();
         playerTransform = echoManager.transform.root;
-        playerhealth = echoManager.Player.Health;
+        playerhealth = echoManager.PlayerRef.Health;
         skillManager = echoManager.SkillManager;
-        statusHandler = echoManager.Player.StatusHandler;
+        statusHandler = echoManager.PlayerRef.StatusHandler;
 
         Invoke(nameof(HandleDeath), echoManager.GetEchoDuration());
         FlipToTarget();

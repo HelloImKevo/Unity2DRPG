@@ -49,6 +49,7 @@ public class Player_SkillManager : MonoBehaviour
 
     public void ResetAllSkills()
     {
+        // TODO: Need to enforce that 'Unlocked By Default' skills cannot be refunded!
         foreach (var skill in allSkills)
         {
             skill.RefundSkill();

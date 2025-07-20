@@ -49,26 +49,32 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private Color lastColor;
 
-    /// <summary>
-    /// Initializes component references and sets the initial icon color for the skill node.
-    /// </summary>
-    void Awake()
-    {
-        ui = GetComponentInParent<UI>();
-        rect = GetComponent<RectTransform>();
-        skillTree = GetComponentInParent<UI_SkillTree>();
-        connectHandler = GetComponentInParent<UI_TreeConnectHandler>();
-
-        UpdateIconColor(GetColorByHex(lockedColorHex));
-    }
-
+    /// <summary>Initializes component references and sets the initial icon color for the skill node.</summary>
     void Start()
     {
+        UpdateIconColor(GetColorByHex(lockedColorHex));
+        UnlockDefaultSkill();
+    }
+
+    public void UnlockDefaultSkill()
+    {
+        // Initialize 'Unlocked By Default' skills, because the SkillTree
+        // gameObject is inactive by default, and won't invoked Start() lifecycle.
+        InitNeededComponents();
+
         if (skillData.unlockedByDefault)
         {
             // Must be called after UI_SkillTree.Awake()
             Unlock();
         }
+    }
+
+    private void InitNeededComponents()
+    {
+        ui = GetComponentInParent<UI>();
+        rect = GetComponent<RectTransform>();
+        skillTree = GetComponentInParent<UI_SkillTree>(true);
+        connectHandler = GetComponentInParent<UI_TreeConnectHandler>(true);
     }
 
     public void Refund()
@@ -93,17 +99,24 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     /// </summary>
     private void Unlock()
     {
-        isUnlocked = true;
         UpdateIconColor(Color.white);
 
         // When unlocking this skill, we need to lock-out all conflicting
         // skill nodes in the shared Skill Tier.
         LockOutConflictingNodes();
 
+        if (isUnlocked)
+        {
+            Debug.Log($"{gameObject.name}.Unlock() -> Skill is already unlocked!");
+            return;
+        }
+
+        isUnlocked = true;
+
         skillTree.RemoveSkillPoints(skillData.cost);
         connectHandler.UnlockConnectionImage(true);
 
-        skillTree.SkillManager.GetSkillByType(skillData.skillType).SetSkillUpgrade(skillData.upgradeData);
+        skillTree.SkillManager.GetSkillByType(skillData.skillType).SetSkillUpgrade(skillData);
     }
 
     /// <summary>
@@ -194,7 +207,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         else
         {
-            Debug.Log($"{gameObject.name} cannot be unlocked - Cost: {skillData.cost} points");
+            Debug.Log($"{gameObject.name} cannot be unlocked - Cost: {skillData.cost} points; Unlocked: {isUnlocked}");
         }
     }
 
@@ -205,7 +218,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Show tooltip and populate the text fields with skill data.
-        ui.skillTooltip.ShowTooltip(true, rect, this);
+        ui.skillTooltip.ShowTooltip(true, rect, skillData, this);
 
         // Do not highlight locked skills (but still show the tooltip).
         if (CanBeUnlocked())

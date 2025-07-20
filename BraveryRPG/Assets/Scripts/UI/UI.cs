@@ -6,24 +6,25 @@ using UnityEngine;
 /// </summary>
 public class UI : MonoBehaviour
 {
-    // User Interface View Controllers
+    #region User Interface View Controllers
     public UI_SkillTree skillTreeUI { get; private set; }
     public UI_Inventory inventoryUI { get; private set; }
     public UI_Storage storageUI { get; private set; }
     public UI_Craft craftUI { get; private set; }
     public UI_Merchant merchantUI { get; private set; }
+    public UI_InGame inGameUI { get; private set; }
+    #endregion
 
-    // Tooltips
+    #region Tooltips
     public UI_SkillTooltip skillTooltip { get; private set; }
     public UI_ItemTooltip itemTooltip { get; private set; }
     public UI_StatTooltip statTooltip { get; private set; }
+    #endregion
 
     private bool skillTreeEnabled;
     private bool inventoryEnabled;
 
-    /// <summary>
-    /// Initializes UI component references on awake.
-    /// </summary>
+    /// <summary>Initializes UI component references on awake.</summary>
     void Awake()
     {
         skillTreeUI = GetComponentInChildren<UI_SkillTree>(true);
@@ -31,6 +32,7 @@ public class UI : MonoBehaviour
         storageUI = GetComponentInChildren<UI_Storage>(true);
         craftUI = GetComponentInChildren<UI_Craft>(true);
         merchantUI = GetComponentInChildren<UI_Merchant>(true);
+        inGameUI = GetComponentInChildren<UI_InGame>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
@@ -62,6 +64,11 @@ public class UI : MonoBehaviour
             Debug.LogWarning("Merchant UI component is null, did you forget to assign it to the UI script?");
         }
 
+        if (inGameUI == null)
+        {
+            Debug.LogWarning("In-Game UI component is null, did you forget to assign it to the UI script?");
+        }
+
         // User Interface Tooltips
         if (skillTooltip == null)
         {
@@ -82,6 +89,11 @@ public class UI : MonoBehaviour
         // scenario where the UI component is already visible and active.
         skillTreeEnabled = skillTreeUI.gameObject.activeSelf;
         inventoryEnabled = inventoryUI.gameObject.activeSelf;
+    }
+
+    void Start()
+    {
+        skillTreeUI.UnlockDefaultSkills();
     }
 
     public void ToggleSkillTreeUI()

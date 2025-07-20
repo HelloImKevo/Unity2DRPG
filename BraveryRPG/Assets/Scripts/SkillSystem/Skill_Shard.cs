@@ -125,13 +125,13 @@ public class Skill_Shard : Skill_Base
     private void SwapPlayerAndShard()
     {
         Vector3 shardPosition = currentShard.transform.position;
-        Vector3 playerPosition = Player.transform.position;
+        Vector3 playerPosition = PlayerRef.transform.position;
 
         currentShard.transform.position = playerPosition;
         // Immediately explode shard to prevent subsequent teleports.
         currentShard.Explode();
 
-        Player.TeleportPlayer(shardPosition);
+        PlayerRef.TeleportPlayer(shardPosition);
     }
 
     private void HandleShardMulticast()

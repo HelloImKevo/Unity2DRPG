@@ -6,7 +6,7 @@ public class Player : Entity
 {
     public static event Action OnPlayerDeath;
 
-    private UI ui;
+    public UI UserInterface { get; private set; }
 
     public PlayerInputSet Input { get; private set; }
 
@@ -71,7 +71,7 @@ public class Player : Entity
         base.Awake();
 
         // This performs some heavy lifting - never do this in Update()
-        ui = FindFirstObjectByType<UI>();
+        UserInterface = FindFirstObjectByType<UI>();
 
         Input = new PlayerInputSet();
 
@@ -221,9 +221,9 @@ public class Player : Entity
         Input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
 
         // Keyboard: L
-        Input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI();
+        Input.Player.ToggleSkillTreeUI.performed += ctx => UserInterface.ToggleSkillTreeUI();
         // Keyboard: C
-        Input.Player.ToggleInventoryUI.performed += ctx => ui.ToggleInventoryUI();
+        Input.Player.ToggleInventoryUI.performed += ctx => UserInterface.ToggleInventoryUI();
 
         // Currently, you can only have one of these spells unlocked:
         // Shard or Time Echo - if this system changes, we need to implement

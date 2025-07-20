@@ -48,15 +48,21 @@ public class UI_SkillTooltip : UI_Tooltip
     /// <param name="show"></param>
     /// <param name="targetRect"></param>
     /// <param name="node"></param>
-    public void ShowTooltip(bool show, RectTransform targetRect, UI_TreeNode node)
+    public void ShowTooltip(bool show, RectTransform targetRect, Skill_DataSO skillData, UI_TreeNode node)
     {
         base.ShowTooltip(show, targetRect);
 
         if (!show) return;
 
-        skillName.text = node.skillData.displayName;
-        skillDescription.text = node.skillData.description;
-        skillCooldown.text = "Cooldown " + node.skillData.upgradeData.cooldown + " s.";
+        skillName.text = skillData.displayName;
+        skillDescription.text = skillData.description;
+        skillCooldown.text = "Cooldown " + skillData.upgradeData.cooldown + " s.";
+
+        if (node == null)
+        {
+            skillRequirements.text = "";
+            return;
+        }
 
         string skillLockedText = GetColoredText(hexImportantInfo, lockedSkillText);
         string requirements = node.isLocked

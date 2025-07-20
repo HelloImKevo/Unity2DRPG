@@ -47,7 +47,7 @@ public class SkillObject_Shard : SkillObject_Base
     {
         this.shardManager = shardManager;
 
-        playerStats = shardManager.Player.Stats;
+        playerStats = shardManager.PlayerRef.Stats;
         damageScaleData = shardManager.damageScaleData;
 
         float detonationTime = shardManager.GetDetonateTime();
@@ -67,7 +67,7 @@ public class SkillObject_Shard : SkillObject_Base
     public void SetupShard(Skill_Shard shardManager, float detonationTime, bool canMove, float shardSpeed, Transform target = null)
     {
         this.shardManager = shardManager;
-        playerStats = shardManager.Player.Stats;
+        playerStats = shardManager.PlayerRef.Stats;
         damageScaleData = shardManager.damageScaleData;
 
         Invoke(nameof(Explode), detonationTime);
@@ -89,7 +89,7 @@ public class SkillObject_Shard : SkillObject_Base
         DamageEnemiesInRadius(transform, damageRadius);
         GameObject vfx = Instantiate(vfxPrefab, transform.position, Quaternion.identity);
         // Colorize the explosion sprite with a tint matching the dominant element.
-        vfx.GetComponentInChildren<SpriteRenderer>().color = shardManager.Player.Vfx.GetElementColor(usedElement);
+        vfx.GetComponentInChildren<SpriteRenderer>().color = shardManager.PlayerRef.Vfx.GetElementColor(usedElement);
 
         // Trigger observable event action.
         OnExplode?.Invoke();

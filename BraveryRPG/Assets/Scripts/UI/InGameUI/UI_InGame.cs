@@ -7,7 +7,7 @@ public class UI_InGame : MonoBehaviour
 {
     private Player player;
     private Inventory_Player inventory;
-    // private UI_SkillSlot[] skillSlots;
+    private UI_SkillSlot[] skillSlots;
 
     [SerializeField] private RectTransform healthRect;
     [SerializeField] private Slider healthSlider;
@@ -72,24 +72,24 @@ public class UI_InGame : MonoBehaviour
 
     // public void HideQuickItemOptions() => quickItemOptionsParent.position = new Vector3(0, 9999);
 
-    // public UI_SkillSlot GetSkillSlot(SkillType skillType)
-    // {
-    //     if (skillSlots == null)
-    //     {
-    //         skillSlots = GetComponentsInChildren<UI_SkillSlot>(true);
-    //     }
+    public UI_SkillSlot GetSkillSlot(SkillType skillType)
+    {
+        if (skillSlots == null)
+        {
+            skillSlots = GetComponentsInChildren<UI_SkillSlot>(true);
+        }
 
-    //     foreach (var slot in skillSlots)
-    //     {
-    //         if (slot.skillType == skillType)
-    //         {
-    //             slot.gameObject.SetActive(true);
-    //             return slot;
-    //         }
-    //     }
+        foreach (var slot in skillSlots)
+        {
+            if (slot.skillType == skillType)
+            {
+                slot.gameObject.SetActive(true);
+                return slot;
+            }
+        }
 
-    //     return null;
-    // }
+        return null;
+    }
 
     private void UpdateHealthBar()
     {

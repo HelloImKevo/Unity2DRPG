@@ -31,7 +31,7 @@ public class SkillObject_Sword : SkillObject_Base
 
         // Establish reference to player root object position.
         playerTransform = swordManager.transform.root;
-        playerStats = swordManager.Player.Stats;
+        playerStats = swordManager.PlayerRef.Stats;
         damageScaleData = swordManager.damageScaleData;
     }
 

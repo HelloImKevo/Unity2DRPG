@@ -3,7 +3,7 @@ using UnityEngine;
 public class Skill_Base : MonoBehaviour
 {
     public Player_SkillManager SkillManager { get; private set; }
-    public Player Player { get; private set; }
+    public Player PlayerRef { get; private set; }
     public DamageScaleData damageScaleData { get; private set; }
 
     [Header("General Details")]
@@ -17,7 +17,7 @@ public class Skill_Base : MonoBehaviour
     protected virtual void Awake()
     {
         SkillManager = GetComponentInParent<Player_SkillManager>();
-        Player = GetComponentInParent<Player>();
+        PlayerRef = GetComponentInParent<Player>();
         lastTimeUsed -= cooldown;
 
         // If a SkillObject is created without the base Skill being unlocked,
@@ -34,11 +34,15 @@ public class Skill_Base : MonoBehaviour
         // Override when needed.
     }
 
-    public void SetSkillUpgrade(UpgradeData upgrade)
+    public void SetSkillUpgrade(Skill_DataSO skillData)
     {
+        UpgradeData upgrade = skillData.upgradeData;
+
         upgradeType = upgrade.upgradeType;
         cooldown = upgrade.cooldown;
         damageScaleData = upgrade.damageScaleData;
+
+        GetAssociatedUISkillSlot().SetupSkillSlot(skillData);
 
         // Allow skills to be immediately used when they are first unlocked.
         ResetCooldown();
@@ -60,6 +64,11 @@ public class Skill_Base : MonoBehaviour
         return true;
     }
 
+    private UI_SkillSlot GetAssociatedUISkillSlot()
+    {
+        return PlayerRef.UserInterface.inGameUI.GetSkillSlot(skillType);
+    }
+
     protected bool Unlocked(SkillUpgradeType upgradeToCheck) => upgradeType == upgradeToCheck;
 
     protected bool OnCooldown() => Time.time < lastTimeUsed + cooldown;
@@ -69,7 +78,11 @@ public class Skill_Base : MonoBehaviour
     /// Some skills might only go on cooldown once the animation is finished,
     /// so we want our system to be flexible.
     /// </summary>
-    public void SetSkillOnCooldown() => lastTimeUsed = Time.time;
+    public void SetSkillOnCooldown()
+    {
+        GetAssociatedUISkillSlot().StartCooldownVisual(cooldown);
+        lastTimeUsed = Time.time;
+    }
 
     /// <summary>
     /// Reduce cooldown by a specific amount.
@@ -77,7 +90,11 @@ public class Skill_Base : MonoBehaviour
     /// <param name="cooldownReduction"></param>
     public void ReduceCooldownBy(float cooldownReduction) => lastTimeUsed += cooldownReduction;
 
-    public void ResetCooldown() => lastTimeUsed = Time.time - cooldown;
+    public void ResetCooldown()
+    {
+        GetAssociatedUISkillSlot().ResetCooldownVisual();
+        lastTimeUsed = Time.time - cooldown;
+    }
 
     // TODO: Need to enforce that 'Unlocked By Default' skills cannot be refunded!
     public void RefundSkill()
