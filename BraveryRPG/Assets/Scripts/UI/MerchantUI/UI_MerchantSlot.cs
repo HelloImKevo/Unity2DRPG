@@ -3,8 +3,7 @@ using UnityEngine.EventSystems;
 
 public class UI_MerchantSlot : UI_ItemSlot
 {
-    public enum MerchantSlotType { MerchantSlot, PlayerSlot }
-    public MerchantSlotType slotType;
+    public UISlotType slotType;
 
     private Inventory_Merchant merchant;
 
@@ -15,7 +14,7 @@ public class UI_MerchantSlot : UI_ItemSlot
         bool rightButton = eventData.button == PointerEventData.InputButton.Right;
         bool leftButton = eventData.button == PointerEventData.InputButton.Left;
 
-        if (MerchantSlotType.PlayerSlot == slotType)
+        if (UISlotType.PlayerSlot == slotType)
         {
             if (rightButton)
             {
@@ -28,7 +27,7 @@ public class UI_MerchantSlot : UI_ItemSlot
             }
 
         }
-        else if (MerchantSlotType.MerchantSlot == slotType)
+        else if (UISlotType.MerchantSlot == slotType)
         {
             if (leftButton) return; // Left click does nothing
 
@@ -36,21 +35,14 @@ public class UI_MerchantSlot : UI_ItemSlot
             merchant.TryBuyItem(itemInSlot, buyFullStack);
         }
 
-        ui.itemTooltip.ShowTooltip(false, null);
+        ui.itemTooltip.HideTooltip();
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
         if (itemInSlot == null) return;
 
-        if (MerchantSlotType.MerchantSlot == slotType)
-        {
-            ui.itemTooltip.ShowTooltip(true, rect, itemInSlot, true, true);
-        }
-        else
-        {
-            ui.itemTooltip.ShowTooltip(true, rect, itemInSlot, false, true);
-        }
+        ui.itemTooltip.ShowTooltip(true, rect, itemInSlot, slotType, true);
     }
 
     public void SetupMerchantSlotUI(Inventory_Merchant merchant) => this.merchant = merchant;
