@@ -74,6 +74,7 @@ public class Player : Entity
         UserInterface = FindFirstObjectByType<UI>();
 
         Input = new PlayerInputSet();
+        UserInterface.SetupControlsUI(Input);
 
         Vfx = GetComponent<Player_VFX>();
         Stats = GetComponent<Player_Stats>();
@@ -221,11 +222,6 @@ public class Player : Entity
         // Subscribe to New Input System 'Movement' action map.
         Input.Player.Movement.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
         Input.Player.Movement.canceled += ctx => MoveInput = Vector2.zero;
-
-        // Keyboard: L
-        Input.Player.ToggleSkillTreeUI.performed += ctx => UserInterface.ToggleSkillTreeUI();
-        // Keyboard: C
-        Input.Player.ToggleInventoryUI.performed += ctx => UserInterface.ToggleInventoryUI();
 
         // Currently, you can only have one of these spells unlocked:
         // Shard or Time Echo - if this system changes, we need to implement

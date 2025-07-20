@@ -6,6 +6,11 @@ using UnityEngine;
 /// </summary>
 public class UI : MonoBehaviour
 {
+    [SerializeField] private GameObject[] uiElements;
+
+    public bool alternativeInput { get; private set; }
+    private PlayerInputSet input;
+
     #region User Interface View Controllers
     public UI_SkillTree skillTreeUI { get; private set; }
     public UI_Inventory inventoryUI { get; private set; }
@@ -13,9 +18,8 @@ public class UI : MonoBehaviour
     public UI_Craft craftUI { get; private set; }
     public UI_Merchant merchantUI { get; private set; }
     public UI_InGame inGameUI { get; private set; }
-    #endregion
+    public UI_Options optionsUI { get; private set; }
 
-    #region Tooltips
     public UI_SkillTooltip skillTooltip { get; private set; }
     public UI_ItemTooltip itemTooltip { get; private set; }
     public UI_StatTooltip statTooltip { get; private set; }
@@ -33,6 +37,7 @@ public class UI : MonoBehaviour
         craftUI = GetComponentInChildren<UI_Craft>(true);
         merchantUI = GetComponentInChildren<UI_Merchant>(true);
         inGameUI = GetComponentInChildren<UI_InGame>(true);
+        optionsUI = GetComponentInChildren<UI_Options>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
@@ -69,6 +74,11 @@ public class UI : MonoBehaviour
             Debug.LogWarning("In-Game UI component is null, did you forget to assign it to the UI script?");
         }
 
+        if (optionsUI == null)
+        {
+            Debug.LogWarning("Options UI component is null, did you forget to assign it to the UI script?");
+        }
+
         // User Interface Tooltips
         if (skillTooltip == null)
         {
@@ -96,32 +106,145 @@ public class UI : MonoBehaviour
         skillTreeUI.UnlockDefaultSkills();
     }
 
+    public void SetupControlsUI(PlayerInputSet inputSet)
+    {
+        input = inputSet;
+
+        // Keyboard: L
+        input.UI.SkillTreeUI.performed += ctx => ToggleSkillTreeUI();
+        // Keyboard: C
+        input.UI.InventoryUI.performed += ctx => ToggleInventoryUI();
+
+        // Left CTRL Alternative Input (Buy Full Stack, etc.)
+        input.UI.AlternativeInput.performed += ctx => alternativeInput = true;
+        input.UI.AlternativeInput.canceled += ctx => alternativeInput = false;
+
+        // Pause / Resume game.
+        input.UI.OptionsUI.performed += ctx => OnEnterOptionsUIState();
+    }
+
+    private void OnEnterOptionsUIState()
+    {
+        foreach (var element in uiElements)
+        {
+            if (element.activeSelf)
+            {
+                // Resume game.
+                Time.timeScale = 1;
+                SwitchToInGameUI();
+                return;
+            }
+        }
+
+        // Pause game when viewing Game Settings UI.
+        Time.timeScale = 0;
+        OpenOptionsUI();
+    }
+
+    // public void OpenDeathScreenUI()
+    // {
+    //     SwitchTo(deathScreenUI.gameObject);
+    //     input.Disable(); // Pay attention to this if you use gamepad
+    // }
+
+    public void OpenOptionsUI()
+    {
+        HideAllTooltips();
+        StopPlayerControls(true);
+        SwitchTo(optionsUI.gameObject);
+    }
+
+    public void SwitchToInGameUI()
+    {
+
+        HideAllTooltips();
+        StopPlayerControls(false);
+        SwitchTo(inGameUI.gameObject);
+
+        skillTreeEnabled = false;
+        inventoryEnabled = false;
+    }
+
+    private void SwitchTo(GameObject objectToSwitchOn)
+    {
+        foreach (var element in uiElements)
+        {
+            element.SetActive(false);
+        }
+
+        objectToSwitchOn.SetActive(true);
+    }
+
+    private void StopPlayerControls(bool stopControls)
+    {
+        if (stopControls)
+        {
+            input.Player.Attack.Disable();
+            input.Player.RangeAttack.Disable();
+            input.Player.Jump.Disable();
+            input.Player.Dash.Disable();
+        }
+        else
+        {
+            input.Player.Attack.Enable();
+            input.Player.RangeAttack.Enable();
+            input.Player.Jump.Enable();
+            input.Player.Dash.Enable();
+        }
+    }
+
+    private void StopPlayerControlsIfNeeded()
+    {
+        foreach (var element in uiElements)
+        {
+            if (element.activeSelf)
+            {
+                StopPlayerControls(true);
+                return;
+            }
+        }
+
+        StopPlayerControls(false);
+    }
+
     public void ToggleSkillTreeUI()
     {
+        skillTreeUI.transform.SetAsLastSibling();
+        SetTooltipsAsLastSibling();
+        // fadeScreenUI.transform.SetAsLastSibling();
+
         skillTreeEnabled = !skillTreeEnabled;
         // Activate / Deactivate game objects.
         skillTreeUI.gameObject.SetActive(skillTreeEnabled);
         // Hide the tooltip (move it into outer space).
         skillTooltip.HideTooltip();
+
+        StopPlayerControlsIfNeeded();
     }
 
     public void ToggleInventoryUI()
     {
+        // Move the Inventory UI to the top of the view draw stack,
+        // except for Tooltips, which should always be rendered on top.
+        inventoryUI.transform.SetAsLastSibling();
+        SetTooltipsAsLastSibling();
+        // fadeScreenUI.transform.SetAsLastSibling();
+
         inventoryEnabled = !inventoryEnabled;
         // Activate / Deactivate game objects.
         inventoryUI.gameObject.SetActive(inventoryEnabled);
         // Hide the tooltips (move them into outer space).
-        itemTooltip.HideTooltip();
-        statTooltip.HideTooltip();
+        HideAllTooltips();
+
+        StopPlayerControlsIfNeeded();
     }
 
     public void OpenStorageUI(bool openStorageUI)
     {
         storageUI.gameObject.SetActive(openStorageUI);
-        // StopPlayerControls(openStorageUI);
+        StopPlayerControls(openStorageUI);
 
-        // TODO: Clean up the readability of this logic.
-        if (openStorageUI == false)
+        if (!openStorageUI)
         {
             craftUI.gameObject.SetActive(false);
             HideAllTooltips();
@@ -131,7 +254,7 @@ public class UI : MonoBehaviour
     public void OpenMerchantUI(bool openMerchantUI)
     {
         merchantUI.gameObject.SetActive(openMerchantUI);
-        // StopPlayerControls(openMerchantUI);
+        StopPlayerControls(openMerchantUI);
 
         if (!openMerchantUI)
         {
@@ -144,5 +267,12 @@ public class UI : MonoBehaviour
         itemTooltip.HideTooltip();
         skillTooltip.HideTooltip();
         statTooltip.HideTooltip();
+    }
+
+    private void SetTooltipsAsLastSibling()
+    {
+        itemTooltip.transform.SetAsLastSibling();
+        skillTooltip.transform.SetAsLastSibling();
+        statTooltip.transform.SetAsLastSibling();
     }
 }
