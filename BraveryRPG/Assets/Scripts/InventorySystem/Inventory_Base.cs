@@ -44,25 +44,6 @@ public class Inventory_Base : MonoBehaviour
         return hasStackable || itemList.Count < maxInventorySize;
     }
 
-    public Inventory_Item FindStackableWithSpace(Inventory_Item itemToFind)
-    {
-        // Find list of existing stackable items in the inventory.
-        List<Inventory_Item> stackableItems = itemList.FindAll(
-            item => item.itemData == itemToFind.itemData
-        );
-
-        // Identify which stackable inventory elements have room for more stacks.
-        foreach (var stackableItem in stackableItems)
-        {
-            if (stackableItem.CanAddStack())
-            {
-                return stackableItem;
-            }
-        }
-
-        return null;
-    }
-
     public void AddItem(Inventory_Item itemToAdd)
     {
         Debug.Log($"Inventory_Base.AddItem() -> Item added to {gameObject.name}: {itemToAdd.itemData.itemName}");
@@ -103,6 +84,15 @@ public class Inventory_Base : MonoBehaviour
         {
             RemoveOneItem(itemToRemove);
         }
+    }
+
+    public Inventory_Item FindStackableWithSpace(Inventory_Item itemToFind)
+    {
+        // Find list of existing stackable items in the inventory, and
+        // identify which stackable inventory elements have room for more stacks.
+        return itemList.Find(
+            item => item.itemData == itemToFind.itemData && item.CanAddStack()
+        );
     }
 
     public Inventory_Item FindItem(Inventory_Item itemToFind)

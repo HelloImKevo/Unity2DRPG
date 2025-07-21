@@ -64,7 +64,7 @@ public class Skill_Base : MonoBehaviour
         return true;
     }
 
-    private UI_SkillSlot GetAssociatedUISkillSlot()
+    private UI_SkillBarSlot GetAssociatedUISkillSlot()
     {
         return PlayerRef.UserInterface.inGameUI.GetSkillSlot(skillType);
     }

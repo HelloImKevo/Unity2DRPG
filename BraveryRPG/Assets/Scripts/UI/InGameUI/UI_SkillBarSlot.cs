@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UI_SkillBarSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private UI ui;
     private Image skillIcon;
@@ -31,7 +31,7 @@ public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     private void OnValidate()
     {
-        gameObject.name = "UI_SkillSlot - " + skillType.ToString();
+        gameObject.name = "UI_SkillBarSlot - " + skillType.ToString();
     }
 
     public void SetupSkillSlot(Skill_DataSO selectedSkill)
