@@ -333,7 +333,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407043c612e3d48c7a8320b448cfe83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityRef: {fileID: 0}
 --- !u!1 &4120727302482641678
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,7 +427,7 @@ MonoBehaviour:
   wallCheckDistance: 0.36
   primaryGroundCheck: {fileID: 1704511922261226276}
   primaryWallCheck: {fileID: 5008659392427905300}
-  secondaryWallCheck: {fileID: 0}
+  secondaryWallCheck: {fileID: 9171378410050631839}
   battleMoveSpeed: 3
   attackDistance: 2
   attackDelay: 1.1

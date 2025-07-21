@@ -18,7 +18,7 @@ public class Enemy_BattleState : EnemyState
     {
         base.Enter();
 
-        Debug.Log("Enemy enters Battle State!");
+        Debug.Log($"Enemy {enemy.gameObject.name} enters Battle State!");
 
         UpdateBattlePursuitTimer();
 
@@ -46,7 +46,7 @@ public class Enemy_BattleState : EnemyState
         // If the player is unreachable, we want the pursuit timer to eventually time-out,
         // otherwise the player will just be standing in an "aggressively idle" state, on
         // the ledge. We want the enemy to eventually go back into its Patrol state.
-        if (enemy.PlayerDetected() && enemy.BelowLedgeDetected)
+        if (enemy.PlayerDetected() && enemy.CanAggressivelyPursuePlayer())
         {
             UpdateTargetIfNeeded();
             UpdateBattlePursuitTimer();
@@ -72,9 +72,8 @@ public class Enemy_BattleState : EnemyState
         }
         else
         {
-            if (enemy.BelowLedgeDetected
-                // Prevent enemy from continuously running into a wall.
-                && !enemy.WallDetected)
+            // Prevent enemy from continuously running into a wall.
+            if (enemy.CanAggressivelyPursuePlayer())
             {
                 // Pursue the player (aggro).
                 enemy.SetVelocity(enemy.GetBattleMoveSpeed() * DirectionToPlayer(), rb.linearVelocity.y);

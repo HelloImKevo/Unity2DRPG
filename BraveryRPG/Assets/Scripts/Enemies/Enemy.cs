@@ -97,6 +97,7 @@ public class Enemy : Entity
 
     protected override void HandleCollisionDetection()
     {
+        // NOTE: The base Entity class uses nearly-identical boolean condition checks.
         base.HandleCollisionDetection();
 
         // Detect if there is a nearby ledge that is safe for the enemy to fall onto,
@@ -111,6 +112,14 @@ public class Enemy : Entity
             BelowLedgeDetected = BelowLedgeDetected
                     || Physics2D.Raycast(secondaryFallCheck.position, Vector2.down, fallCheckDistance, whatIsGround);
         }
+    }
+
+    /// <summary>Must be called after <see cref="HandleCollisionDetection"/>.</summary>
+    public virtual bool CanAggressivelyPursuePlayer()
+    {
+        // Enemies can pursue the player as long as there is a below ledge (so they don't blindly
+        // walk off a cliff and fall to their death) and there isn't a wall obstructing them.
+        return BelowLedgeDetected && !WallDetected;
     }
 
     protected override IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)

@@ -51,6 +51,8 @@ public class Entity : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        // Collision detections should be calculated before instructing the
+        // FSM mechanism to evaluate state transitions.
         HandleCollisionDetection();
         stateMachine.UpdateActiveState();
     }
@@ -70,6 +72,10 @@ public class Entity : MonoBehaviour
         // Override in subclasses as needed.
     }
 
+    /// <summary>
+    /// Slow down the Entity with a Time-Stop / Time-Dilation effect.
+    /// Alters the enemy move, attack and animation speeds.
+    /// </summary>
     public void SlowDownEntity(float duration, float slowMultiplier, bool canOverrideSlowEffect = false)
     {
         if (slowDownCoroutine != null)
@@ -148,7 +154,7 @@ public class Entity : MonoBehaviour
         if (secondaryWallCheck != null)
         {
             WallDetected = WallDetected
-                    && Physics2D.Raycast(secondaryWallCheck.position, Vector2.right * FacingDir, wallCheckDistance, whatIsGround);
+                    || Physics2D.Raycast(secondaryWallCheck.position, Vector2.right * FacingDir, wallCheckDistance, whatIsGround);
         }
     }
 
