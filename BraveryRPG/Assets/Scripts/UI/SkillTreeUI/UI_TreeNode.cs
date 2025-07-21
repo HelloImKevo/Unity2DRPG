@@ -52,7 +52,10 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     /// <summary>Initializes component references and sets the initial icon color for the skill node.</summary>
     void Start()
     {
-        UpdateIconColor(GetColorByHex(lockedColorHex));
+        if (!isUnlocked)
+        {
+            UpdateIconColor(GetColorByHex(lockedColorHex));
+        }
         UnlockDefaultSkill();
     }
 

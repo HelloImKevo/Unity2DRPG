@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,9 @@ using UnityEngine;
 public class UI_SkillTree : MonoBehaviour
 {
     [SerializeField] private int skillPoints;
+
+    [Tooltip("TextView that displays the number of Skill Points available to the Player.")]
+    [SerializeField] private TextMeshProUGUI skillPointsText;
     [Tooltip("The top-most node in the tree hierarchy. Required for the UpdateAllConnections context menu action.")]
     [SerializeField] private UI_TreeConnectHandler[] parentNodes;
 
@@ -18,6 +22,12 @@ public class UI_SkillTree : MonoBehaviour
     private void Start()
     {
         UpdateAllConnections();
+        UpdateSkillPointsUI();
+    }
+
+    private void UpdateSkillPointsUI()
+    {
+        skillPointsText.text = skillPoints.ToString();
     }
 
     public void UnlockDefaultSkills()
@@ -61,13 +71,21 @@ public class UI_SkillTree : MonoBehaviour
     /// Removes skill points from the player's available pool.
     /// </summary>
     /// <param name="cost">The number of skill points to remove.</param>
-    public void RemoveSkillPoints(int cost) => skillPoints -= cost;
+    public void RemoveSkillPoints(int cost)
+    {
+        skillPoints -= cost;
+        UpdateSkillPointsUI();
+    }
 
     /// <summary>
     /// Adds skill points to the player's available pool.
     /// </summary>
     /// <param name="points">The number of skill points to add.</param>
-    public void AddSkillPoints(int points) => skillPoints += points;
+    public void AddSkillPoints(int points)
+    {
+        skillPoints += points;
+        UpdateSkillPointsUI();
+    }
 
     /// <summary>
     /// Use to rebuild the positions and sorting of all nodes in the skill tree.
