@@ -6,6 +6,9 @@ public class Inventory_Player : Inventory_Base
 {
     public event Action<int> OnQuickSlotUsed;
 
+    [Tooltip("The 'ITEM DATABASE' scriptable object containing all item data unity objects.\n\nSee ItemList_DataSO.CollectItemsData() for more details.")]
+    [SerializeField] private ItemList_DataSO itemDatabase;
+
     public Inventory_Storage storage { get; private set; }
 
     [Tooltip("Equipment that the player is currently wearing.")]
@@ -138,76 +141,82 @@ public class Inventory_Player : Inventory_Base
     public override void SaveData(ref GameData data)
     {
         data.gold = gold;
-        // data.inventory.Clear();
-        // data.equippedItems.Clear();
+        data.inventory.Clear();
+        data.equippedItems.Clear();
 
-        // foreach (var item in itemList)
-        // {
-        //     if (item != null && item.itemData != null)
-        //     {
-        //         string saveId = item.itemData.saveId;
+        // Save items in the player's inventory.
+        foreach (var item in itemList)
+        {
+            if (item != null && item.itemData != null)
+            {
+                string saveId = item.itemData.saveId;
 
-        //         if (!data.inventory.ContainsKey(saveId))
-        //         {
-        //             data.inventory[saveId] = 0;
-        //         }
+                if (!data.inventory.ContainsKey(saveId))
+                {
+                    // Assign a quantity (stack) of zero.
+                    data.inventory[saveId] = 0;
+                }
 
-        //         data.inventory[saveId] += item.stackSize;
-        //     }
-        // }
+                data.inventory[saveId] += item.stackSize;
+            }
+        }
 
-        // foreach (var slot in equipmentList)
-        // {
-        //     if (slot.HasItem())
-        //     {
-        //         data.equippedItems[slot.equippedItem.itemData.saveId] = slot.slotType;
-        //     }
-        // }
+        // Save equipped items.
+        foreach (var slot in equipmentList)
+        {
+            if (slot.HasItem())
+            {
+                data.equippedItems[slot.equippedItem.itemData.saveId] = slot.slotType;
+            }
+        }
     }
 
     public override void LoadData(GameData data)
     {
         gold = data.gold;
 
-        // foreach (var entry in data.inventory)
-        // {
-        //     string saveId = entry.Key;
-        //     int stackSize = entry.Value;
+        foreach (var entry in data.inventory)
+        {
+            string saveId = entry.Key;
+            int stackSize = entry.Value;
 
-        //     Item_DataSO itemData = itemDataBase.GetItemData(saveId);
+            Item_DataSO itemData = itemDatabase.GetItemData(saveId);
 
-        //     if (itemData == null)
-        //     {
-        //         Debug.LogWarning("Item not found: " + saveId);
-        //         continue;
-        //     }
+            if (itemData == null)
+            {
+                Debug.LogWarning($"{GetType().Name}.LoadData() -> Item Database" +
+                                 $" may be outdated! Item not found: {saveId}");
+                continue;
+            }
 
-        //     Inventory_Item itemToLoad = new Inventory_Item(itemData);
+            // This is necessary to respect stack size rules, otherwise the Load Data
+            // system would permit equipment to be stacked, and potions to be stacked
+            // over the limit (like 500 potions in one stack).
+            for (int i = 0; i < stackSize; i++)
+            {
+                Inventory_Item itemToLoad = new(itemData);
+                AddItem(itemToLoad);
+            }
+        }
 
-        //     for (int i = 0; i < stackSize; i++)
-        //     {
-        //         AddItem(itemToLoad);
-        //     }
-        // }
+        foreach (var entry in data.equippedItems)
+        {
+            string saveId = entry.Key;
+            ItemType equipemntSlotType = entry.Value;
 
-        // foreach (var entry in data.equippedItems)
-        // {
-        //     string saveId = entry.Key;
-        //     ItemType equipemntSlotType = entry.Value;
+            Item_DataSO itemData = itemDatabase.GetItemData(saveId);
+            Inventory_Item itemToLoad = new(itemData);
 
-        //     Item_DataSO itemData = itemDataBase.GetItemData(saveId);
-        //     Inventory_Item itemToLoad = new Inventory_Item(itemData);
+            var slot = equipmentList.Find(
+                slot => slot.slotType == equipemntSlotType && !slot.HasItem()
+            );
 
-        //     var slot = equipmentList.Find(
-        //         slot => slot.slotType == equipemntSlotType && !slot.HasItem()
-        //     );
+            slot.equippedItem = itemToLoad;
+            slot.equippedItem.AddModifiers(player.Stats);
+            slot.equippedItem.AddItemEffect(player);
+        }
 
-        //     slot.equippedItem = itemToLoad;
-        //     slot.equippedItem.AddModifiers(player.Stats);
-        //     slot.equippedItem.AddItemEffect(player);
-        // }
-
-        // TriggerUpdateUI();
+        TriggerUpdateUI();
     }
 
     #endregion

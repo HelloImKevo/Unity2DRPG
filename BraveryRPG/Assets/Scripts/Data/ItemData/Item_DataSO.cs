@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -10,7 +11,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "RPG Setup/Item Data/Material Item", fileName = "Material Data - ")]
 public class Item_DataSO : ScriptableObject
 {
-    // public string saveId { get; private set; }
+    public string saveId { get; private set; }
 
     [Header("Item Details")]
     public string itemName;
@@ -43,10 +44,11 @@ public class Item_DataSO : ScriptableObject
     {
         dropChance = GetDropChance();
 
-        // #if UNITY_EDITOR
-        //         string path = AssetDatabase.GetAssetPath(this);
-        //         saveId = AssetDatabase.AssetPathToGUID(path);
-        // #endif
+        // The below code will only execute in the Unity Editor.
+#if UNITY_EDITOR
+        string path = AssetDatabase.GetAssetPath(this);
+        saveId = AssetDatabase.AssetPathToGUID(path);
+#endif
     }
 
     public float GetDropChance()
