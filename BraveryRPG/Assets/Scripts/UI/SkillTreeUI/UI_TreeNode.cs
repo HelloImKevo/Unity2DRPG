@@ -238,6 +238,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         // Move the tooltip way off-screen.
         ui.skillTooltip.HideTooltip();
+        ui.skillTooltip.StopLockedSkillBlinkEffect();
 
         if (CanBeUnlocked())
         {

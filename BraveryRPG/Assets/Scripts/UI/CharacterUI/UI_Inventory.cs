@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class UI_Inventory : MonoBehaviour
@@ -9,6 +10,9 @@ public class UI_Inventory : MonoBehaviour
 
     [Tooltip("The UI_Equipment object containing all of the UI_EquipSlot children.")]
     [SerializeField] private UI_EquipSlotParent uiEquipSlotsParent;
+
+    [Tooltip("TextView that displays how much Gold the Player possesses.")]
+    [SerializeField] private TextMeshProUGUI goldText;
 
     private void Awake()
     {
@@ -22,5 +26,6 @@ public class UI_Inventory : MonoBehaviour
     {
         inventorySlotsParent.UpdateSlots(inventory.itemList);
         uiEquipSlotsParent.UpdateEquipmentSlots(inventory.equipmentList);
+        goldText.text = inventory.gold.ToString("N0") + "g.";
     }
 }
