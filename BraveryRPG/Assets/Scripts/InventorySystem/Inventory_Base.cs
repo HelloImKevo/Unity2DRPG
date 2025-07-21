@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory_Base : MonoBehaviour
+public class Inventory_Base : MonoBehaviour, ISaveable
 {
     public event Action OnInventoryChange;
 
@@ -107,11 +107,17 @@ public class Inventory_Base : MonoBehaviour
 
     public void TriggerUpdateUI() => OnInventoryChange?.Invoke();
 
-    // public virtual void LoadData(GameData data)
-    // {
-    // }
+    #region ISaveable
 
-    // public virtual void SaveData(ref GameData data)
-    // {
-    // }
+    public virtual void LoadData(GameData data)
+    {
+        // Override in subclasses to load game data.
+    }
+
+    public virtual void SaveData(ref GameData data)
+    {
+        // Override in subclasses to save game data.
+    }
+
+    #endregion
 }

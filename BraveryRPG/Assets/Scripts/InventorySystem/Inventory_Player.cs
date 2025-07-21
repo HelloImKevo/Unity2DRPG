@@ -133,78 +133,82 @@ public class Inventory_Player : Inventory_Base
         AddItem(itemToUnequip);
     }
 
-    // public override void SaveData(ref GameData data)
-    // {
-    //     data.gold = gold;
-    //     data.inventory.Clear();
-    //     data.equipedItems.Clear();
+    #region ISaveable
 
-    //     foreach (var item in itemList)
-    //     {
-    //         if (item != null && item.itemData != null)
-    //         {
-    //             string saveId = item.itemData.saveId;
+    public override void SaveData(ref GameData data)
+    {
+        data.gold = gold;
+        // data.inventory.Clear();
+        // data.equippedItems.Clear();
 
-    //             if (!data.inventory.ContainsKey(saveId))
-    //             {
-    //                 data.inventory[saveId] = 0;
-    //             }
+        // foreach (var item in itemList)
+        // {
+        //     if (item != null && item.itemData != null)
+        //     {
+        //         string saveId = item.itemData.saveId;
 
-    //             data.inventory[saveId] += item.stackSize;
-    //         }
-    //     }
+        //         if (!data.inventory.ContainsKey(saveId))
+        //         {
+        //             data.inventory[saveId] = 0;
+        //         }
 
-    //     foreach (var slot in equipList)
-    //     {
-    //         if (slot.HasItem())
-    //         {
-    //             data.equipedItems[slot.equipedItem.itemData.saveId] = slot.slotType;
-    //         }
-    //     }
-    // }
+        //         data.inventory[saveId] += item.stackSize;
+        //     }
+        // }
 
-    // public override void LoadData(GameData data)
-    // {
-    //     gold = data.gold;
+        // foreach (var slot in equipmentList)
+        // {
+        //     if (slot.HasItem())
+        //     {
+        //         data.equippedItems[slot.equippedItem.itemData.saveId] = slot.slotType;
+        //     }
+        // }
+    }
 
-    //     foreach (var entry in data.inventory)
-    //     {
-    //         string saveId = entry.Key;
-    //         int stackSize = entry.Value;
+    public override void LoadData(GameData data)
+    {
+        gold = data.gold;
 
-    //         ItemDataSO itemData = itemDataBase.GetItemData(saveId);
+        // foreach (var entry in data.inventory)
+        // {
+        //     string saveId = entry.Key;
+        //     int stackSize = entry.Value;
 
-    //         if (itemData == null)
-    //         {
-    //             Debug.LogWarning("Item not found: " + saveId);
-    //             continue;
-    //         }
+        //     Item_DataSO itemData = itemDataBase.GetItemData(saveId);
 
-    //         Inventory_Item itemToLoad = new Inventory_Item(itemData);
+        //     if (itemData == null)
+        //     {
+        //         Debug.LogWarning("Item not found: " + saveId);
+        //         continue;
+        //     }
 
-    //         for (int i = 0; i < stackSize; i++)
-    //         {
-    //             AddItem(itemToLoad);
-    //         }
-    //     }
+        //     Inventory_Item itemToLoad = new Inventory_Item(itemData);
 
-    //     foreach (var entry in data.equipedItems)
-    //     {
-    //         string saveId = entry.Key;
-    //         ItemType equipemntSlotType = entry.Value;
+        //     for (int i = 0; i < stackSize; i++)
+        //     {
+        //         AddItem(itemToLoad);
+        //     }
+        // }
 
-    //         Item_DataSO itemData = itemDataBase.GetItemData(saveId);
-    //         Inventory_Item itemToLoad = new Inventory_Item(itemData);
+        // foreach (var entry in data.equippedItems)
+        // {
+        //     string saveId = entry.Key;
+        //     ItemType equipemntSlotType = entry.Value;
 
-    //         var slot = equipmentList.Find(
-    //             slot => slot.slotType == equipemntSlotType && !slot.HasItem()
-    //         );
+        //     Item_DataSO itemData = itemDataBase.GetItemData(saveId);
+        //     Inventory_Item itemToLoad = new Inventory_Item(itemData);
 
-    //         slot.equippedItem = itemToLoad;
-    //         slot.equippedItem.AddModifiers(player.Stats);
-    //         slot.equippedItem.AddItemEffect(player);
-    //     }
+        //     var slot = equipmentList.Find(
+        //         slot => slot.slotType == equipemntSlotType && !slot.HasItem()
+        //     );
 
-    //     TriggerUpdateUI();
-    // }
+        //     slot.equippedItem = itemToLoad;
+        //     slot.equippedItem.AddModifiers(player.Stats);
+        //     slot.equippedItem.AddItemEffect(player);
+        // }
+
+        // TriggerUpdateUI();
+    }
+
+    #endregion
 }
