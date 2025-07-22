@@ -11,6 +11,10 @@ public class Inventory_Base : MonoBehaviour, ISaveable
     public int maxInventorySize = 10;
     public List<Inventory_Item> itemList = new();
 
+    [Header("ITEM DATABASE")]
+    [Tooltip("The 'ITEM DATABASE' scriptable object containing all item data unity objects.\n\nSee ItemList_DataSO.CollectItemsData() for more details.")]
+    [SerializeField] protected ItemList_DataSO itemDatabase;
+
     protected virtual void Awake()
     {
         player = GetComponent<Player>();

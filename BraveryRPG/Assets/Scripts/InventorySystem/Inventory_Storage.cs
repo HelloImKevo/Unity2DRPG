@@ -204,94 +204,105 @@ public class Inventory_Storage : Inventory_Base
         TriggerUpdateUI();
     }
 
-    #region Save & Load Data
+    #region ISaveable
 
-    // public override void SaveData(ref GameData data)
-    // {
-    //     base.SaveData(ref data);
+    // TODO: This logic is quite similar to the Inventory_Player.cs - we can
+    // revisit this and consolidate the duplicate behavior to adhere to DRY.
+    public override void SaveData(ref GameData data)
+    {
+        base.SaveData(ref data);
 
-    //     data.storageItems.Clear();
+        data.storageItems.Clear();
 
-    //     foreach (var item in itemList)
-    //     {
-    //         if (item != null && item.itemData != null)
-    //         {
-    //             string saveId = item.itemData.saveId;
+        // Save items in persistent "player stash" storage.
+        foreach (var item in itemList)
+        {
+            if (item != null && item.itemData != null)
+            {
+                string saveId = item.itemData.saveId;
 
-    //             if (!data.storageItems.ContainsKey(saveId))
-    //             {
-    //                 data.storageItems[saveId] = 0;
-    //             }
+                if (!data.storageItems.ContainsKey(saveId))
+                {
+                    // Assign a quantity (stack) of zero.
+                    data.storageItems[saveId] = 0;
+                }
 
-    //             data.storageItems[saveId] += item.stackSize;
-    //         }
-    //     }
+                data.storageItems[saveId] += item.stackSize;
+            }
+        }
 
-    //     data.storageMaterials.Clear();
+        data.storageMaterials.Clear();
 
-    //     foreach (var item in materialStash)
-    //     {
-    //         if (item != null && item.itemData != null)
-    //         {
-    //             string saveId = item.itemData.saveId;
+        // Save items in the separate materials stash.
+        foreach (var item in materialStash)
+        {
+            if (item != null && item.itemData != null)
+            {
+                string saveId = item.itemData.saveId;
 
-    //             if (!data.storageMaterials.ContainsKey(saveId))
-    //             {
-    //                 data.storageMaterials[saveId] = 0;
-    //             }
+                if (!data.storageMaterials.ContainsKey(saveId))
+                {
+                    // Assign a quantity (stack) of zero.
+                    data.storageMaterials[saveId] = 0;
+                }
 
-    //             data.storageMaterials[saveId] += item.stackSize;
-    //         }
-    //     }
-    // }
+                data.storageMaterials[saveId] += item.stackSize;
+            }
+        }
+    }
 
-    // public override void LoadData(GameData data)
-    // {
-    //     itemList.Clear();
-    //     materialStash.Clear();
+    public override void LoadData(GameData data)
+    {
+        base.LoadData(data);
 
-    //     foreach (var entry in data.storageItems)
-    //     {
-    //         string saveId = entry.Key;
-    //         int stackSize = entry.Value;
+        itemList.Clear();
+        materialStash.Clear();
 
-    //         Item_DataSO itemData = itemDataBase.GetItemData(saveId);
+        foreach (var entry in data.storageItems)
+        {
+            string saveId = entry.Key;
+            int stackSize = entry.Value;
 
-    //         if (itemData == null)
-    //         {
-    //             Debug.LogWarning("Item not found in Storage Items: " + saveId);
-    //             continue;
-    //         }
+            Item_DataSO itemData = itemDatabase.GetItemData(saveId);
 
-    //         Inventory_Item itemToLoad = new Inventory_Item(itemData);
+            if (itemData == null)
+            {
+                Debug.LogWarning($"{GetType().Name}.LoadData() -> Item Database" +
+                                 $" may be outdated! Item not found in Storage: {saveId}");
+                continue;
+            }
 
-    //         for (int i = 0; i < stackSize; i++)
-    //         {
-    //             AddItem(itemToLoad);
-    //         }
-    //     }
+            for (int i = 0; i < stackSize; i++)
+            {
+                Inventory_Item itemToLoad = new(itemData);
+                AddItem(itemToLoad);
+            }
+        }
 
-    //     foreach (var entry in data.storageMaterials)
-    //     {
-    //         string saveId = entry.Key;
-    //         int stackSize = entry.Value;
+        foreach (var entry in data.storageMaterials)
+        {
+            string saveId = entry.Key;
+            int stackSize = entry.Value;
 
-    //         ItemDataSO itemData = itemDataBase.GetItemData(saveId);
+            Item_DataSO itemData = itemDatabase.GetItemData(saveId);
 
-    //         if (itemData == null)
-    //         {
-    //             Debug.LogWarning("Item not found in Storage Material: " + saveId);
-    //             continue;
-    //         }
+            if (itemData == null)
+            {
+                Debug.LogWarning($"{GetType().Name}.LoadData() -> Item Database" +
+                                 $" may be outdated! Item not found in Materials Stash: {saveId}");
+                continue;
+            }
 
-    //         Inventory_Item itemToLoad = new Inventory_Item(itemData);
-
-    //         for (int i = 0; i < stackSize; i++)
-    //         {
-    //             AddMaterialToStash(itemToLoad);
-    //         }
-    //     }
-    // }
+            // This is necessary to respect stack size rules, otherwise the Load Data
+            // system would permit equipment to be stacked, and potions to be stacked
+            // over the limit (like 500 potions in one stack).
+            for (int i = 0; i < stackSize; i++)
+            {
+                Inventory_Item itemToLoad = new(itemData);
+                AddMaterialToStash(itemToLoad);
+            }
+        }
+    }
 
     #endregion
 }

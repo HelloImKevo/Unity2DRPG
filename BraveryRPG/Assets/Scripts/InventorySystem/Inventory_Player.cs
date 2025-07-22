@@ -6,9 +6,6 @@ public class Inventory_Player : Inventory_Base
 {
     public event Action<int> OnQuickSlotUsed;
 
-    [Tooltip("The 'ITEM DATABASE' scriptable object containing all item data unity objects.\n\nSee ItemList_DataSO.CollectItemsData() for more details.")]
-    [SerializeField] private ItemList_DataSO itemDatabase;
-
     public Inventory_Storage storage { get; private set; }
 
     [Tooltip("Equipment that the player is currently wearing.")]
@@ -138,8 +135,12 @@ public class Inventory_Player : Inventory_Base
 
     #region ISaveable
 
+    // TODO: This logic is quite similar to the Inventory_Storage.cs - we can
+    // revisit this and consolidate the duplicate behavior to adhere to DRY.
     public override void SaveData(ref GameData data)
     {
+        base.SaveData(ref data);
+
         data.gold = gold;
         data.inventory.Clear();
         data.equippedItems.Clear();
@@ -173,6 +174,8 @@ public class Inventory_Player : Inventory_Base
 
     public override void LoadData(GameData data)
     {
+        base.LoadData(data);
+
         gold = data.gold;
 
         foreach (var entry in data.inventory)
@@ -201,6 +204,8 @@ public class Inventory_Player : Inventory_Base
 
         foreach (var entry in data.equippedItems)
         {
+            // Bugfix: Prevent Item Duplication method by utilizing an Item GUID,
+            // and ensuring a trinket can only be assigned to one trinket slot.
             string saveId = entry.Key;
             ItemType equipemntSlotType = entry.Value;
 
