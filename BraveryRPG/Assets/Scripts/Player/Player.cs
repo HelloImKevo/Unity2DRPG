@@ -5,6 +5,8 @@ using UnityEngine;
 public class Player : Entity
 {
     public static event Action OnPlayerDeath;
+    // TODO: This is not a good practice, especially if we need to add multiplayer to the game.
+    public static Player instance;
 
     public UI UserInterface { get; private set; }
 
@@ -69,6 +71,7 @@ public class Player : Entity
     protected override void Awake()
     {
         base.Awake();
+        instance = this;
 
         // This performs some heavy lifting - never do this in Update()
         UserInterface = FindFirstObjectByType<UI>();

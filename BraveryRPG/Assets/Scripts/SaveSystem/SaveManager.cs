@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SaveManager : MonoBehaviour
 {
+    // Expose the static SaveManager instance to be available as a Singleton from any script.
     public static SaveManager instance;
 
     private FileDataHandler dataHandler;
