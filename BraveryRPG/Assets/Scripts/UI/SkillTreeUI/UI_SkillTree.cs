@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ using UnityEngine;
 /// Manages the skill tree system including skill point allocation, validation, and tree operations.
 /// Controls the overall state and behavior of the skill progression system.
 /// </summary>
-public class UI_SkillTree : MonoBehaviour
+public class UI_SkillTree : MonoBehaviour, ISaveable
 {
     [SerializeField] private int skillPoints;
 
@@ -98,4 +99,56 @@ public class UI_SkillTree : MonoBehaviour
             node.UpdateAllConnections();
         }
     }
+
+    #region ISaveable
+
+    public void SaveData(ref GameData data)
+    {
+        data.skillPoints = skillPoints;
+        data.skillTreeUI.Clear();
+        data.skillUpgrades.Clear();
+
+        foreach (var node in allTreeNodes)
+        {
+            string skillName = node.skillData.displayName;
+            data.skillTreeUI[skillName] = node.isUnlocked;
+        }
+
+        foreach (var skill in SkillManager.allSkills)
+        {
+            data.skillUpgrades[skill.GetSkillType()] = skill.GetUpgrade();
+        }
+    }
+
+    public void LoadData(GameData data)
+    {
+        skillPoints = data.skillPoints;
+
+        foreach (var node in allTreeNodes)
+        {
+            string skillName = node.skillData.displayName;
+
+            if (data.skillTreeUI.TryGetValue(skillName, out bool unlocked) && unlocked)
+            {
+                node.UnlockFromSaveSystem();
+            }
+        }
+
+        foreach (var skill in SkillManager.allSkills)
+        {
+            if (data.skillUpgrades.TryGetValue(skill.GetSkillType(), out SkillUpgradeType upgradeType))
+            {
+                var upgradeNode = allTreeNodes.FirstOrDefault(
+                    node => node.skillData.upgradeData.upgradeType == upgradeType
+                );
+
+                if (upgradeNode != null)
+                {
+                    skill.SetSkillUpgrade(upgradeNode.skillData);
+                }
+            }
+        }
+    }
+
+    #endregion
 }

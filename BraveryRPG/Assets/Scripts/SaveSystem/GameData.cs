@@ -14,9 +14,9 @@ public class GameData
 
     public SerializableDictionary<string, ItemType> equippedItems; // itemSaveId -> slot for item
 
-    // public int skillPoints;
-    // public SerializableDictionary<string, bool> skillTreeUI; // skill name -> unlock status
-    // public SerializableDictionary<SkillType, SkillUpgradeType> skillUpgrades; // skill type -> upgrade type
+    public int skillPoints;
+    public SerializableDictionary<string, bool> skillTreeUI; // skill name -> unlock status
+    public SerializableDictionary<SkillType, SkillUpgradeType> skillUpgrades; // skill type -> upgrade type
 
     // public SerializableDictionary<string, bool> unlockedCheckpoints; // checkpoint id -> unlocked status
     // public SerializableDictionary<string, Vector3> inScenePortals; // scene name > portal position
@@ -35,8 +35,8 @@ public class GameData
 
         equippedItems = new SerializableDictionary<string, ItemType>();
 
-        // skillTreeUI = new SerializableDictionary<string, bool>();
-        // skillUpgrades = new SerializableDictionary<SkillType, SkillUpgradeType>();
+        skillTreeUI = new SerializableDictionary<string, bool>();
+        skillUpgrades = new SerializableDictionary<SkillType, SkillUpgradeType>();
 
         // unlockedCheckpoints = new SerializableDictionary<string, bool>();
         // inScenePortals = new SerializableDictionary<string, Vector3>();
