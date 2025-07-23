@@ -14,7 +14,7 @@ public class Player : Entity
 
     public Player_VFX Vfx { get; private set; }
     public Player_Stats Stats { get; private set; }
-    public Entity_Health Health { get; private set; }
+    public Player_Health Health { get; private set; }
     public Player_SkillManager SkillManager { get; private set; }
     public Entity_StatusHandler StatusHandler { get; private set; }
     public Player_Combat Combat { get; private set; }
@@ -81,7 +81,7 @@ public class Player : Entity
 
         Vfx = GetComponent<Player_VFX>();
         Stats = GetComponent<Player_Stats>();
-        Health = GetComponent<Entity_Health>();
+        Health = GetComponent<Player_Health>();
         SkillManager = GetComponent<Player_SkillManager>();
         StatusHandler = GetComponent<Entity_StatusHandler>();
         Combat = GetComponent<Player_Combat>();

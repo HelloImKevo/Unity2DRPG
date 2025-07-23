@@ -50,7 +50,7 @@ public class Inventory_Base : MonoBehaviour, ISaveable
 
     public void AddItem(Inventory_Item itemToAdd)
     {
-        Debug.Log($"Inventory_Base.AddItem() -> Item added to {gameObject.name}: {itemToAdd.itemData.itemName}");
+        // Debug.Log($"Inventory_Base.AddItem() -> Item added to {gameObject.name}: {itemToAdd.itemData.itemName}");
 
         Inventory_Item existingStackable = FindStackableWithSpace(itemToAdd);
 

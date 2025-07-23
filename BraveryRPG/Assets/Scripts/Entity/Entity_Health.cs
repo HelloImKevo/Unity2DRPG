@@ -341,7 +341,11 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         if (healthBar == null || !healthBar.gameObject.activeSelf) return;
 
-        if (healthBar == null || entityStats == null) return;
+        if (healthBar.slider == null)
+        {
+            Debug.LogWarning($"{gameObject.name}.Entity_Health -> healthBar.slider is null due to Component Lifecycle Initialization Sequence!");
+            return;
+        }
 
         healthBar.slider.value = currentHealth / entityStats.GetMaxHealth();
     }

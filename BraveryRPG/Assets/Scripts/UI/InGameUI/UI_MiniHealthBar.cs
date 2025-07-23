@@ -11,6 +11,11 @@ public class UI_MiniHealthBar : MonoBehaviour
         entityRef = GetComponentInParent<Entity>();
         slider = GetComponentInChildren<Slider>();
 
+        if (slider == null)
+        {
+            Debug.LogWarning($"{gameObject.name} -> UI_MiniHealthBar.slider is null!");
+        }
+
         // TODO: The health bar is scaling to match the parent scale,
         //  so for enemies, it will be 130% size. Can also explore
         //  using the [ExecuteInEditMode] decorator.
