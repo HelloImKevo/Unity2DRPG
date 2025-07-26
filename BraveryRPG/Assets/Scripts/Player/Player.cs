@@ -110,7 +110,11 @@ public class Player : Entity
     }
 
     // TODO: Add some kind of teleportation VFX like a glow or puff of smoke.
-    public void TeleportPlayer(Vector3 position) => transform.position = position;
+    public void TeleportPlayer(Vector3 position)
+    {
+        Debug.Log($"{GetType().Name}.TeleportPlayer() -> Teleporting to Position = {position}");
+        transform.position = position;
+    }
 
     // TODO: Implement the same pattern used to slow down the enemy - requires a lot of refactor.
     protected override IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)

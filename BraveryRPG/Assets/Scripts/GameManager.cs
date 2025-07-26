@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour, ISaveable
         DontDestroyOnLoad(gameObject);
     }
 
-    // public void SetLastPlayerPosition(Vector3 position ) => lastPlayerPosition = position;
+    public void SetLastPlayerPosition(Vector3 position) => lastPlayerPosition = position;
 
     public void ContinuePlay()
     {
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour, ISaveable
     public void RestartScene()
     {
         string sceneName = SceneManager.GetActiveScene().name;
+        Debug.Log($"{GetType().Name}.RestartScene() -> Restarting '{sceneName}'");
         ChangeScene(sceneName, RespawnType.NonSpecific);
     }
 
@@ -53,9 +54,14 @@ public class GameManager : MonoBehaviour, ISaveable
         // UI_FadeScreen fadeScreen = FindFadeScreenUI();
         // fadeScreen.DoFadeOut(); // transperent > black
         // yield return fadeScreen.fadeEffectCo;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         SceneManager.LoadScene(sceneName);
+
+        // Note: If we don't wait long enough for the scene to load, the  player will be
+        // teleported first, and then the default Player-In-Scene position will be loaded,
+        // and the Player will snap-back to the wrong "default position".
+        yield return new WaitForSeconds(1f);
 
         // dataLoaded = false; // data loaded becomes true when you load game from save manager
         // yield return null;
@@ -72,8 +78,9 @@ public class GameManager : MonoBehaviour, ISaveable
 
         if (player == null) yield break;
 
-        // Vector3 position = GetNewPlayerPosition(respawnType);
-        Vector3 position = GetWaypointPosition(respawnType);
+        Vector3 position = GetNewPlayerPosition(respawnType);
+
+        Debug.Log($"{GetType().Name}.ChangeSceneCo() -> New Player Position = {position}");
 
         if (position != Vector3.zero)
         {
@@ -93,45 +100,53 @@ public class GameManager : MonoBehaviour, ISaveable
     //     }
     // }
 
-    // private Vector3 GetNewPlayerPosition(RespawnType type)
-    // {
-    //     if (type == RespawnType.Portal)
-    //     {
-    //         Object_Portal portal = Object_Portal.instance;
+    private Vector3 GetNewPlayerPosition(RespawnType type)
+    {
+        // if (type == RespawnType.Portal)
+        // {
+        //     Object_Portal portal = Object_Portal.instance;
 
-    //         Vector3 position = portal.GetPosition();
+        //     Vector3 position = portal.GetPosition();
 
-    //         portal.SetTrigger(false);
-    //         portal.DisableIfNeeded();
+        //     portal.SetTrigger(false);
+        //     portal.DisableIfNeeded();
 
-    //         return position;
-    //     }
+        //     return position;
+        // }
 
-    //     if (type == RespawnType.NonSpecific)
-    //     {
-    //         var data = SaveManager.instance.GetGameData();
-    //         var checkpoints = FindObjectsByType<Object_Checkpoint>(FindObjectsSortMode.None);
-    //         var unlockedCheckpoints = checkpoints
-    //             .Where(cp => data.unlockedCheckpoints.TryGetValue(cp.GetCheckpointId(), out bool unlocked) && unlocked)
-    //             .Select(cp => cp.GetPosition())
-    //             .ToList();
+        // Prevent player from respawning close to the Exit waypoint
+        // (so the Waypoint system cannot be easily exploited).
+        if (RespawnType.NonSpecific == type)
+        {
+            var data = SaveManager.instance.GetGameData();
+            var checkpoints = FindObjectsByType<Object_Checkpoint>(FindObjectsSortMode.None);
+            var unlockedCheckpoints = checkpoints
+                .Where(cp => data.unlockedCheckpoints.TryGetValue(
+                    cp.GetCheckpointId(), out bool unlocked) && unlocked
+                )
+                .Select(cp => cp.GetPosition())
+                .ToList();
 
-    //         var enterWaypoints = FindObjectsByType<Object_Waypoint>(FindObjectsSortMode.None)
-    //             .Where(wp => wp.GetWaypointType() == RespawnType.Enter)
-    //             .Select(wp => wp.GetPositionAndSetTriggerFalse())
-    //             .ToList();
+            var enterWaypoints = FindObjectsByType<Object_Waypoint>(FindObjectsSortMode.None)
+                .Where(wp => wp.GetWaypointType() == RespawnType.Enter)
+                // Deactivate the Entrance Waypoints, so that we don't immediately trigger
+                // the teleport mechanism when respawning the player on the Waypoint.
+                .Select(wp => wp.GetPositionAndSetTriggerFalse())
+                .ToList();
 
-    //         var selectedPositions = unlockedCheckpoints.Concat(enterWaypoints).ToList(); // combine two lists into one
+            // Combine two lists into one.
+            var selectedPositions = unlockedCheckpoints.Concat(enterWaypoints).ToList();
 
-    //         if (selectedPositions.Count == 0) return Vector3.zero;
+            if (selectedPositions.Count == 0) return Vector3.zero;
 
-    //         return selectedPositions.
-    //             OrderBy(position => Vector3.Distance(position, lastPlayerPosition)) // arrange form lowest to highest by comparing distance
-    //             .First();
-    //     }
+            // Arrange from lowest to highest by comparing distance.
+            return selectedPositions.
+                OrderBy(position => Vector3.Distance(position, lastPlayerPosition))
+                .First();
+        }
 
-    //     return GetWaypointPosition(type);
-    // }
+        return GetWaypointPosition(type);
+    }
 
     private Vector3 GetWaypointPosition(RespawnType type)
     {

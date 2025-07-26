@@ -23,7 +23,7 @@ public class Player_Health : Entity_Health
         base.Die();
 
         // player.UserInterface.OpenDeathScreenUI();
-        // GameManager.instance.SetLastPlayerPosition(transform.position);
-        // GameManager.instance.RestartScene();
+        GameManager.instance.SetLastPlayerPosition(transform.position);
+        GameManager.instance.RestartScene();
     }
 }

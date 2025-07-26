@@ -71,6 +71,16 @@ public class SaveManager : MonoBehaviour
 
     public GameData GetGameData() => gameData;
 
+    private List<ISaveable> FindISaveables()
+    {
+        return
+            FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .OfType<ISaveable>()
+            .ToList();
+    }
+
+    #region Unity Menu Actions
+
     [ContextMenu("*** Delete Save Data ***")]
     public void DeleteSaveData()
     {
@@ -80,11 +90,21 @@ public class SaveManager : MonoBehaviour
         LoadGame();
     }
 
-    private List<ISaveable> FindISaveables()
+    [ContextMenu("*** Clear All Checkpoints ***")]
+    public void ClearAllCheckpoints()
     {
-        return
-            FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-            .OfType<ISaveable>()
-            .ToList();
+        var handler = new FileDataHandler(Application.persistentDataPath, fileName, encryptData);
+        var data = handler.LoadData();
+
+        if (data == null)
+        {
+            Debug.LogWarning("ClearAllCheckpoints() -> data is null!");
+            return;
+        }
+
+        data.unlockedCheckpoints.Clear();
+        handler.SaveData(data);
     }
+
+    #endregion
 }

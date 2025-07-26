@@ -24,7 +24,7 @@ public class Skill_Base : MonoBehaviour
         // then the Damage Scale Data will likely be null.
         if (damageScaleData == null)
         {
-            Debug.Log($"{GetType().Name} -> Awake() -> damageScaleData is null - Has the corresponding Skill been unlocked?");
+            // Debug.Log($"{GetType().Name} -> Awake() -> damageScaleData is null - Has the corresponding Skill been unlocked?");
             damageScaleData = new DamageScaleData();
         }
     }
