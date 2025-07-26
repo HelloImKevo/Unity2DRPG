@@ -9,16 +9,16 @@ public class Object_Waypoint : MonoBehaviour
     [SerializeField] private RespawnType thisWaypointType;
     [Tooltip("Waypoint type for the OTHER Waypoint object. E.g., if THIS Waypoint is an 'Entrance', the connected Waypoint should be an 'Exit'")]
     [SerializeField] private RespawnType connectedWaypoint;
-    // [SerializeField] private Transform respawnPoint;
+    [SerializeField] private Transform respawnPoint;
     [SerializeField] private bool canBeTriggered = true;
 
     public RespawnType GetWaypointType() => thisWaypointType;
 
-    // public Vector3 GetPositionAndSetTriggerFalse()
-    // {
-    //     canBeTriggered = false;
-    //     return respawnPoint == null ? transform.position : respawnPoint.position;
-    // }
+    public Vector3 GetPositionAndSetTriggerFalse()
+    {
+        canBeTriggered = false;
+        return respawnPoint == null ? transform.position : respawnPoint.position;
+    }
 
     private void OnValidate()
     {
@@ -39,11 +39,12 @@ public class Object_Waypoint : MonoBehaviour
     {
         if (!canBeTriggered) return;
 
-        // GameManager.instance.ChangeScene(transferToScene, connectedWaypoint);
+        GameManager.instance.ChangeScene(transferToScene, connectedWaypoint);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        // Once the player exits the Waypoint collider area, re-activate the Waypoint.
         canBeTriggered = true;
     }
 }
