@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b95b4f3e68184bd2aebbf5335e657f0, type: 3}
+  m_Name: Consumable Data - Scroll of Town Portal
+  m_EditorClassIdentifier: 
+  itemName: Scroll of Town Portal
+  itemIcon: {fileID: -1496276197, guid: 4b4f1f12420c94c93ab90316aa2a5419, type: 3}
+  itemType: 4
+  maxStackSize: 20
+  itemPrice: 150
+  minStackSizeAtShop: 1
+  maxStackSizeAtShop: 5
+  itemRarity: 70
+  dropChance: 25
+  maxDropChance: 25
+  itemEffect: {fileID: 11400000, guid: 16435f27aef7249e2b011f51b0c7bb17, type: 2}
+  craftRecipe: []

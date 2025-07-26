@@ -102,17 +102,17 @@ public class GameManager : MonoBehaviour, ISaveable
 
     private Vector3 GetNewPlayerPosition(RespawnType type)
     {
-        // if (type == RespawnType.Portal)
-        // {
-        //     Object_Portal portal = Object_Portal.instance;
+        if (RespawnType.Portal == type)
+        {
+            Object_Portal portal = Object_Portal.instance;
 
-        //     Vector3 position = portal.GetPosition();
+            Vector3 position = portal.GetPosition();
 
-        //     portal.SetTrigger(false);
-        //     portal.DisableIfNeeded();
+            portal.SetTrigger(false);
+            portal.DisableIfNeeded();
 
-        //     return position;
-        // }
+            return position;
+        }
 
         // Prevent player from respawning close to the Exit waypoint
         // (so the Waypoint system cannot be easily exploited).
