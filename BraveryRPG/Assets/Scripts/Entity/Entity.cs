@@ -11,6 +11,8 @@ public class Entity : MonoBehaviour
     public Animator Anim { get; protected set; }
     public Rigidbody2D Rb { get; protected set; }
 
+    public Entity_SFX Sfx { get; protected set; }
+
     protected StateMachine stateMachine;
 
     private bool facingRight = true;
@@ -40,6 +42,7 @@ public class Entity : MonoBehaviour
         // Must be initialized before the StateMachine.
         Anim = GetComponentInChildren<Animator>();
         Rb = GetComponent<Rigidbody2D>();
+        Sfx = GetComponent<Entity_SFX>();
 
         stateMachine = new StateMachine();
     }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6036733679370774438}
   - component: {fileID: 2949138906211298075}
   - component: {fileID: 2840388996440109282}
+  - component: {fileID: 7817133598240122600}
   m_Layer: 0
   m_Name: ___SINGLETONS___
   m_TagString: Untagged
@@ -74,3 +75,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7d9c58f923440b9936b81292f1ec35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7817133598240122600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6778755808179094489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed02d6608c4034e24b8c08ef83201e2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioDB: {fileID: 11400000, guid: eebd88208efee4f919a29431db752459, type: 2}
+  bgmSource: {fileID: 0}
+  sfxSource: {fileID: 0}
+  bgmShouldPlay: 0

@@ -8,6 +8,7 @@ public class SkillObject_Sword : SkillObject_Base
     protected bool shouldComeback;
     protected float comebackSpeed = 20f;
     protected float maxAllowedDistance = 25f;
+    protected float swordTooFarAway = 150f;
 
     protected override void Awake()
     {
@@ -44,6 +45,12 @@ public class SkillObject_Sword : SkillObject_Base
         if (distance > maxAllowedDistance)
         {
             EnableSwordFlyBackToPlayer();
+        }
+
+        if (distance > swordTooFarAway)
+        {
+            Destroy(gameObject);
+            return;
         }
 
         if (!shouldComeback) return;

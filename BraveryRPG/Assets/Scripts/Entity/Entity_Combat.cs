@@ -31,6 +31,7 @@ public class Entity_Combat : MonoBehaviour
 
     private Entity_Stats stats;
     private Entity_VFX vfx;
+    private Entity_SFX sfx;
 
     [Tooltip("Physical & elemental attack damage scaling and behavior parameters.")]
     public DamageScaleData basicAttackScale;
@@ -89,6 +90,7 @@ public class Entity_Combat : MonoBehaviour
     {
         stats = GetComponent<Entity_Stats>();
         vfx = GetComponent<Entity_VFX>();
+        sfx = GetComponent<Entity_SFX>();
     }
 
     /// <summary>
@@ -108,6 +110,8 @@ public class Entity_Combat : MonoBehaviour
     /// </summary>
     public void PerformAttack()
     {
+        bool targetGotHit = false;
+
         foreach (var target in GetDetectedColliders())
         {
             if (target.TryGetComponent<IDamageable>(out var damageable))
@@ -118,7 +122,7 @@ public class Entity_Combat : MonoBehaviour
                 float elementalDamage = attackData.elementalDamage;
                 ElementType element = attackData.element;
 
-                bool targetDamaged = damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
+                targetGotHit = damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
 
                 if (element != ElementType.None)
                 {
@@ -130,12 +134,21 @@ public class Entity_Combat : MonoBehaviour
                     }
                 }
 
-                if (targetDamaged)
+                if (targetGotHit)
                 {
                     OnDoingPhysicalDamage?.Invoke(physicalDamage);
                     vfx.CreateOnHitVfx(target.transform, attackData.isCrit, element);
                 }
             }
+        }
+
+        if (targetGotHit)
+        {
+            sfx?.PlayAttackHit();
+        }
+        else
+        {
+            sfx?.PlayAttackMiss();
         }
     }
 
