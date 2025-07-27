@@ -35,7 +35,8 @@ public class Object_Portal : MonoBehaviour, ISaveable
 
         if (facingDir == -1)
         {
-            transform.Rotate(0, 180, 0);
+            // Flip the Portal Sprite (do not flip the Text Label)
+            GetComponentInChildren<SpriteRenderer>().transform.Rotate(0, 180, 0);
         }
     }
 

@@ -6,6 +6,9 @@ using UnityEngine;
 /// </summary>
 public class UI : MonoBehaviour
 {
+    // Expose the static UI instance to be available as a Singleton from any script.
+    public static UI instance;
+
     [SerializeField] private GameObject[] uiElements;
 
     public bool alternativeInput { get; private set; }
@@ -19,6 +22,7 @@ public class UI : MonoBehaviour
     public UI_Merchant merchantUI { get; private set; }
     public UI_InGame inGameUI { get; private set; }
     public UI_Options optionsUI { get; private set; }
+    public UI_DeathScreen deathScreenUI { get; private set; }
 
     public UI_SkillTooltip skillTooltip { get; private set; }
     public UI_ItemTooltip itemTooltip { get; private set; }
@@ -31,6 +35,8 @@ public class UI : MonoBehaviour
     /// <summary>Initializes UI component references on awake.</summary>
     void Awake()
     {
+        instance = this;
+
         skillTreeUI = GetComponentInChildren<UI_SkillTree>(true);
         inventoryUI = GetComponentInChildren<UI_Inventory>(true);
         storageUI = GetComponentInChildren<UI_Storage>(true);
@@ -38,6 +44,7 @@ public class UI : MonoBehaviour
         merchantUI = GetComponentInChildren<UI_Merchant>(true);
         inGameUI = GetComponentInChildren<UI_InGame>(true);
         optionsUI = GetComponentInChildren<UI_Options>(true);
+        deathScreenUI = GetComponentInChildren<UI_DeathScreen>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
@@ -77,6 +84,11 @@ public class UI : MonoBehaviour
         if (optionsUI == null)
         {
             Debug.LogWarning("Options UI component is null, did you forget to assign it to the UI script?");
+        }
+
+        if (deathScreenUI == null)
+        {
+            Debug.LogWarning("Death Screen UI component is null, did you forget to assign it to the UI script?");
         }
 
         // User Interface Tooltips
@@ -130,22 +142,25 @@ public class UI : MonoBehaviour
             if (element.activeSelf)
             {
                 // Resume game.
-                Time.timeScale = 1;
+                GameManager.instance.UnpauseGame();
                 SwitchToInGameUI();
                 return;
             }
         }
 
         // Pause game when viewing Game Settings UI.
-        Time.timeScale = 0;
+        GameManager.instance.PauseGame();
         OpenOptionsUI();
     }
 
-    // public void OpenDeathScreenUI()
-    // {
-    //     SwitchTo(deathScreenUI.gameObject);
-    //     input.Disable(); // Pay attention to this if you use gamepad
-    // }
+    public void OpenDeathScreenUI()
+    {
+        SwitchTo(deathScreenUI.gameObject);
+        // Pay attention to this if you use gamepad.
+        // Buttons are not part of the Unity Input system, so you might
+        // be able to simply use input.Disable()
+        StopPlayerControls(true);
+    }
 
     public void OpenOptionsUI()
     {

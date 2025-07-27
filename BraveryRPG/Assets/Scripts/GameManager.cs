@@ -39,14 +39,34 @@ public class GameManager : MonoBehaviour, ISaveable
         string sceneName = SceneManager.GetActiveScene().name;
         Debug.Log($"{GetType().Name}.RestartScene() -> Restarting '{sceneName}'");
         ChangeScene(sceneName, RespawnType.NonSpecific);
+        ShowInGameUI();
+    }
+
+    private void ShowInGameUI()
+    {
+        if (UI.instance != null)
+        {
+            UI.instance.SwitchToInGameUI();
+        }
     }
 
     public void ChangeScene(string sceneName, RespawnType respwanType)
     {
         SaveManager.instance.SaveGame();
 
-        // Time.timeScale = 1;
+        // Unpause the game, for situations where we are transitioning from a Pause Menu.
+        UnpauseGame();
         StartCoroutine(ChangeSceneCo(sceneName, respwanType));
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+    }
+
+    public void UnpauseGame()
+    {
+        Time.timeScale = 1;
     }
 
     private IEnumerator ChangeSceneCo(string sceneName, RespawnType respawnType)
