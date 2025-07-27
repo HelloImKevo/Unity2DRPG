@@ -24,8 +24,10 @@ public class ToastManager : MonoBehaviour
 
     [Tooltip("Toast prefab containing at least a background and a message element.")]
     [SerializeField] private Toast toastPrefab;
-    [Tooltip("Primary Canvas used to display User Interface visual elements.")]
-    [SerializeField] private RectTransform canvasTransform;
+
+    // NOTE: Avoid holding references to Canvas instances in a Singleton construct,
+    // as it could cause the Canvas instance to be carried-forward into other scenes.
+
     [Tooltip("Margin distance from the edges of the visible screen.")]
     [SerializeField] private float screenMargin = 40f;
 
@@ -46,9 +48,9 @@ public class ToastManager : MonoBehaviour
         Transform relativeTo = null
     )
     {
-        RectTransform parent = canvasTransform != null
-            ? canvasTransform
-            : FindAnyObjectByType<Canvas>().GetComponent<RectTransform>();
+        // The [Graphy] package uses a separate Canvas instance, so we need to perform
+        // a more specialized lookup.
+        RectTransform parent = FindAnyObjectByType<UI>().GetComponent<RectTransform>();
 
         Debug.Log("ToastManager.ShowToast() -> Instantiating toast prefab, parent: " + parent.name + ", message: " + message);
 

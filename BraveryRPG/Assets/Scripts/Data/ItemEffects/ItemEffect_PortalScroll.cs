@@ -14,7 +14,7 @@ public class ItemEffect_PortalScroll : ItemEffect_DataSO
             return;
         }
 
-        Player player = Player.instance;
+        Player player = Player.GetInstance();
         // Spawn the portal near the player's current position.
         Vector3 portalPosition = player.transform.position + new Vector3(player.FacingDir * 1.5f, 0);
 

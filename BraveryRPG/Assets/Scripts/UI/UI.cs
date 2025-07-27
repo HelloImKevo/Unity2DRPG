@@ -6,9 +6,7 @@ using UnityEngine;
 /// </summary>
 public class UI : MonoBehaviour
 {
-    // Expose the static UI instance to be available as a Singleton from any script.
-    public static UI instance;
-
+    [Tooltip("UI Elements that can be toggled between Active & Inactive.")]
     [SerializeField] private GameObject[] uiElements;
 
     public bool alternativeInput { get; private set; }
@@ -23,6 +21,7 @@ public class UI : MonoBehaviour
     public UI_InGame inGameUI { get; private set; }
     public UI_Options optionsUI { get; private set; }
     public UI_DeathScreen deathScreenUI { get; private set; }
+    public UI_FadeScreen fadeScreenUI { get; private set; }
 
     public UI_SkillTooltip skillTooltip { get; private set; }
     public UI_ItemTooltip itemTooltip { get; private set; }
@@ -35,8 +34,6 @@ public class UI : MonoBehaviour
     /// <summary>Initializes UI component references on awake.</summary>
     void Awake()
     {
-        instance = this;
-
         skillTreeUI = GetComponentInChildren<UI_SkillTree>(true);
         inventoryUI = GetComponentInChildren<UI_Inventory>(true);
         storageUI = GetComponentInChildren<UI_Storage>(true);
@@ -45,6 +42,7 @@ public class UI : MonoBehaviour
         inGameUI = GetComponentInChildren<UI_InGame>(true);
         optionsUI = GetComponentInChildren<UI_Options>(true);
         deathScreenUI = GetComponentInChildren<UI_DeathScreen>(true);
+        fadeScreenUI = GetComponentInChildren<UI_FadeScreen>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
@@ -171,7 +169,6 @@ public class UI : MonoBehaviour
 
     public void SwitchToInGameUI()
     {
-
         HideAllTooltips();
         StopPlayerControls(false);
         SwitchTo(inGameUI.gameObject);
@@ -180,12 +177,17 @@ public class UI : MonoBehaviour
         inventoryEnabled = false;
     }
 
-    private void SwitchTo(GameObject objectToSwitchOn)
+    public void HideAllUI()
     {
         foreach (var element in uiElements)
         {
             element.SetActive(false);
         }
+    }
+
+    private void SwitchTo(GameObject objectToSwitchOn)
+    {
+        HideAllUI();
 
         objectToSwitchOn.SetActive(true);
     }
@@ -226,7 +228,8 @@ public class UI : MonoBehaviour
     {
         skillTreeUI.transform.SetAsLastSibling();
         SetTooltipsAsLastSibling();
-        // fadeScreenUI.transform.SetAsLastSibling();
+        // Fade Screen should hide / cover all other UI elements.
+        fadeScreenUI.transform.SetAsLastSibling();
 
         skillTreeEnabled = !skillTreeEnabled;
         // Activate / Deactivate game objects.
@@ -243,7 +246,8 @@ public class UI : MonoBehaviour
         // except for Tooltips, which should always be rendered on top.
         inventoryUI.transform.SetAsLastSibling();
         SetTooltipsAsLastSibling();
-        // fadeScreenUI.transform.SetAsLastSibling();
+        // Fade Screen should hide / cover all other UI elements.
+        fadeScreenUI.transform.SetAsLastSibling();
 
         inventoryEnabled = !inventoryEnabled;
         // Activate / Deactivate game objects.

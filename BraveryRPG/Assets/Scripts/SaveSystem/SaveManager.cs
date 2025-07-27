@@ -10,7 +10,6 @@ public class SaveManager : MonoBehaviour
 
     private FileDataHandler dataHandler;
     private GameData gameData;
-    private List<ISaveable> allSaveables;
 
     [SerializeField] private string fileName = "gamesavedata.json";
     [SerializeField] private bool encryptData = true;
@@ -18,9 +17,11 @@ public class SaveManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        StartCoroutine(InitializeSaveSystem());
     }
 
-    private IEnumerator Start()
+    private IEnumerator InitializeSaveSystem()
     {
         // macOS Default Path:
         // /Users/johnny/Library/Application Support/DefaultCompany/BraveryRPG
@@ -28,7 +29,6 @@ public class SaveManager : MonoBehaviour
         // C:/Users/Johnny/AppData/LocalLow/DefaultCompany/WindowsRPGGame
         Debug.Log($"{GetType().Name}.Start() -> Data Path: {Application.persistentDataPath}");
         dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, encryptData);
-        allSaveables = FindISaveables();
 
         // Let all other Unity components get initialized before loading the game.
         yield return null;
@@ -44,6 +44,10 @@ public class SaveManager : MonoBehaviour
 
     public void SaveGame()
     {
+        List<ISaveable> allSaveables = FindISaveables();
+
+        Debug.Log($"{GetType().Name}.SaveGame() -> Saving data for {allSaveables.Count} objects");
+
         foreach (var saveable in allSaveables)
         {
             saveable.SaveData(ref gameData);
@@ -52,8 +56,15 @@ public class SaveManager : MonoBehaviour
         dataHandler.SaveData(gameData);
     }
 
+    public void LoadSceneData()
+    {
+        LoadGame();
+    }
+
     private void LoadGame()
     {
+        Debug.Log($"{GetType().Name}.LoadGame() -> Loading Game Data...");
+
         gameData = dataHandler.LoadData();
 
         if (gameData == null)
@@ -62,6 +73,10 @@ public class SaveManager : MonoBehaviour
             gameData = new GameData();
             return;
         }
+
+        List<ISaveable> allSaveables = FindISaveables();
+
+        Debug.Log($"{GetType().Name}.LoadGame() -> Loading data for {allSaveables.Count} objects");
 
         foreach (var saveable in allSaveables)
         {
@@ -73,9 +88,9 @@ public class SaveManager : MonoBehaviour
 
     private List<ISaveable> FindISaveables()
     {
-        return
-            FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+        return FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
             .OfType<ISaveable>()
+            .OrderBy(saveable => saveable is GameManager ? 1 : 0) // 0 = non-GameManager, 1 = GameManager
             .ToList();
     }
 
@@ -106,6 +121,8 @@ public class SaveManager : MonoBehaviour
             );
         }
 
+        // If the game had already been loaded in-memory, we need to reload
+        // everything back to a fresh start.
         LoadGame();
     }
 

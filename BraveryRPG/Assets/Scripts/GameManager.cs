@@ -16,15 +16,20 @@ public class GameManager : MonoBehaviour, ISaveable
     {
         // Prevent one-off instances of *** GAME MANAGER *** from being initialized
         // in other scenes.
-        if (instance != null && instance != this)
+        if (instance != null)
         {
             Destroy(gameObject);
             return;
         }
 
-        instance = this;
         // Do not destroy the object when changing scenes.
         DontDestroyOnLoad(gameObject);
+        instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        Debug.LogWarning("GameManager has been destroyed.");
     }
 
     public void SetLastPlayerPosition(Vector3 position) => lastPlayerPosition = position;
@@ -39,14 +44,14 @@ public class GameManager : MonoBehaviour, ISaveable
         string sceneName = SceneManager.GetActiveScene().name;
         Debug.Log($"{GetType().Name}.RestartScene() -> Restarting '{sceneName}'");
         ChangeScene(sceneName, RespawnType.NonSpecific);
-        ShowInGameUI();
+        HideCurrentSceneGameUI();
     }
 
-    private void ShowInGameUI()
+    private void HideCurrentSceneGameUI()
     {
-        if (UI.instance != null)
+        if (TryGetComponent<UI>(out var userInterface))
         {
-            UI.instance.SwitchToInGameUI();
+            userInterface.HideAllUI();
         }
     }
 
@@ -71,54 +76,72 @@ public class GameManager : MonoBehaviour, ISaveable
 
     private IEnumerator ChangeSceneCo(string sceneName, RespawnType respawnType)
     {
-        // UI_FadeScreen fadeScreen = FindFadeScreenUI();
-        // fadeScreen.DoFadeOut(); // transperent > black
-        // yield return fadeScreen.fadeEffectCo;
-        yield return new WaitForSeconds(0.5f);
+        Debug.Log($"{GetType().Name}.ChangeSceneCo() -> Showing Black Screen, then transitioning to = {sceneName}");
+
+        UI_FadeScreen fadeScreen = FindFadeScreenUI();
+        fadeScreen.FadeToBlack();
+        yield return fadeScreen.fadeEffectCo;
+
+        HideCurrentSceneGameUI();
 
         SceneManager.LoadScene(sceneName);
 
-        // Note: If we don't wait long enough for the scene to load, the  player will be
-        // teleported first, and then the default Player-In-Scene position will be loaded,
-        // and the Player will snap-back to the wrong "default position".
-        yield return new WaitForSeconds(1f);
+        // Data loaded becomes true when you load game from save manager.
+        dataLoaded = false;
+        // Add a 1-frame delay before proceeding to the while loop.
+        yield return null;
 
-        // dataLoaded = false; // data loaded becomes true when you load game from save manager
-        // yield return null;
+        SaveManager.instance.LoadSceneData();
 
-        // while (!dataLoaded)
-        // {
-        //     yield return null;
-        // }
+        while (!dataLoaded)
+        {
+            yield return null;
+        }
 
-        // fadeScreen = FindFadeScreenUI();
-        // fadeScreen.DoFadeIn(); // black > transperent
+        Player player = Player.GetInstance();
 
-        Player player = Player.instance;
-
-        if (player == null) yield break;
+        if (player == null)
+        {
+            Debug.Log($"{GetType().Name}.ChangeSceneCo() -> Player instance is null, hiding the Fade Loading Screen ...");
+            yield return HideFadeScreenUI();
+            yield break;
+        }
 
         Vector3 position = GetNewPlayerPosition(respawnType);
 
-        Debug.Log($"{GetType().Name}.ChangeSceneCo() -> New Player Position = {position}");
-
         if (position != Vector3.zero)
         {
+            Debug.Log($"{GetType().Name}.ChangeSceneCo() -> Teleporting Player to New Position = {position}");
             player.TeleportPlayer(position);
         }
+
+        Debug.Log($"{GetType().Name}.ChangeSceneCo() -> Hiding the Fade Loading Screen ...");
+        yield return HideFadeScreenUI();
     }
 
-    // private UI_FadeScreen FindFadeScreenUI()
-    // {
-    //     if (UI.instance != null)
-    //     {
-    //         return UI.instance.fadeScreenUI;
-    //     }
-    //     else
-    //     {
-    //         return FindFirstObjectByType<UI_FadeScreen>();
-    //     }
-    // }
+    private IEnumerator HideFadeScreenUI()
+    {
+        // We have to re-find the Loading screen after calling LoadScene().
+        UI_FadeScreen fadeScreen = FindFadeScreenUI();
+
+        yield return new WaitForSeconds(0.2f);
+
+        fadeScreen.FadeToTransparent();
+
+        yield return fadeScreen.fadeEffectCo;
+    }
+
+    private UI_FadeScreen FindFadeScreenUI()
+    {
+        if (TryGetComponent<UI>(out var userInterface))
+        {
+            return userInterface.fadeScreenUI;
+        }
+        else
+        {
+            return FindFirstObjectByType<UI_FadeScreen>(FindObjectsInactive.Include);
+        }
+    }
 
     private Vector3 GetNewPlayerPosition(RespawnType type)
     {
@@ -192,7 +215,11 @@ public class GameManager : MonoBehaviour, ISaveable
         // We don't want to save the player's last played scene as "Main Menu".
         if (currentScene == "MainMenu") return;
 
-        data.lastPlayerPosition = Player.instance.transform.position;
+        if (TryGetComponent<Player>(out var player))
+        {
+            // This approach would require refinement for multiplayer.
+            data.lastPlayerPosition = player.transform.position;
+        }
         data.lastScenePlayed = currentScene;
 
         dataLoaded = false;
@@ -208,6 +235,7 @@ public class GameManager : MonoBehaviour, ISaveable
             lastScenePlayed = "Level_0";
         }
 
+        Debug.Log($"{GetType().Name}.LoadData() -> Data is loaded!");
         dataLoaded = true;
     }
 

@@ -5,8 +5,6 @@ using UnityEngine;
 public class Player : Entity
 {
     public static event Action OnPlayerDeath;
-    // TODO: This is not a good practice, especially if we need to add multiplayer to the game.
-    public static Player instance;
 
     public UI UserInterface { get; private set; }
 
@@ -71,7 +69,6 @@ public class Player : Entity
     protected override void Awake()
     {
         base.Awake();
-        instance = this;
 
         // This performs some heavy lifting - never do this in Update()
         UserInterface = FindFirstObjectByType<UI>();
@@ -107,6 +104,14 @@ public class Player : Entity
         base.Start();
 
         stateMachine.Initialize(IdleState);
+    }
+
+    /// <summary>Use sparingly - this lookup is not highly-performant!</summary>
+    public static Player GetInstance(int playerNumber = 1)
+    {
+        // If we ever add multiplayer support, add additional logic ...
+
+        return FindFirstObjectByType<Player>();
     }
 
     // TODO: Add some kind of teleportation VFX like a glow or puff of smoke.
