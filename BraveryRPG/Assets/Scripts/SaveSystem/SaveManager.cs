@@ -87,6 +87,25 @@ public class SaveManager : MonoBehaviour
         dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, encryptData);
         dataHandler.Delete();
 
+        // TODO: We should show a 'Confirm Action' modal dialog.
+        if (Application.isPlaying)
+        {
+            ToastStyle warningStyle = new()
+            {
+                textColor = Color.white,
+                backgroundColor = new Color(0.2f, 0, 0),
+                blinkColor = Color.red,
+                enableBlink = true,
+                duration = 2f
+            };
+
+            ToastManager.Instance.ShowToast(
+                "Save data deleted!!",
+                warningStyle,
+                ToastAnchor.BottomCenter
+            );
+        }
+
         LoadGame();
     }
 

@@ -169,17 +169,19 @@ public class GameManager : MonoBehaviour, ISaveable
     {
         string currentScene = SceneManager.GetActiveScene().name;
 
+        // We don't want to save the player's last played scene as "Main Menu".
         if (currentScene == "MainMenu") return;
 
-        // data.lastPlayerPosition = Player.instance.transform.position;
-        // data.lastScenePlayed = currentScene;
+        data.lastPlayerPosition = Player.instance.transform.position;
+        data.lastScenePlayed = currentScene;
+
         dataLoaded = false;
     }
 
     public void LoadData(GameData data)
     {
-        // lastScenePlayed = data.lastScenePlayed;
-        // lastPlayerPosition = data.lastPlayerPosition;
+        lastScenePlayed = data.lastScenePlayed;
+        lastPlayerPosition = data.lastPlayerPosition;
 
         if (string.IsNullOrEmpty(lastScenePlayed))
         {

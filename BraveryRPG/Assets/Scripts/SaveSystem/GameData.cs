@@ -24,8 +24,8 @@ public class GameData
     public string portalDestinationSceneName;
     public bool returningFromTown;
 
-    // public string lastScenePlayed;
-    // public Vector3 lastPlayerPosition;
+    public string lastScenePlayed;
+    public Vector3 lastPlayerPosition;
 
     public GameData()
     {
