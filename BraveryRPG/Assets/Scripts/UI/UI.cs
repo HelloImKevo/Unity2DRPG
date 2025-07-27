@@ -258,8 +258,23 @@ public class UI : MonoBehaviour
         StopPlayerControlsIfNeeded();
     }
 
+    private bool IsGameShutdownInProgress()
+    {
+        foreach (var element in uiElements)
+        {
+            if (element == null || element.gameObject == null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void OpenStorageUI(bool openStorageUI)
     {
+        if (IsGameShutdownInProgress()) return;
+
         storageUI.gameObject.SetActive(openStorageUI);
         StopPlayerControls(openStorageUI);
 

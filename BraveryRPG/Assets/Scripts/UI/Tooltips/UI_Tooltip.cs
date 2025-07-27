@@ -35,6 +35,9 @@ public class UI_Tooltip : MonoBehaviour
 
     public void HideTooltip()
     {
+        // Check for async component lifecycle cleanup to prevent MissingReferenceException.
+        if (rect == null) return;
+
         // Hide the tooltip by moving it way off-screen in an area that
         // should never be visible to the user.
         rect.position = new Vector2(9999f, 9999f);
