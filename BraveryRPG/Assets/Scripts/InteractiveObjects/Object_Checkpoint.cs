@@ -8,12 +8,12 @@ public class Object_Checkpoint : MonoBehaviour, ISaveable
 
     public bool isActive { get; private set; }
     private Animator anim;
-    // private AudioSource fireAudioSource;
+    private AudioSource fireAudioSource;
 
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
-        // fireAudioSource = GetComponent<AudioSource>();
+        fireAudioSource = GetComponent<AudioSource>();
     }
 
     private void OnValidate()
@@ -21,11 +21,26 @@ public class Object_Checkpoint : MonoBehaviour, ISaveable
 #if UNITY_EDITOR
         if (string.IsNullOrEmpty(checkpointId))
         {
-            // Generate a unique GUID for each Checkpoint.
-            checkpointId = System.Guid.NewGuid().ToString();
+            // Ensure this is not the prefab asset itself
+            if (PrefabUtility.IsPartOfPrefabInstance(this))
+            {
+                // Generate a unique GUID for each Checkpoint.
+                checkpointId = System.Guid.NewGuid().ToString();
+                // Mark the object dirty so Unity saves the change.
+                EditorUtility.SetDirty(this);
+            }
         }
 #endif
     }
+
+#if UNITY_EDITOR
+    [ContextMenu("Generate New GUID")]
+    private void GenerateNewGuid()
+    {
+        checkpointId = System.Guid.NewGuid().ToString();
+        EditorUtility.SetDirty(this);
+    }
+#endif
 
     public string GetCheckpointId() => checkpointId;
 
@@ -36,15 +51,15 @@ public class Object_Checkpoint : MonoBehaviour, ISaveable
         isActive = activate;
         anim.SetBool("isActive", activate);
 
-        // if (isActive && !fireAudioSource.isPlaying)
-        // {
-        //     fireAudioSource.Play();
-        // }
+        if (isActive && !fireAudioSource.isPlaying)
+        {
+            fireAudioSource.Play();
+        }
 
-        // if (!isActive)
-        // {
-        //     fireAudioSource.Stop();
-        // }
+        if (!isActive)
+        {
+            fireAudioSource.Stop();
+        }
     }
 
     // Should only activate when the Player enters this collider, thanks to

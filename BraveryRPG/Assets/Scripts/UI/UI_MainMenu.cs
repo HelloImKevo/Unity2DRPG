@@ -12,8 +12,8 @@ public class UI_MainMenu : MonoBehaviour
 
     public void PlayBTN()
     {
-        // AudioManager.instance.PlayGlobalSFX("button_click");
-        GameManager.instance.ContinuePlay();
+        AudioManager.instance.PlayGlobalSFX("button_click");
+        // GameManager.instance.ContinuePlay();
     }
 
     public void QuitGameBTN()

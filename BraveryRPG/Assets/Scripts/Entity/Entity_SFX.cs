@@ -11,7 +11,7 @@ public class Entity_SFX : MonoBehaviour
     [Space]
 
     [SerializeField] private float soundDistance = 15f;
-    [SerializeField] private bool showGizmo;
+    [SerializeField] private bool showDistanceGizmo;
 
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class Entity_SFX : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (showGizmo)
+        if (showDistanceGizmo)
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, soundDistance);

@@ -146,13 +146,23 @@ public class AudioManager : MonoBehaviour
 
         float maxVolume = data.maxVolume;
         float distance = Vector2.Distance(sfxSource.transform.position, player.position);
+        // Use exponential falloff to decrease the volume of the SFX the
+        // further away the player is from this audio source.
         float t = Mathf.Clamp01(1 - (distance / minDistanceToHearSound));
 
         sfxSource.pitch = Random.Range(0.95f, 1.1f);
         sfxSource.volume = Mathf.Lerp(0, maxVolume, t * t); // exponential falloff
         sfxSource.PlayOneShot(clip);
+
+        // To add Enemy Footsteps / Movement Noise, you would add another
+        // Audio Source with Looping enabled, and then use loopingSource.Play()
+        // and loopingSource.Stop()
     }
 
+    /// <summary>
+    /// Play a sound audible to the player, regardless of their distance to the source.
+    /// Example: A key event triggers a church bell ring.
+    /// </summary>
     public void PlayGlobalSFX(string soundName)
     {
         var data = audioDB.Get(soundName);
@@ -161,7 +171,7 @@ public class AudioManager : MonoBehaviour
         var clip = data.GetRandomClip();
         if (clip == null) return;
 
-        Debug.Log("Played audio " + soundName);
+        Debug.Log("Play Global Audio SFX: " + soundName);
         sfxSource.pitch = Random.Range(0.95f, 1.1f);
         sfxSource.volume = data.maxVolume;
         sfxSource.PlayOneShot(clip);
