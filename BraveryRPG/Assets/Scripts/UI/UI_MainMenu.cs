@@ -7,13 +7,13 @@ public class UI_MainMenu : MonoBehaviour
         // transform.root.GetComponentInChildren<UI_Options>(true).LoadUpVolume();
         transform.root.GetComponentInChildren<UI_FadeScreen>(true).FadeToTransparent();
 
-        // AudioManager.instance.StartBGM("playlist_mainMenu");
+        AudioManager.instance.StartBGM("playlist_mainMenu");
     }
 
     public void PlayBTN()
     {
         AudioManager.instance.PlayGlobalSFX("button_click");
-        // GameManager.instance.ContinuePlay();
+        GameManager.instance.ContinuePlay();
     }
 
     public void QuitGameBTN()

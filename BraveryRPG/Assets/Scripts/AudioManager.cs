@@ -31,18 +31,18 @@ public class AudioManager : MonoBehaviour
 
     private void Update()
     {
-        // if (!bgmSource.isPlaying && bgmShouldPlay)
-        // {
-        //     if (string.IsNullOrEmpty(currentBgmGroupName) == false)
-        //     {
-        //         NextBGM(currentBgmGroupName);
-        //     }
-        // }
+        if (!bgmSource.isPlaying && bgmShouldPlay)
+        {
+            if (!string.IsNullOrEmpty(currentBgmGroupName))
+            {
+                NextBGM(currentBgmGroupName);
+            }
+        }
 
-        // if (bgmSource.isPlaying && !bgmShouldPlay)
-        // {
-        //     StopBGM();
-        // }
+        if (bgmSource.isPlaying && !bgmShouldPlay)
+        {
+            StopBGM();
+        }
     }
 
     public void StartBGM(string musicGroup)
@@ -79,6 +79,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    /// <summary>Cross-fade to a new BGM (Background Music) music track.</summary>
     private IEnumerator SwitchMusicCo(string musicGroup)
     {
         AudioClipData data = audioDB.Get(musicGroup);
@@ -90,6 +91,8 @@ public class AudioManager : MonoBehaviour
             yield break;
         }
 
+        // If there is only 1 music option in the clips group, play that one.
+        // Otherwise, pick a different music track different from the last one played.
         if (data.clips.Count > 1)
         {
             while (nextMusic == lastMusicPlayed)
@@ -98,6 +101,7 @@ public class AudioManager : MonoBehaviour
             }
         }
 
+        // Fade out the existing music track.
         if (bgmSource.isPlaying)
         {
             yield return FadeVolumeCo(bgmSource, 0, 1f);
@@ -111,6 +115,7 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(FadeVolumeCo(bgmSource, data.maxVolume, 1f));
     }
 
+    /// <summary>Fade out BGM (Background Music) instead of a harsh cut.</summary>
     private IEnumerator FadeVolumeCo(AudioSource source, float targetVolume, float duration)
     {
         float time = 0;

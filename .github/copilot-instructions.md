@@ -23,6 +23,12 @@ This project is a 2D sidescrolling platformer built in Unity using C#. It includ
 - `Entity_StatusHandler.cs` manages elemental status effects.
 - UI is built with Unity's Canvas + TextMeshPro.
 
+# Global Singleton Constructs
+- `AudioManager.cs` controls playing BGM (Background Music) and SFX (Sound Effects).
+- `GameManager.cs` controls scene transitions.
+- `SaveManager.cs` is responsible for our Save System, to Save Data and Load Data.
+- `ToastManager.cs` controls displaying "Toast" messages to the user.
+
 # Tips for Copilot
 - Assume Unity-specific context (`Transform`, `Rigidbody2D`, `Animator`, etc.).
 - Use `TryGetComponent` where performance matters.
