@@ -1,7 +1,11 @@
 using UnityEngine;
+using UnityEngine.Localization;
 
 public class Object_Merchant : Object_NPC, IInteractable
 {
+    [Header("Localized Text")]
+    [SerializeField] private LocalizedString welcomeText;
+
     private Inventory_Player inventory;
     private Inventory_Merchant merchant;
 
@@ -41,7 +45,10 @@ public class Object_Merchant : Object_NPC, IInteractable
             enableBlink = false,
             duration = 3f
         };
-        ToastManager.Instance.ShowToast("Welcome to the Merchant Shop!", style, ToastAnchor.BottomCenter);
+
+        // Welcome to the Merchant Shop!
+        string message = welcomeText.GetLocalizedString();
+        ToastManager.Instance.ShowToast(message, style, ToastAnchor.BottomCenter);
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)

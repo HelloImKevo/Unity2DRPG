@@ -1,10 +1,14 @@
 using UnityEngine;
+using UnityEngine.Localization;
 
 /// <summary>
 /// Must have the <see cref="Inventory_Storage"/> script component!
 /// </summary>
 public class Object_Blacksmith : Object_NPC, IInteractable
 {
+    [Header("Localized Text")]
+    [SerializeField] private LocalizedString welcomeText;
+
     private Animator anim;
     private Inventory_Player inventory;
     private Inventory_Storage storage;
@@ -42,7 +46,14 @@ public class Object_Blacksmith : Object_NPC, IInteractable
             enableBlink = true,
             duration = 3f
         };
-        ToastManager.Instance.ShowToast("Welcome to the Blacksmith Storage & Crafting!", toastStyle, ToastAnchor.BottomCenter);
+
+        // NOTE: After adding the Localization package, VS Code would not recognize
+        // the `using` directive until I restarted VS Code and Unity.
+
+        // Retrieve the localized string synchronously
+        // Welcome to the Blacksmith Storage & Crafting!
+        string message = welcomeText.GetLocalizedString();
+        ToastManager.Instance.ShowToast(message, toastStyle, ToastAnchor.BottomCenter);
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
