@@ -2,11 +2,15 @@ using UnityEngine;
 
 public class Enemy_Skeleton : Enemy, ICounterable
 {
+    private Entity_VisionCone visionCone;
+
     protected override void Awake()
     {
         base.Awake();
 
         Debug.Log("Enemy_Skeleton Is Awake");
+
+        visionCone = GetComponent<Entity_VisionCone>();
 
         IdleState = new Enemy_IdleState(this, stateMachine, "idle");
         MoveState = new Enemy_MoveState(this, stateMachine, "move");
