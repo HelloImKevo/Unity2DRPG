@@ -7381,6 +7381,7 @@ MonoBehaviour:
   primaryGroundCheck: {fileID: 3901148567593699409}
   primaryWallCheck: {fileID: 7207545363604499041}
   secondaryWallCheck: {fileID: 6828377800475345898}
+  questTargetId: 
   battleMoveSpeed: 2.6
   attackDistance: 2
   attackDelay: 1.1

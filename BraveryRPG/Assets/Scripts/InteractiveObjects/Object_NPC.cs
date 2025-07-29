@@ -5,6 +5,7 @@ public class Object_NPC : MonoBehaviour
     protected Transform player;
     protected UI ui;
 
+    [SerializeField] private string npcTargetQuestId;
     [SerializeField] private Transform npc;
     [Tooltip("Floating button hint that becomes visible when the player is within range.")]
     [SerializeField] private GameObject interactTooltip;

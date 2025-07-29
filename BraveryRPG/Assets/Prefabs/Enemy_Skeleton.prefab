@@ -560,6 +560,7 @@ MonoBehaviour:
   primaryGroundCheck: {fileID: 1704511922261226276}
   primaryWallCheck: {fileID: 5008659392427905300}
   secondaryWallCheck: {fileID: 9171378410050631839}
+  questTargetId: enemy_skeleton
   battleMoveSpeed: 3
   attackDistance: 2
   attackDelay: 1.1

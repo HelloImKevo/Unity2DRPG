@@ -11,7 +11,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "RPG Setup/Item Data/Material Item", fileName = "Material Data - ")]
 public class Item_DataSO : ScriptableObject
 {
-    public string saveId { get; private set; }
+    // NOTE: It's not a good practice to use get + private set on these properties,
+    // because it can cause issues with Save System.
+    public string saveId;
 
     [Header("Item Details")]
     public string itemName;

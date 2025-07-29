@@ -15,6 +15,7 @@ public class ItemList_DataSO : ScriptableObject
     }
 
 #if UNITY_EDITOR
+    /// <summary>Mirrors logic from <see cref="QuestDatabaseSO"/>.</summary>
     [ContextMenu("Auto-fill with all Item_DataSO")]
     public void CollectItemsData()
     {
