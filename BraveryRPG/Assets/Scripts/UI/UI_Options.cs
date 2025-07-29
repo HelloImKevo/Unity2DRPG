@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UI_Options : MonoBehaviour
@@ -14,11 +13,11 @@ public class UI_Options : MonoBehaviour
 
     [Header("BGM Volume Settings")]
     [SerializeField] private Slider bgmSlider;
-    [SerializeField] private string bgmParametr;
+    [SerializeField] private string bgmParameter;
 
     [Header("SFX Volume Settings")]
     [SerializeField] private Slider sfxSlider;
-    [SerializeField] private string sfxParametr;
+    [SerializeField] private string sfxParameter;
 
     private void Start()
     {
@@ -29,41 +28,52 @@ public class UI_Options : MonoBehaviour
 
     public void BGMSliderValue(float value)
     {
-        float newValue = MathF.Log10(value) * mixerMultiplier;
-        audioMixer.SetFloat(bgmParametr, newValue);
+        audioMixer.SetFloat(bgmParameter, ConvertSliderToDecibels(value));
     }
 
     public void SFXSliderValue(float value)
     {
-        float newValue = MathF.Log10(value) * mixerMultiplier;
-        audioMixer.SetFloat(sfxParametr, newValue);
+        audioMixer.SetFloat(sfxParameter, ConvertSliderToDecibels(value));
     }
+
+    /// <summary>Slider values default to a range 0 - 1</summary>
+    private float ConvertSliderToDecibels(float value) => MathF.Log10(value) * mixerMultiplier;
 
     private void OnHealthBarToggleChanged(bool isOn)
     {
+        AudioManager.instance.PlayGlobalSFX("button_click");
         // TODO: Currently this setting only works for the Player Health Bar.
         // We could persist this setting to the game data, and disable enemy
         // health bars also.
-        player.Health.EnableHealthBar(isOn);
+        // TODO: This null-check is just a quick & dirty fix for the Main Menu.
+        // Revisit this and implement a more robust solution.
+        if (player != null)
+        {
+            player.Health.EnableHealthBar(isOn);
+        }
     }
 
-    public void GoMainMenuBTN() => GameManager.instance.ChangeScene("MainMenu", RespawnType.NonSpecific);
+    public void GoMainMenuBTN()
+    {
+        AudioManager.instance.PlayGlobalSFX("button_click");
+        GameManager.instance.ChangeScene("MainMenu", RespawnType.NonSpecific);
+    }
 
-    // private void OnEnable()
-    // {
-    //     sfxSlider.value = PlayerPrefs.GetFloat(sfxParametr, 0.6f);
-    //     bgmSlider.value = PlayerPrefs.GetFloat(bgmParametr, 0.6f);
-    // }
+    private void OnEnable()
+    {
+        sfxSlider.value = PlayerPrefs.GetFloat(sfxParameter, 0.6f);
+        bgmSlider.value = PlayerPrefs.GetFloat(bgmParameter, 0.6f);
+    }
 
-    // private void OnDisable()
-    // {
-    //     PlayerPrefs.SetFloat(sfxParametr, sfxSlider.value);
-    //     PlayerPrefs.SetFloat(bgmParametr, bgmSlider.value);
-    // }
+    private void OnDisable()
+    {
+        PlayerPrefs.SetFloat(sfxParameter, sfxSlider.value);
+        PlayerPrefs.SetFloat(bgmParameter, bgmSlider.value);
+    }
 
-    // public void LoadUpVolume()
-    // {
-    //     sfxSlider.value = PlayerPrefs.GetFloat(sfxParametr, 0.6f);
-    //     bgmSlider.value = PlayerPrefs.GetFloat(bgmParametr, 0.6f);
-    // }
+    public void LoadUpVolume()
+    {
+        sfxSlider.value = PlayerPrefs.GetFloat(sfxParameter, 0.6f);
+        bgmSlider.value = PlayerPrefs.GetFloat(bgmParameter, 0.6f);
+    }
 }

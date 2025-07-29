@@ -11493,7 +11493,7 @@ GameObject:
   - component: {fileID: 4329894708524355966}
   - component: {fileID: 5212178822385357661}
   m_Layer: 5
-  m_Name: BGM_Volume
+  m_Name: BGM_Volume - Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11565,13 +11565,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 2681319977985825123}
   m_HandleRect: {fileID: 4141377013716539507}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0.6
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3405362409491423170}
+        m_TargetAssemblyTypeName: UI_Options, Assembly-CSharp
+        m_MethodName: BGMSliderValue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1367342085767095117
 GameObject:
   m_ObjectHideFlags: 0
@@ -16172,7 +16184,7 @@ GameObject:
   - component: {fileID: 3087757959496327082}
   - component: {fileID: 3428536659145534133}
   m_Layer: 5
-  m_Name: SFX_Volume
+  m_Name: SFX_Volume - Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16244,13 +16256,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 8326874399129550016}
   m_HandleRect: {fileID: 5156540657712786585}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0.6
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3405362409491423170}
+        m_TargetAssemblyTypeName: UI_Options, Assembly-CSharp
+        m_MethodName: SFXSliderValue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1936278950023788578
 GameObject:
   m_ObjectHideFlags: 0
@@ -30284,12 +30308,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBarToggle: {fileID: 954713664149604428}
-  audioMixer: {fileID: 0}
+  audioMixer: {fileID: 24100000, guid: 6fe750ac3009b4292a0c0af8369d3eb8, type: 2}
   mixerMultiplier: 25
-  bgmSlider: {fileID: 0}
-  bgmParametr: 
-  sfxSlider: {fileID: 0}
-  sfxParametr: 
+  bgmSlider: {fileID: 5212178822385357661}
+  bgmParameter: bgmMixer
+  sfxSlider: {fileID: 3428536659145534133}
+  sfxParameter: sfxMixer
 --- !u!114 &6230460324751482726
 MonoBehaviour:
   m_ObjectHideFlags: 0
