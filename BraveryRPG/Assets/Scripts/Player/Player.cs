@@ -17,6 +17,7 @@ public class Player : Entity
     public Entity_StatusHandler StatusHandler { get; private set; }
     public Player_Combat Combat { get; private set; }
     public Inventory_Player Inventory { get; private set; }
+    public Player_QuestManager questManager { get; private set; }
 
     #region FSM State Variables
 
@@ -83,6 +84,7 @@ public class Player : Entity
         StatusHandler = GetComponent<Entity_StatusHandler>();
         Combat = GetComponent<Player_Combat>();
         Inventory = GetComponent<Inventory_Player>();
+        questManager = GetComponent<Player_QuestManager>();
 
         IdleState = new Player_IdleState(this, stateMachine, "idle");
         MoveState = new Player_MoveState(this, stateMachine, "move");

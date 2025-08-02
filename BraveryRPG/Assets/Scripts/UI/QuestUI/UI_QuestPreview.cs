@@ -6,7 +6,7 @@ public class UI_QuestPreview : MonoBehaviour
     [SerializeField] private TextMeshProUGUI questName;
     [SerializeField] private TextMeshProUGUI questDescription;
     [SerializeField] private TextMeshProUGUI questGoal;
-    [SerializeField] private UI_QuestRewardSlot[] questReward;
+    [SerializeField] private UI_QuestRewardSlot[] questRewardSlots;
 
     [SerializeField] private GameObject[] additionalObjects;
     private UI_Quest questUI;
@@ -14,6 +14,8 @@ public class UI_QuestPreview : MonoBehaviour
 
     public void SetupQuestPreview(QuestDataSO questDataSO)
     {
+        Debug.Log($"UI_QuestPreview.SetupQuestPreview() -> Setting up quest: '{questDataSO.questName}'");
+
         questUI = transform.root.GetComponentInChildren<UI_Quest>();
         previewQuest = questDataSO;
 
@@ -29,8 +31,8 @@ public class UI_QuestPreview : MonoBehaviour
             Inventory_Item rewardItem = new(questDataSO.rewardItems[i].itemData);
             rewardItem.stackSize = questDataSO.rewardItems[i].stackSize;
 
-            questReward[i].gameObject.SetActive(true);
-            questReward[i].UpdateSlot(rewardItem);
+            questRewardSlots[i].gameObject.SetActive(true);
+            questRewardSlots[i].UpdateSlot(rewardItem);
         }
     }
 
@@ -61,7 +63,7 @@ public class UI_QuestPreview : MonoBehaviour
 
     private void EnableQuestRewardObjects(bool enable)
     {
-        foreach (var obj in questReward)
+        foreach (var obj in questRewardSlots)
         {
             obj.gameObject.SetActive(enable);
         }

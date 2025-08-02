@@ -3,6 +3,10 @@ using UnityEngine.Localization;
 
 public class Object_Merchant : Object_NPC, IInteractable
 {
+    [Space]
+    [Header("Quest & Dialogue")]
+    [SerializeField] private QuestDataSO[] quests;
+
     [Header("Localized Text")]
     [SerializeField] private LocalizedString welcomeText;
 
@@ -33,6 +37,11 @@ public class Object_Merchant : Object_NPC, IInteractable
             Debug.LogWarning($"{gameObject.name}.Interact() -> merchant or inventory" +
                               " is null - Check Layer Collision Map for Player+NPC");
         }
+
+        ui.OpenQuestUI(quests);
+
+        // TODO: Temporarily switch from Merchant Behavior to Quest-Giver mode.
+        if (true) return;
 
         ui.merchantUI.SetupMerchantUI(merchant, inventory);
         ui.OpenMerchantUI(true);

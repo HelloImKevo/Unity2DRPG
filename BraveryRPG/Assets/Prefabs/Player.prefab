@@ -389,6 +389,7 @@ GameObject:
   - component: {fileID: 2427365154931507997}
   - component: {fileID: 3491522774119149643}
   - component: {fileID: 7680738091864819418}
+  - component: {fileID: 8162458458812087041}
   - component: {fileID: 585708910956082004}
   - component: {fileID: 2899696493769423741}
   m_Layer: 8
@@ -706,7 +707,22 @@ MonoBehaviour:
   attackHit: player_attackHit
   attackMiss: player_attackMiss
   soundDistance: 15
-  showGizmo: 0
+  showDistanceGizmo: 0
+--- !u!114 &8162458458812087041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5011931714547370983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b2cddc27ec94a1c883f549bcaccfb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeQuests: []
+  completedQuests: []
+  questDatabase: {fileID: 11400000, guid: 39c690aad23944b5bacd8b5f01077fce, type: 2}
 --- !u!50 &585708910956082004
 Rigidbody2D:
   serializedVersion: 5

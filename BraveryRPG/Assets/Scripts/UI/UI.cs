@@ -22,6 +22,7 @@ public class UI : MonoBehaviour
     public UI_Options optionsUI { get; private set; }
     public UI_DeathScreen deathScreenUI { get; private set; }
     public UI_FadeScreen fadeScreenUI { get; private set; }
+    public UI_Quest questUI { get; private set; }
 
     public UI_SkillTooltip skillTooltip { get; private set; }
     public UI_ItemTooltip itemTooltip { get; private set; }
@@ -43,6 +44,7 @@ public class UI : MonoBehaviour
         optionsUI = GetComponentInChildren<UI_Options>(true);
         deathScreenUI = GetComponentInChildren<UI_DeathScreen>(true);
         fadeScreenUI = GetComponentInChildren<UI_FadeScreen>(true);
+        questUI = GetComponentInChildren<UI_Quest>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
@@ -256,6 +258,15 @@ public class UI : MonoBehaviour
         HideAllTooltips();
 
         StopPlayerControlsIfNeeded();
+    }
+
+    public void OpenQuestUI(QuestDataSO[] questsToShow)
+    {
+        StopPlayerControls(true);
+        HideAllTooltips();
+
+        questUI.gameObject.SetActive(true);
+        questUI.SetupQuestUI(questsToShow);
     }
 
     private bool IsGameShutdownInProgress()

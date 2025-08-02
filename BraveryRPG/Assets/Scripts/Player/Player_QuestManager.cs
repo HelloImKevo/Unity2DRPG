@@ -38,7 +38,9 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
             }
 
             if (quest.CanGetReward() && quest.questDataSO.rewardType == npcType)
+            {
                 getRewardQuests.Add(quest);
+            }
         }
 
         foreach (var quest in getRewardQuests)
@@ -50,15 +52,15 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
 
     private void GiveQuestReward(QuestDataSO questDataSO)
     {
-        foreach (var item in questDataSO.rewardItems)
-        {
-            if (item == null || item.itemData == null) continue;
+        // foreach (var item in questDataSO.rewardItems)
+        // {
+        //     if (item == null || item.itemData == null) continue;
 
-            // for (int i = 0; i < item.stackSize; i++)
-            // {
-            //     dropManager.CreateItemDrop(item.itemData);
-            // }
-        }
+        //     for (int i = 0; i < item.stackSize; i++)
+        //     {
+        //         dropManager.CreateItemDrop(item.itemData);
+        //     }
+        // }
     }
 
     public void AddProgress(string questTargetId, int amount = 1)
@@ -114,6 +116,8 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
         return activeQuests.Find(q => q.questDataSO == questToCheck) != null;
     }
 
+    #region Save System
+
     public void LoadData(GameData data)
     {
         // activeQuests.Clear();
@@ -152,5 +156,6 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
         //     data.completedQuests.Add(quest.questDataSO.questSaveId, true);
         // }
     }
-}
 
+    #endregion
+}

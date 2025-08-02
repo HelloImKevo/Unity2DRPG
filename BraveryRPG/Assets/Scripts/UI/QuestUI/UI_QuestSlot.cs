@@ -17,9 +17,9 @@ public class UI_QuestSlot : MonoBehaviour
         questInSlot = questDataSO;
         questName.text = questDataSO.questName;
 
-        foreach (var previwIcon in rewardQuickPreviewSlots)
+        foreach (var previewIcon in rewardQuickPreviewSlots)
         {
-            previwIcon.gameObject.SetActive(false);
+            previewIcon.gameObject.SetActive(false);
         }
 
         for (int i = 0; i < questInSlot.rewardItems.Length; i++)
@@ -36,7 +36,8 @@ public class UI_QuestSlot : MonoBehaviour
         }
     }
 
-    public void UpdateQuestPreviw()
+    /// <summary>Invoked by the UI_QuestListBTN Button OnClick() event.</summary>
+    public void UpdateQuestPreview()
     {
         questPreview.SetupQuestPreview(questInSlot);
     }
