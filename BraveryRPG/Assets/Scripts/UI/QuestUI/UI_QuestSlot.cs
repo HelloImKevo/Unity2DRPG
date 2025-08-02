@@ -12,7 +12,7 @@ public class UI_QuestSlot : MonoBehaviour
 
     public void SetupQuestSlot(QuestDataSO questDataSO)
     {
-        questPreview = transform.root.GetComponentInChildren<UI_Quest>().GetQuestPreview();
+        questPreview = transform.root.GetComponentInChildren<UI_Quest>().GetQuestPreviewUI();
 
         questInSlot = questDataSO;
         questName.text = questDataSO.questName;

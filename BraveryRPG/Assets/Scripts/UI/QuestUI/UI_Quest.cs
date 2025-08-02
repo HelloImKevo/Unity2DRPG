@@ -56,18 +56,19 @@ public class UI_Quest : MonoBehaviour, ISaveable
     {
         bool questActive = questManager.QuestIsActive(questToCheck);
 
-        // if (currentGameData != null)
-        // {
-        //     bool questCompleted =
-        //         currentGameData.completedQuests.TryGetValue(questToCheck.questSaveId, out bool isCompleted) && isCompleted;
+        if (currentGameData != null)
+        {
+            bool questCompleted = currentGameData.completedQuests.TryGetValue(
+                questToCheck.questSaveId, out bool isCompleted
+            ) && isCompleted;
 
-        //     return questActive == false && questCompleted == false;
-        // }
+            return !questActive && !questCompleted;
+        }
 
         return !questActive;
     }
 
-    public UI_QuestPreview GetQuestPreview() => questPreview;
+    public UI_QuestPreview GetQuestPreviewUI() => questPreview;
 
     #region Save System
 

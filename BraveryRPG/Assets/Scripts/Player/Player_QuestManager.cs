@@ -40,7 +40,8 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
             // TODO: 'Talk to Blacksmith' quest is not getting completed. Need to revisit this.
             if (quest.CanGetReward() && quest.questDataSO.rewardType == npcType)
             {
-                Debug.Log($"Player_QuestManager.TryGiveRewardFrom() -> '{quest.GetQuestName()}' Quest Objectives Fulfilled - NPC Type = '{npcType}'");
+                Debug.Log($"Player_QuestManager.TryGiveRewardFrom() -> '{quest.GetQuestName()}' {quest.GetQuestType()}" +
+                          $" Quest Objectives Fulfilled - NPC Type = '{npcType}'");
                 getRewardQuests.Add(quest);
             }
         }
@@ -123,41 +124,41 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
 
     public void LoadData(GameData data)
     {
-        // activeQuests.Clear();
+        activeQuests.Clear();
 
-        // foreach (var entry in data.activeQuests)
-        // {
-        //     string questSaveId = entry.Key;
-        //     int progress = entry.Value;
+        foreach (var entry in data.activeQuests)
+        {
+            string questSaveId = entry.Key;
+            int progress = entry.Value;
 
-        //     QuestDataSO questDataSO = questDatabase.GetQuestById(questSaveId);
+            QuestDataSO questDataSO = questDatabase.GetQuestById(questSaveId);
 
-        //     if (questDataSO == null)
-        //     {
-        //         Debug.Log(questSaveId + " was not found in the database!");
-        //         continue;
-        //     }
+            if (questDataSO == null)
+            {
+                Debug.Log(questSaveId + " was not found in the database!");
+                continue;
+            }
 
-        //     QuestData questToLoad = new(questDataSO);
-        //     questToLoad.currentAmount = progress;
+            QuestData questToLoad = new(questDataSO);
+            questToLoad.currentAmount = progress;
 
-        //     activeQuests.Add(questToLoad);
-        // }
+            activeQuests.Add(questToLoad);
+        }
     }
 
     public void SaveData(ref GameData data)
     {
-        // data.activeQuests.Clear();
+        data.activeQuests.Clear();
 
-        // foreach (var quest in activeQuests)
-        // {
-        //     data.activeQuests.Add(quest.questDataSO.questSaveId, quest.currentAmount);
-        // }
+        foreach (var quest in activeQuests)
+        {
+            data.activeQuests.Add(quest.questDataSO.questSaveId, quest.currentAmount);
+        }
 
-        // foreach (var quest in completedQuests)
-        // {
-        //     data.completedQuests.Add(quest.questDataSO.questSaveId, true);
-        // }
+        foreach (var quest in completedQuests)
+        {
+            data.completedQuests.Add(quest.questDataSO.questSaveId, true);
+        }
     }
 
     #endregion

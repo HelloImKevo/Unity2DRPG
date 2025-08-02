@@ -21,6 +21,8 @@ public class QuestData
 
     public string GetQuestName() => questDataSO.questName;
 
+    public QuestType GetQuestType() => questDataSO.questType;
+
     public QuestData(QuestDataSO questSO)
     {
         questDataSO = questSO;
