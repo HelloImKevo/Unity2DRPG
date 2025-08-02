@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Quest - It's Dangerous to Go Alone
   m_EditorClassIdentifier: 
   questSaveId: feff98a6f9a6e42caacca462f7195b9c
-  questType: 0
+  questType: 1
   questName: It's Dangerous to Go Alone
   description: Since you're just startin' your adventure, you'll need somethin' to
     train with. I bought a sword off some weird fella - looked half mad, but the

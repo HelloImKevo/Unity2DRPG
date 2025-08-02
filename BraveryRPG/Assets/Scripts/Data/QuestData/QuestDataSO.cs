@@ -25,7 +25,7 @@ public class QuestDataSO : ScriptableObject
     public Item_DataSO itemToDeliver; // Used only if quest type is Delivery
 
     [Header("Reward")]
-    public RewardType rewardType;
+    public RewardType rewardProvider;
     public Inventory_Item[] rewardItems;
 
     private void OnValidate()

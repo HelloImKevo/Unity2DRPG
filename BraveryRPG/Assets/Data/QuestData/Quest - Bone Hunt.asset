@@ -22,14 +22,14 @@ MonoBehaviour:
   questTargetId: enemy_skeleton
   requiredAmount: 2
   itemToDeliver: {fileID: 0}
-  rewardType: 0
+  rewardProvider: 0
   rewardItems:
   - itemData: {fileID: 11400000, guid: 8f499965f14d743b2a62129828aa105f, type: 2}
     stackSize: 1
-    itemEffect: {fileID: 0}
+    itemEffect: {fileID: 11400000, guid: 336ac9a10fe0346a89c86c44435e3bfd, type: 2}
   - itemData: {fileID: 11400000, guid: de1fe97c03f9b445c8c421376f4fd06b, type: 2}
     stackSize: 2
-    itemEffect: {fileID: 0}
+    itemEffect: {fileID: 11400000, guid: 16435f27aef7249e2b011f51b0c7bb17, type: 2}
   - itemData: {fileID: 11400000, guid: aec22303ae5554af5862d68c38ab4199, type: 2}
     stackSize: 1
     itemEffect: {fileID: 0}

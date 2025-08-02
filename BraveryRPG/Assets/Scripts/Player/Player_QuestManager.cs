@@ -30,15 +30,14 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
                 var requiredItem = quest.questDataSO.itemToDeliver;
                 var requiredAmount = quest.questDataSO.requiredAmount;
 
-                // if (inventory.HasItemAmount(requiredItem, requiredAmount))
-                // {
-                //     inventory.RemoveItemAmount(requiredItem, requiredAmount);
-                //     quest.AddQuestProgress(requiredAmount);
-                // }
+                if (inventory.HasItemAmount(requiredItem, requiredAmount))
+                {
+                    inventory.RemoveItemAmount(requiredItem, requiredAmount);
+                    quest.AddQuestProgress(requiredAmount);
+                }
             }
 
-            // TODO: 'Talk to Blacksmith' quest is not getting completed. Need to revisit this.
-            if (quest.CanGetReward() && quest.questDataSO.rewardType == npcType)
+            if (quest.CanGetReward() && quest.questDataSO.rewardProvider == npcType)
             {
                 Debug.Log($"Player_QuestManager.TryGiveRewardFrom() -> '{quest.GetQuestName()}' {quest.GetQuestType()}" +
                           $" Quest Objectives Fulfilled - NPC Type = '{npcType}'");
@@ -66,7 +65,7 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
                 quest.AddQuestProgress(amount);
             }
 
-            if (RewardType.None == quest.questDataSO.rewardType && quest.CanGetReward())
+            if (RewardType.None == quest.questDataSO.rewardProvider && quest.CanGetReward())
             {
                 getRewardQuests.Add(quest);
             }
