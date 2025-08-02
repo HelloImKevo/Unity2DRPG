@@ -54,9 +54,7 @@ public class UI_Quest : MonoBehaviour, ISaveable
 
     private bool CanTakeQuest(QuestDataSO questToCheck)
     {
-        // TODO: Remove this.
-        return true;
-        // bool questActive = questManager.QuestIsActive(questToCheck);
+        bool questActive = questManager.QuestIsActive(questToCheck);
 
         // if (currentGameData != null)
         // {
@@ -66,7 +64,7 @@ public class UI_Quest : MonoBehaviour, ISaveable
         //     return questActive == false && questCompleted == false;
         // }
 
-        // return questActive == false;
+        return !questActive;
     }
 
     public UI_QuestPreview GetQuestPreview() => questPreview;

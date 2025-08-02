@@ -40,7 +40,7 @@ public class UI_QuestPreview : MonoBehaviour
     {
         MakeQuestPreviewEmpty();
 
-        // questUI.questManager.AcceptQuest(previewQuest);
+        questUI.questManager.AcceptQuest(previewQuest);
         questUI.UpdateQuestList();
     }
 
