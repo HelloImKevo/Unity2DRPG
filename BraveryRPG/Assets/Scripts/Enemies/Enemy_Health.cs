@@ -46,6 +46,6 @@ public class Enemy_Health : Entity_Health
 
         // Attempt to add progress to the player's Quest Manager,
         // like "Eliminated 5 out of 10 Skeletons"
-        questManager.AddProgress(enemy.questTargetId);
+        questManager.TryAddProgress(enemy.questTargetId);
     }
 }

@@ -23,7 +23,7 @@ MonoBehaviour:
   questTargetId: blacksmith_joe
   requiredAmount: 1
   itemToDeliver: {fileID: 0}
-  rewardType: 2
+  rewardType: 1
   rewardItems:
   - itemData: {fileID: 11400000, guid: c70137d2831ac491d8e85f59f22b5cfc, type: 2}
     stackSize: 1

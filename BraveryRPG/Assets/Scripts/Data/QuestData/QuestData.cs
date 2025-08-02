@@ -19,6 +19,8 @@ public class QuestData
 
     public bool CanGetReward() => currentAmount >= questDataSO.requiredAmount;
 
+    public string GetQuestName() => questDataSO.questName;
+
     public QuestData(QuestDataSO questSO)
     {
         questDataSO = questSO;

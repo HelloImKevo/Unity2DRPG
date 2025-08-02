@@ -1,11 +1,16 @@
 using UnityEngine;
 
-public class Object_NPC : MonoBehaviour
+public class Object_NPC : MonoBehaviour, IInteractable
 {
     protected Transform player;
     protected UI ui;
+    protected Player_QuestManager questManager;
 
+    [Header("Quest Info")]
     [SerializeField] private string npcTargetQuestId;
+    [SerializeField] private RewardType rewardNpc;
+
+    [Space]
     [SerializeField] private Transform npc;
     [Tooltip("Floating button hint that becomes visible when the player is within range.")]
     [SerializeField] private GameObject interactTooltip;
@@ -22,6 +27,11 @@ public class Object_NPC : MonoBehaviour
         startPosition = interactTooltip.transform.position;
         // Hide the "Interact with this NPC" tooltip by default.
         interactTooltip.SetActive(false);
+    }
+
+    protected virtual void Start()
+    {
+        questManager = Player.GetInstance().questManager;
     }
 
     protected virtual void Update()
@@ -69,5 +79,11 @@ public class Object_NPC : MonoBehaviour
     protected virtual void OnTriggerExit2D(Collider2D collision)
     {
         interactTooltip.SetActive(false);
+    }
+
+    public virtual void Interact()
+    {
+        questManager.TryAddProgress(npcTargetQuestId);
+        questManager.TryGiveRewardFrom(rewardNpc);
     }
 }

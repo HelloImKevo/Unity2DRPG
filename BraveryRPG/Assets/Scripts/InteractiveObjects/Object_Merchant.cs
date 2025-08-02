@@ -30,8 +30,10 @@ public class Object_Merchant : Object_NPC, IInteractable
         }
     }
 
-    public void Interact()
+    public override void Interact()
     {
+        base.Interact();
+
         if (merchant == null || inventory == null)
         {
             Debug.LogWarning($"{gameObject.name}.Interact() -> merchant or inventory" +

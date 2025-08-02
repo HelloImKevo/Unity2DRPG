@@ -36,7 +36,7 @@ public class Entity_DropManager : MonoBehaviour
         }
     }
 
-    protected void CreateItemDrop(Item_DataSO itemToDrop)
+    public void CreateItemDrop(Item_DataSO itemToDrop)
     {
         GameObject newItem = Instantiate(
             itemDropPrefab,

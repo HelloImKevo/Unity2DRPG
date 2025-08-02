@@ -271,6 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c95a6abc18abe416db4f9ebf26bfab02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcTargetQuestId: blacksmith_joe
+  rewardNpc: 0
   npc: {fileID: 2265249235570427911}
   interactTooltip: {fileID: 6071110340338632439}
   floatSpeed: 8

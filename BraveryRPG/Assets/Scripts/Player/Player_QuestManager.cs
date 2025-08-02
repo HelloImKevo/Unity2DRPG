@@ -37,33 +37,22 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
                 // }
             }
 
+            // TODO: 'Talk to Blacksmith' quest is not getting completed. Need to revisit this.
             if (quest.CanGetReward() && quest.questDataSO.rewardType == npcType)
             {
+                Debug.Log($"Player_QuestManager.TryGiveRewardFrom() -> '{quest.GetQuestName()}' Quest Objectives Fulfilled - NPC Type = '{npcType}'");
                 getRewardQuests.Add(quest);
             }
         }
 
         foreach (var quest in getRewardQuests)
         {
-            GiveQuestReward(quest.questDataSO);
+            DropQuestRewardsOnGround(quest.questDataSO);
             CompleteQuest(quest);
         }
     }
 
-    private void GiveQuestReward(QuestDataSO questDataSO)
-    {
-        // foreach (var item in questDataSO.rewardItems)
-        // {
-        //     if (item == null || item.itemData == null) continue;
-
-        //     for (int i = 0; i < item.stackSize; i++)
-        //     {
-        //         dropManager.CreateItemDrop(item.itemData);
-        //     }
-        // }
-    }
-
-    public void AddProgress(string questTargetId, int amount = 1)
+    public void TryAddProgress(string questTargetId, int amount = 1)
     {
         List<QuestData> getRewardQuests = new();
 
@@ -84,8 +73,21 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
 
         foreach (var quest in getRewardQuests)
         {
-            GiveQuestReward(quest.questDataSO);
+            DropQuestRewardsOnGround(quest.questDataSO);
             CompleteQuest(quest);
+        }
+    }
+
+    private void DropQuestRewardsOnGround(QuestDataSO questDataSO)
+    {
+        foreach (var item in questDataSO.rewardItems)
+        {
+            if (item == null || item.itemData == null) continue;
+
+            for (int i = 0; i < item.stackSize; i++)
+            {
+                dropManager.CreateItemDrop(item.itemData);
+            }
         }
     }
 
@@ -102,6 +104,7 @@ public class Player_QuestManager : MonoBehaviour, ISaveable
 
     public void CompleteQuest(QuestData questData)
     {
+        // TODO: Mark the QuestData as 'Completed' to avoid confusion with 'CanGetReward = true'
         completedQuests.Add(questData);
         activeQuests.Remove(questData);
     }
