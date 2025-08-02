@@ -15,15 +15,6 @@ public class UI_ItemTooltip : UI_Tooltip
     public void ShowTooltip(
         bool show,
         RectTransform targetRect,
-        Inventory_Item itemToShow
-    )
-    {
-        ShowTooltip(show, targetRect, itemToShow, UISlotType.None, false);
-    }
-
-    public void ShowTooltip(
-        bool show,
-        RectTransform targetRect,
         Inventory_Item itemToShow,
         UISlotType slotType,
         bool showMerchantInfo
@@ -31,9 +22,18 @@ public class UI_ItemTooltip : UI_Tooltip
     {
         base.ShowTooltip(show, targetRect);
 
-        // Toggle the Displayed 'Special Controls' (Equip Item, Buy Stack, Delete Item, etc.)
-        merchantInfo.gameObject.SetActive(showMerchantInfo);
-        inventoryInfo.gameObject.SetActive(!showMerchantInfo);
+        if (UISlotType.None == slotType)
+        {
+            // Hide the displayed 'Special Controls'
+            merchantInfo.gameObject.SetActive(false);
+            inventoryInfo.gameObject.SetActive(false);
+        }
+        else
+        {
+            // Toggle the Displayed 'Special Controls' (Equip Item, Buy Stack, Delete Item, etc.)
+            merchantInfo.gameObject.SetActive(showMerchantInfo);
+            inventoryInfo.gameObject.SetActive(!showMerchantInfo);
+        }
 
         int price = GetDisplayedPrice(slotType, itemToShow);
         int totalPrice = price * itemToShow.stackSize;

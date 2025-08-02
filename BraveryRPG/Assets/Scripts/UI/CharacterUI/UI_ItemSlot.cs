@@ -85,7 +85,7 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
     {
         if (itemInSlot == null) return;
 
-        ui.itemTooltip.ShowTooltip(true, rect, itemInSlot);
+        ui.itemTooltip.ShowTooltip(true, rect, itemInSlot, UISlotType.PlayerSlot, false);
     }
 
     public void OnPointerExit(PointerEventData eventData)
