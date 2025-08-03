@@ -8,8 +8,6 @@ public class Enemy_Skeleton : Enemy, ICounterable
     {
         base.Awake();
 
-        Debug.Log("Enemy_Skeleton Is Awake");
-
         visionCone = GetComponent<Entity_VisionCone>();
 
         IdleState = new Enemy_IdleState(this, stateMachine, "idle");

@@ -72,6 +72,8 @@ public class Enemy : Entity
     {
         base.Awake();
 
+        Debug.Log($"{GetType().Name} Is Awake");
+
         Stats = GetComponent<Entity_Stats>();
         health = GetComponent<Enemy_Health>();
     }
