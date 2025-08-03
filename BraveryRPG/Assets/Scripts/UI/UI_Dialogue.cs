@@ -15,7 +15,8 @@ public class UI_Dialogue : MonoBehaviour
     // [SerializeField] private TextMeshProUGUI[] dialogueChoicesText;
 
     [Space]
-    [SerializeField] private float textSpeed = 0.2f;
+    [Tooltip("20 = fast, 5 = slow")]
+    [SerializeField, Min(1f)] private float charactersPerSecond = 20f;
     private string fullTextToShow;
     private Coroutine typeTextCo;
 
@@ -31,12 +32,22 @@ public class UI_Dialogue : MonoBehaviour
     {
         ui = GetComponentInParent<UI>();
         questManager = Player.GetInstance().questManager;
+
+        canInteract = true;
     }
 
     // public void SetupNpcData(DialogueNpcData npcData) => this.npcData = npcData;
 
     public void PlayDialogueLine(DialogueLineSO line)
     {
+        if (typeTextCo != null)
+        {
+            // TODO: Come up with a more robust canInteract check - I think there's
+            // an issue with the EnableInteractionCo implementation.
+            CompleteTyping();
+            return;
+        }
+
         currentLine = line;
         currentChoices = line.choiceLines;
         canInteract = false;
@@ -52,6 +63,7 @@ public class UI_Dialogue : MonoBehaviour
             ? line.GetRandomLine()
             : line.actionLine;
 
+        Debug.Log($"PlayDialogueLine() -> fullTextToShow = {fullTextToShow}");
         typeTextCo = StartCoroutine(TypeTextCo(fullTextToShow));
         StartCoroutine(EnableInteractionCo());
     }
@@ -104,6 +116,7 @@ public class UI_Dialogue : MonoBehaviour
 
         if (typeTextCo != null)
         {
+            // If player re-interacts, auto-complete the dialogue output.
             CompleteTyping();
 
             if (currentLine.actionType != DialogueActionType.PlayerMakeChoice)
@@ -125,11 +138,13 @@ public class UI_Dialogue : MonoBehaviour
         }
     }
 
+    /// <summary>Auto-complete and finish the typewriter text output.</summary>
     private void CompleteTyping()
     {
         if (typeTextCo != null)
         {
             StopCoroutine(typeTextCo);
+            Debug.Log($"CompleteTyping() -> fullTextToShow = {fullTextToShow}");
             dialogueText.text = fullTextToShow;
             typeTextCo = null;
         }
@@ -184,10 +199,12 @@ public class UI_Dialogue : MonoBehaviour
     {
         dialogueText.text = "";
 
+        float delay = 1f / charactersPerSecond;
+
         foreach (char letter in text)
         {
             dialogueText.text += letter;
-            yield return new WaitForSeconds(textSpeed);
+            yield return new WaitForSeconds(delay);
         }
 
         if (currentLine.actionType != DialogueActionType.PlayerMakeChoice)

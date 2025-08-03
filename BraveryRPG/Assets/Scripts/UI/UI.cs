@@ -135,6 +135,15 @@ public class UI : MonoBehaviour
 
         // Pause / Resume game.
         input.UI.OptionsUI.performed += ctx => OnEnterOptionsUIState();
+
+        // Interact with NPC dialogue.
+        input.UI.DialogueInteraction.performed += ctx =>
+        {
+            if (dialogueUI.gameObject.activeInHierarchy)
+            {
+                dialogueUI.DialogueInteraction();
+            }
+        };
     }
 
     private void OnEnterOptionsUIState()

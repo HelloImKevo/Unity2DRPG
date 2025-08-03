@@ -10203,7 +10203,7 @@ MonoBehaviour:
   speakerPortrait: {fileID: 1896702154613434322}
   speakerName: {fileID: 5579810215723286970}
   dialogueText: {fileID: 6952942202281038893}
-  textSpeed: 0.2
+  charactersPerSecond: 20
 --- !u!1 &789490718030548327
 GameObject:
   m_ObjectHideFlags: 0

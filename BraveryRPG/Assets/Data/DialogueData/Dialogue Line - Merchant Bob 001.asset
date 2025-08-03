@@ -20,6 +20,11 @@ MonoBehaviour:
     ye?
   - Joe took me tools again. I swear, I'll bury that bastard...
   - If ye break it, you buy it. If I break it... Well, that's a tradition!
+  - That's the door to Food Storage. But I can't override the integrity lockdown.
+    You have to destroy the pods to bring the air quality up.
+  - Ah, hello. How nice of you to stop by again. Please, buy something, won't you?
+  - Ah, you appear to be doing well. Very good. Well then, would you like to learn
+    an incantation?
   playerChoiceAnswer: 
   choiceLines: []
   actionLine: 
