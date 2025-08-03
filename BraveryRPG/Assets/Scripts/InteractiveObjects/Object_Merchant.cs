@@ -41,7 +41,7 @@ public class Object_Merchant : Object_NPC, IInteractable
                               " is null - Check Layer Collision Map for Player+NPC");
         }
 
-        ui.OpenDialogueUI(firstDialogueLine);
+        ui.OpenDialogueUI(firstDialogueLine, new DialogueNpcData(rewardNpc, quests));
         // ui.OpenQuestUI(quests);
 
         // TODO: Temporarily switch from Merchant Behavior to Quest-Giver mode.

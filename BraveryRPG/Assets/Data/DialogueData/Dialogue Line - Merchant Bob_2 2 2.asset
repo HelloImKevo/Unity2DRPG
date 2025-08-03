@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7142acb24f1274bee8ed112014f15c74, type: 3}
-  m_Name: Dialogue Line - Merchant Bob 01_04
+  m_Name: Dialogue Line - Merchant Bob_2 2 2
   m_EditorClassIdentifier: 
-  dialogueGroupName: 
+  dialogueGroupName: Merchant Bob
+  dialogueDescription: Redeem Quest Reward
   speakerData: {fileID: 11400000, guid: 5f2858a2cceb7478c81607514fba8a6d, type: 2}
   textLines:
-  - I have to go.
-  playerChoiceAnswer: I have to go.
+  - You've finished a quest, eh?
+  playerChoiceAnswer: I want my reward.
   choiceLines: []
-  npcResponseText: Don't be a stranger.
-  actionType: 6
+  actionLine: Great, here's your reward.
+  actionType: 4

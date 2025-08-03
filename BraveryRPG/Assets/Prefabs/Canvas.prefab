@@ -10204,7 +10204,7 @@ MonoBehaviour:
   - {fileID: 298029755757713489}
   - {fileID: 571745724737386903}
   - {fileID: 9166899515031863514}
-  charactersPerSecond: 20
+  charactersPerSecond: 25
 --- !u!1 &789490718030548327
 GameObject:
   m_ObjectHideFlags: 0

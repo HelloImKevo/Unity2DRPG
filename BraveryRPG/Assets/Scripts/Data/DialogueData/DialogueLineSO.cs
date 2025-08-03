@@ -5,19 +5,23 @@ public class DialogueLineSO : ScriptableObject
 {
     [Header("Dialogue Info")]
     public string dialogueGroupName;
+    public string dialogueDescription;
     public DialogueSpeakerSO speakerData;
 
     [Space]
     [Header("Text Options")]
+    [Tooltip("These are text spoken by the NPC.")]
     [TextArea] public string[] textLines;
 
     [Header("Player Choices")]
+    [Tooltip("This is used for player answers & choices.")]
     [TextArea] public string playerChoiceAnswer;
     [Space]
     public DialogueLineSO[] choiceLines;
 
     [Header("Dialogue Action")]
-    [TextArea] public string npcResponseText;
+    [Tooltip("This will be said by the NPC before the action is triggered.")]
+    [TextArea] public string actionLine;
     public DialogueActionType actionType;
 
     public string GetFirstLine() => textLines[0];

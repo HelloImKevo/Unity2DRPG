@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UI_Dialogue : MonoBehaviour
 {
     private UI ui;
-    // private DialogueNpcData npcData;
+    private DialogueNpcData npcData;
     private Player_QuestManager questManager;
 
     [SerializeField] private Image speakerPortrait;
@@ -16,7 +16,7 @@ public class UI_Dialogue : MonoBehaviour
 
     [Space]
     [Tooltip("20 = fast, 5 = slow")]
-    [SerializeField, Min(1f)] private float charactersPerSecond = 20f;
+    [SerializeField, Min(1f)] private float charactersPerSecond = 25f;
     private string fullTextToShow;
     private Coroutine typeTextCo;
 
@@ -37,17 +37,18 @@ public class UI_Dialogue : MonoBehaviour
         canInteract = true;
     }
 
-    // public void SetupNpcData(DialogueNpcData npcData) => this.npcData = npcData;
+    public void SetupNpcData(DialogueNpcData npcData) => this.npcData = npcData;
 
     public void PlayDialogueLine(DialogueLineSO line)
     {
-        if (typeTextCo != null && selectedChoice != null)
-        {
-            // TODO: Come up with a more robust canInteract check - I think there's
-            // an issue with the EnableInteractionCo implementation.
-            CompleteTyping();
-            return;
-        }
+        // if (typeTextCo != null)
+        // {
+        //     // TODO: Come up with a more robust canInteract check - I think there's
+        //     // an issue with the EnableInteractionCo implementation.
+        //     CompleteTyping();
+        //     HandleNextAction();
+        //     return;
+        // }
 
         currentLine = line;
         currentChoices = line.choiceLines;
@@ -62,16 +63,28 @@ public class UI_Dialogue : MonoBehaviour
 
         fullTextToShow = line.actionType == DialogueActionType.None || line.actionType == DialogueActionType.PlayerMakeChoice
             ? line.GetRandomLine()
-            : line.npcResponseText;
+            : line.actionLine;
 
-        Debug.Log($"PlayDialogueLine() -> fullTextToShow = {fullTextToShow}");
+        Debug.Log($"PlayDialogueLine() -> Action = {line.actionType} fullTextToShow = {fullTextToShow}");
         typeTextCo = StartCoroutine(TypeTextCo(fullTextToShow));
         StartCoroutine(EnableInteractionCo());
     }
 
-    private void HandleNextAction()
+    private void HandleNextAction(DialogueLineSO choice = null)
     {
-        switch (currentLine.actionType)
+        DialogueActionType actionType;
+        if (choice == null)
+        {
+            actionType = currentLine.actionType;
+            Debug.Log($"HandleNextAction() -> Action = {actionType}, CurrentLine = {currentLine.dialogueDescription}");
+        }
+        else
+        {
+            actionType = choice.actionType;
+            Debug.Log($"HandleNextAction().Choice -> Action = {actionType}, CurrentLine = {choice.dialogueDescription}");
+        }
+
+        switch (actionType)
         {
             case DialogueActionType.OpenShop:
                 ui.SwitchToInGameUI();
@@ -81,30 +94,33 @@ public class UI_Dialogue : MonoBehaviour
             case DialogueActionType.PlayerMakeChoice:
                 if (selectedChoice == null)
                 {
-                    ShowChoices();
+                    ShowChoices(currentChoices);
                 }
                 else
                 {
                     // Activate the selected dialogue choice when the player
                     // clicks the 'Interact' (F) key.
                     DialogueLineSO selectedChoice = currentChoices[selectedChoiceIndex];
+                    Debug.Log($"HandleNextAction().PlayDialogueLine() -> Selected Choice = {selectedChoice.dialogueDescription}" +
+                              $", Sub-Choices = {selectedChoice.choiceLines?.Length}");
+
                     PlayDialogueLine(selectedChoice);
                 }
                 break;
 
             case DialogueActionType.OpenQuest:
                 ui.SwitchToInGameUI();
-                // ui.OpenQuestUI(npcData.quests);
+                ui.OpenQuestUI(npcData.quests);
                 break;
 
             case DialogueActionType.GetQuestReward:
                 ui.SwitchToInGameUI();
-                // questManager.TryGetRewardFrom(npcData.npcRewardType);
+                questManager.TryGiveRewardFrom(npcData.npcRewardType);
                 break;
 
             case DialogueActionType.OpenCraft:
                 ui.SwitchToInGameUI();
-                // ui.OpenCraftUI(true);
+                ui.OpenCraftUI(true);
                 break;
 
             case DialogueActionType.CloseDialogue:
@@ -124,6 +140,7 @@ public class UI_Dialogue : MonoBehaviour
 
             if (currentLine.actionType != DialogueActionType.PlayerMakeChoice)
             {
+                Debug.Log("DialogueInteraction() -> Dialogue requires the Player to Make Choice - Waiting for player confirmation ...");
                 waitingToConfirm = true;
             }
             else
@@ -137,7 +154,8 @@ public class UI_Dialogue : MonoBehaviour
         if (waitingToConfirm || selectedChoice != null)
         {
             waitingToConfirm = false;
-            HandleNextAction();
+            Debug.Log($"DialogueInteraction() -> Next set of choices: {selectedChoice.choiceLines?.Length}");
+            HandleNextAction(selectedChoice);
         }
     }
 
@@ -153,13 +171,13 @@ public class UI_Dialogue : MonoBehaviour
         }
     }
 
-    private void ShowChoices()
+    private void ShowChoices(DialogueLineSO[] choices)
     {
         for (int i = 0; i < dialogueChoicesText.Length; i++)
         {
-            if (i < currentChoices.Length)
+            if (i < choices.Length)
             {
-                DialogueLineSO choice = currentChoices[i];
+                DialogueLineSO choice = choices[i];
                 string choiceText = choice.playerChoiceAnswer;
 
                 dialogueChoicesText[i].gameObject.SetActive(true);
@@ -167,11 +185,11 @@ public class UI_Dialogue : MonoBehaviour
                     ? $"<color=yellow> {i + 1}) {choiceText}"
                     : $"{i + 1}) {choiceText}";
 
-                // if (choice.actionType == DialogueActionType.GetQuestReward
-                //     && !questManager.HasCompletedQuest())
-                // {
-                //     dialogueChoicesText[i].gameObject.SetActive(false);
-                // }
+                if (choice.actionType == DialogueActionType.GetQuestReward
+                    && !questManager.HasCompletedQuest())
+                {
+                    dialogueChoicesText[i].gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -179,7 +197,7 @@ public class UI_Dialogue : MonoBehaviour
             }
         }
 
-        selectedChoice = currentChoices[selectedChoiceIndex];
+        selectedChoice = choices[selectedChoiceIndex];
 
         Debug.Log($"ShowChoices() -> selectedChoice is now = {selectedChoice}");
     }
@@ -200,7 +218,7 @@ public class UI_Dialogue : MonoBehaviour
 
         selectedChoiceIndex += direction;
         selectedChoiceIndex = Mathf.Clamp(selectedChoiceIndex, 0, currentChoices.Length - 1);
-        ShowChoices();
+        ShowChoices(currentChoices);
     }
 
     private IEnumerator TypeTextCo(string text)
@@ -221,7 +239,9 @@ public class UI_Dialogue : MonoBehaviour
         }
         else
         {
+            // Automatically confirm the interact action and show the set of choices.
             yield return new WaitForSeconds(0.2f);
+            // Do not auto-select choices on behalf of the player.
             selectedChoice = null;
             HandleNextAction();
         }

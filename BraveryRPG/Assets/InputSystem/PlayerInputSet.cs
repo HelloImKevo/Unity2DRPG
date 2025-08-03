@@ -486,7 +486,7 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5d02acc7-73bd-4553-a2f5-7eaed918bcb9"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard & Mouse"",
