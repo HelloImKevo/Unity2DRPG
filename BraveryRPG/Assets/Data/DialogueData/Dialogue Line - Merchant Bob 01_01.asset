@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7142acb24f1274bee8ed112014f15c74, type: 3}
-  m_Name: Dialogue Line - Merchant Bob 001
+  m_Name: Dialogue Line - Merchant Bob 01_01
   m_EditorClassIdentifier: 
   dialogueGroupName: 
   speakerData: {fileID: 11400000, guid: 5f2858a2cceb7478c81607514fba8a6d, type: 2}
@@ -26,6 +26,9 @@ MonoBehaviour:
   - Ah, you appear to be doing well. Very good. Well then, would you like to learn
     an incantation?
   playerChoiceAnswer: 
-  choiceLines: []
+  choiceLines:
+  - {fileID: 11400000, guid: 7aa682652f22e468090ec3a769b13e98, type: 2}
+  - {fileID: 11400000, guid: 363a390839ee34197bff6c1eef24d2a6, type: 2}
+  - {fileID: 11400000, guid: 88d8a1618ab5d40e79405ef1754ea0c1, type: 2}
   actionLine: 
-  actionType: 0
+  actionType: 5

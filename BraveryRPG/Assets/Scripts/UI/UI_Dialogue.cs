@@ -12,7 +12,7 @@ public class UI_Dialogue : MonoBehaviour
     [SerializeField] private Image speakerPortrait;
     [SerializeField] private TextMeshProUGUI speakerName;
     [SerializeField] private TextMeshProUGUI dialogueText;
-    // [SerializeField] private TextMeshProUGUI[] dialogueChoicesText;
+    [SerializeField] private TextMeshProUGUI[] dialogueChoicesText;
 
     [Space]
     [Tooltip("20 = fast, 5 = slow")]
@@ -21,6 +21,7 @@ public class UI_Dialogue : MonoBehaviour
     private Coroutine typeTextCo;
 
     private DialogueLineSO currentLine;
+    // TODO: Improve design by using a dedicated DialogueChoiceSO
     private DialogueLineSO[] currentChoices;
     private DialogueLineSO selectedChoice;
     private int selectedChoiceIndex;
@@ -40,7 +41,7 @@ public class UI_Dialogue : MonoBehaviour
 
     public void PlayDialogueLine(DialogueLineSO line)
     {
-        if (typeTextCo != null)
+        if (typeTextCo != null && selectedChoice != null)
         {
             // TODO: Come up with a more robust canInteract check - I think there's
             // an issue with the EnableInteractionCo implementation.
@@ -61,7 +62,7 @@ public class UI_Dialogue : MonoBehaviour
 
         fullTextToShow = line.actionType == DialogueActionType.None || line.actionType == DialogueActionType.PlayerMakeChoice
             ? line.GetRandomLine()
-            : line.actionLine;
+            : line.npcResponseText;
 
         Debug.Log($"PlayDialogueLine() -> fullTextToShow = {fullTextToShow}");
         typeTextCo = StartCoroutine(TypeTextCo(fullTextToShow));
@@ -84,6 +85,8 @@ public class UI_Dialogue : MonoBehaviour
                 }
                 else
                 {
+                    // Activate the selected dialogue choice when the player
+                    // clicks the 'Interact' (F) key.
                     DialogueLineSO selectedChoice = currentChoices[selectedChoiceIndex];
                     PlayDialogueLine(selectedChoice);
                 }
@@ -152,42 +155,47 @@ public class UI_Dialogue : MonoBehaviour
 
     private void ShowChoices()
     {
-        // for (int i = 0; i < dialogueChoicesText.Length; i++)
-        // {
-        //     if (i < currentChoices.Length)
-        //     {
-        //         DialogueLineSO choice = currentChoices[i];
-        //         string choiceText = choice.playerChoiceAnswer;
+        for (int i = 0; i < dialogueChoicesText.Length; i++)
+        {
+            if (i < currentChoices.Length)
+            {
+                DialogueLineSO choice = currentChoices[i];
+                string choiceText = choice.playerChoiceAnswer;
 
-        //         dialogueChoicesText[i].gameObject.SetActive(true);
-        //         dialogueChoicesText[i].text = selectedChoiceIndex == i
-        //             ? $"<color=yellow> {i + 1}) {choiceText}"
-        //             : $"{i + 1}) {choiceText}";
+                dialogueChoicesText[i].gameObject.SetActive(true);
+                dialogueChoicesText[i].text = selectedChoiceIndex == i
+                    ? $"<color=yellow> {i + 1}) {choiceText}"
+                    : $"{i + 1}) {choiceText}";
 
-        //         if (choice.actionType == DialogueActionType.GetQuestReward && questManager.HasCompletedQuest() == false)
-        //         {
-        //             dialogueChoicesText[i].gameObject.SetActive(false);
-        //         }
-        //     }
-        //     else
-        //     {
-        //         dialogueChoicesText[i].gameObject.SetActive(false);
-        //     }
-        // }
+                // if (choice.actionType == DialogueActionType.GetQuestReward
+                //     && !questManager.HasCompletedQuest())
+                // {
+                //     dialogueChoicesText[i].gameObject.SetActive(false);
+                // }
+            }
+            else
+            {
+                dialogueChoicesText[i].gameObject.SetActive(false);
+            }
+        }
 
-        // selectedChoice = currentChoices[selectedChoiceIndex];
+        selectedChoice = currentChoices[selectedChoiceIndex];
+
+        Debug.Log($"ShowChoices() -> selectedChoice is now = {selectedChoice}");
     }
 
     private void HideAllChoices()
     {
-        // foreach (var obj in dialogueChoicesText)
-        // {
-        //     obj.gameObject.SetActive(false);
-        // }
+        foreach (var obj in dialogueChoicesText)
+        {
+            obj.gameObject.SetActive(false);
+        }
     }
 
     public void NavigateChoice(int direction)
     {
+        // Uses the Positive/Negative Binding for W and S to navigate
+        // up and down between the dialogue choices.
         if (currentChoices == null || currentChoices.Length <= 1) return;
 
         selectedChoiceIndex += direction;

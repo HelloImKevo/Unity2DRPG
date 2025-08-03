@@ -144,6 +144,17 @@ public class UI : MonoBehaviour
                 dialogueUI.DialogueInteraction();
             }
         };
+
+        // Navigate dialogue choices.
+        input.UI.DialogueNavigation.performed += ctx =>
+        {
+            int direction = Mathf.RoundToInt(ctx.ReadValue<float>());
+
+            if (dialogueUI.gameObject.activeInHierarchy)
+            {
+                dialogueUI.NavigateChoice(direction);
+            }
+        };
     }
 
     private void OnEnterOptionsUIState()
