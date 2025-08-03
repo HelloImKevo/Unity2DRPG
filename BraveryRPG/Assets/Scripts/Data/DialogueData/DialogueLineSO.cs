@@ -1,27 +1,29 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "RPG Setup/Dialogue Data/New Line Data", fileName = "Line - ")]
+[CreateAssetMenu(menuName = "RPG Setup/Dialogue Data/New Dialogue Line Data", fileName = "Dialogue Line - ")]
 public class DialogueLineSO : ScriptableObject
 {
     [Header("Dialogue Info")]
     public string dialogueGroupName;
-    public DialogueSpeakerSO speaker;
+    public DialogueSpeakerSO speakerData;
 
+    [Space]
     [Header("Text Options")]
-    [TextArea] public string[] textLine;
+    [TextArea] public string[] textLines;
 
-    [Header("Choices Fnfo")]
+    [Header("Choices Info")]
     [TextArea] public string playerChoiceAnswer;
+    [Space]
     public DialogueLineSO[] choiceLines;
 
     [Header("Dialogue Action")]
     [TextArea] public string actionLine;
     public DialogueActionType actionType;
 
-    public string GetFirstLine() => textLine[0];
+    public string GetFirstLine() => textLines[0];
 
     public string GetRandomLine()
     {
-        return textLine[Random.Range(0, textLine.Length)];
+        return textLines[Random.Range(0, textLines.Length)];
     }
 }

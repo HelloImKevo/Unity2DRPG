@@ -5,6 +5,7 @@ public class Object_Merchant : Object_NPC, IInteractable
 {
     [Space]
     [Header("Quest & Dialogue")]
+    [SerializeField] private DialogueLineSO firstDialogueLine;
     [SerializeField] private QuestDataSO[] quests;
 
     [Header("Localized Text")]
@@ -40,7 +41,8 @@ public class Object_Merchant : Object_NPC, IInteractable
                               " is null - Check Layer Collision Map for Player+NPC");
         }
 
-        ui.OpenQuestUI(quests);
+        ui.OpenDialogueUI(firstDialogueLine);
+        // ui.OpenQuestUI(quests);
 
         // TODO: Temporarily switch from Merchant Behavior to Quest-Giver mode.
         if (true) return;

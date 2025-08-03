@@ -23,6 +23,7 @@ public class UI : MonoBehaviour
     public UI_DeathScreen deathScreenUI { get; private set; }
     public UI_FadeScreen fadeScreenUI { get; private set; }
     public UI_Quest questUI { get; private set; }
+    public UI_Dialogue dialogueUI { get; private set; }
 
     public UI_SkillTooltip skillTooltip { get; private set; }
     public UI_ItemTooltip itemTooltip { get; private set; }
@@ -45,6 +46,7 @@ public class UI : MonoBehaviour
         deathScreenUI = GetComponentInChildren<UI_DeathScreen>(true);
         fadeScreenUI = GetComponentInChildren<UI_FadeScreen>(true);
         questUI = GetComponentInChildren<UI_Quest>(true);
+        dialogueUI = GetComponentInChildren<UI_Dialogue>(true);
 
         skillTooltip = GetComponentInChildren<UI_SkillTooltip>(true);
         itemTooltip = GetComponentInChildren<UI_ItemTooltip>(true);
@@ -260,6 +262,15 @@ public class UI : MonoBehaviour
         StopPlayerControlsIfNeeded();
     }
 
+    public void OpenDialogueUI(DialogueLineSO firstLine)
+    {
+        StopPlayerControls(true);
+        HideAllTooltips();
+
+        dialogueUI.gameObject.SetActive(true);
+        dialogueUI.PlayDialogueLine(firstLine);
+    }
+
     public void OpenQuestUI(QuestDataSO[] questsToShow)
     {
         StopPlayerControls(true);
@@ -298,6 +309,12 @@ public class UI : MonoBehaviour
 
     public void OpenMerchantUI(bool openMerchantUI)
     {
+        if (merchantUI == null)
+        {
+            Debug.LogWarning($"{gameObject.name}.OpenMerchantUI() -> merchantUI is null, likely due to application death/teardown");
+            return;
+        }
+
         merchantUI.gameObject.SetActive(openMerchantUI);
         StopPlayerControls(openMerchantUI);
 
