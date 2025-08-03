@@ -159,12 +159,11 @@ public class Entity_Health : MonoBehaviour, IDamageable
         entityVfx = GetComponent<Entity_VFX>();
         entityStats = GetComponent<Entity_Stats>();
         dropManager = GetComponent<Entity_DropManager>();
-
-        SetupHealth();
     }
 
     protected virtual void Start()
     {
+        SetupHealth();
     }
 
     private void SetupHealth()

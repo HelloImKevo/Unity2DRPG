@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy_Slime : Enemy, ICounterable
 {
     public bool CanBeCountered { get => canBeStunned; }
-    // public Enemy_SlimeDeadState slimeDeadState { get; set; }
+    public Enemy_SlimeDeadState slimeDeadState { get; set; }
 
     [Header("Slime Specifics")]
     [SerializeField] private GameObject slimeToCreatePrefab;
@@ -15,26 +15,33 @@ public class Enemy_Slime : Enemy, ICounterable
     {
         base.Awake();
 
+        Debug.Log($"{gameObject.name} calling AWAKE");
+
         IdleState = new Enemy_IdleState(this, stateMachine, "idle");
         MoveState = new Enemy_MoveState(this, stateMachine, "move");
         AttackState = new Enemy_AttackState(this, stateMachine, "attack");
         BattleState = new Enemy_BattleState(this, stateMachine, "battle");
         StunnedState = new Enemy_StunnedState(this, stateMachine, "stunned");
-        // slimeDeadState = new Enemy_SlimeDeadState(this, stateMachine, "idle");
+        slimeDeadState = new Enemy_SlimeDeadState(this, stateMachine, "idle");
 
         Anim.SetBool("hasStunRecovery", hasRecoveryAnimation);
+
+        // A CurrentState must be specified for the CreateSlimeOnDeath() logic
+        // sequence to behave correctly, without causing a NullReferenceException
+        // in StateMachine.ChangeState() -> CurrentState
+        stateMachine.Initialize(IdleState);
     }
 
     protected override void Start()
     {
         base.Start();
 
-        stateMachine.Initialize(IdleState);
+        Debug.Log($"{gameObject.name} calling START");
     }
 
     public override void EntityDeath()
     {
-        // stateMachine.ChangeState(slimeDeadState);
+        stateMachine.ChangeState(slimeDeadState);
     }
 
     public void OnReceiveCounterattack()
@@ -53,9 +60,12 @@ public class Enemy_Slime : Enemy, ICounterable
             GameObject newSlime = Instantiate(slimeToCreatePrefab, transform.position, Quaternion.identity);
             Enemy_Slime slimeScript = newSlime.GetComponent<Enemy_Slime>();
 
-            // slimeScript.Stats.AdjustStatSetup(Stats.resources, Stats.offense, Stats.defense, 0.6f, 1.2f);
-            // slimeScript.ApplyRespawnVelocity();
-            // slimeScript.StartBattleStateCheck(PlayerRef);
+            slimeScript.Stats.AdjustStatSetup(Stats.resources, Stats.offense, Stats.defense, 0.6f, 1.2f);
+
+            Debug.Log($"Enemy_Slime.CreateSlimeOnDeath() -> Creating Slime #{i + 1}");
+
+            slimeScript.ApplyRespawnVelocity();
+            slimeScript.StartBattleStateCheck(GetPlayerReference());
         }
     }
 
@@ -65,20 +75,20 @@ public class Enemy_Slime : Enemy, ICounterable
         SetVelocity(velocity.x, velocity.y);
     }
 
-    // public void StartBattleStateCheck(Transform player)
-    // {
-    //     TryEnterBattleState(player);
-    //     InvokeRepeating(nameof(ReEnterBattleState), 0, 0.3f);
-    // }
+    public void StartBattleStateCheck(Transform player)
+    {
+        TryEnterBattleState(player);
+        InvokeRepeating(nameof(ReEnterBattleState), 0, 0.3f);
+    }
 
-    // private void ReEnterBattleState()
-    // {
-    //     if (stateMachine.CurrentState == BattleState || stateMachine.CurrentState == AttackState)
-    //     {
-    //         CancelInvoke(nameof(ReEnterBattleState));
-    //         return;
-    //     }
+    private void ReEnterBattleState()
+    {
+        if (stateMachine.CurrentState == BattleState || stateMachine.CurrentState == AttackState)
+        {
+            CancelInvoke(nameof(ReEnterBattleState));
+            return;
+        }
 
-    //     stateMachine.ChangeState(BattleState);
-    // }
+        stateMachine.ChangeState(BattleState);
+    }
 }
