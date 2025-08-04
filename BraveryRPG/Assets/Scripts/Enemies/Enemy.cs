@@ -22,6 +22,10 @@ public class Enemy : Entity
     // TODO: Consider adding a range, like random 0.5 - 2.0 second delay.
     [Tooltip("Delay (seconds) in between attacks while in Battle state (currently tracked at the start of an attack animation)")]
     [SerializeField] private float attackDelay = 1.5f;
+    [Tooltip("Whether this is a melee-focused enemy that should pursue the player to get in melee range.")]
+    public bool canChasePlayer = true;
+
+    [Space]
     [Tooltip("How long the enemy remains engaged in pursuit of player, after losing Line of Sight")]
     public float battleTimeDuration = 5f;
     public float minRetreatDistance = 1f;
@@ -54,6 +58,8 @@ public class Enemy : Entity
     [SerializeField] private Transform playerCheck;
     [SerializeField] private float playerCheckDistance = 10;
     public Transform PlayerRef { get; private set; }
+
+    public bool shouldLogStateTransitions = false;
 
     public float GetMoveSpeed() => moveSpeed * activeSlowMultiplier;
 
@@ -115,7 +121,7 @@ public class Enemy : Entity
         if (secondaryFallCheck != null)
         {
             BelowLedgeDetected = BelowLedgeDetected
-                    || Physics2D.Raycast(secondaryFallCheck.position, Vector2.down, fallCheckDistance, whatIsGround);
+                    && Physics2D.Raycast(secondaryFallCheck.position, Vector2.down, fallCheckDistance, whatIsGround);
         }
     }
 

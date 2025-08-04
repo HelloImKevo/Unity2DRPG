@@ -4,6 +4,8 @@ public class Enemy_BattleState : EnemyState
 {
     private Transform player;
 
+    private float verticalTolerance = 1.5f;
+
     /// <summary>
     /// Support target switching between the Player and its Time Echo mirror clones.
     /// </summary>
@@ -18,7 +20,10 @@ public class Enemy_BattleState : EnemyState
     {
         base.Enter();
 
-        Debug.Log($"Enemy {enemy.gameObject.name} enters Battle State!");
+        if (enemy.shouldLogStateTransitions)
+        {
+            Debug.Log($"{enemy.gameObject.name} Entering BATTLE state");
+        }
 
         UpdateBattlePursuitTimer();
 
@@ -52,13 +57,18 @@ public class Enemy_BattleState : EnemyState
             UpdateBattlePursuitTimer();
         }
 
-        if (BattleTimeIsOver())
+        if (BattleTimeIsOver() || IsPlayerBeyondReach())
         {
             stateMachine.ChangeState(enemy.IdleState);
+            return;
         }
 
-        if (WithinAttackRange() && enemy.PlayerDetected())
+        if (ShouldAttackIfPossible())
         {
+            if (!ShouldWalkAwayFromPlayer())
+            {
+                FlipToFacePlayerIfNeeded();
+            }
             // Note: This is tracking the Start of an Attack (rather than when the Attack
             // was finished), so the attack delay value should be longer than the full
             // attack animation.
@@ -75,11 +85,28 @@ public class Enemy_BattleState : EnemyState
             // Prevent enemy from continuously running into a wall.
             if (enemy.CanAggressivelyPursuePlayer())
             {
-                // Pursue the player (aggro).
-                enemy.SetVelocity(enemy.GetBattleMoveSpeed() * DirectionToPlayer(), rb.linearVelocity.y);
+                if (ShouldWalkAwayFromPlayer())
+                {
+                    // Debug.Log("Elf should walk away from player ...");
+                    // Strafe / retreat backwards a short distance.
+                    enemy.SetVelocity(enemy.GetBattleMoveSpeed() * -1 * DirectionToPlayer(), rb.linearVelocity.y);
+                }
+                else
+                {
+                    FlipToFacePlayerIfNeeded();
+                    // Pursue the player (aggro).
+                    enemy.SetVelocity(enemy.GetBattleMoveSpeed() * DirectionToPlayer(), rb.linearVelocity.y);
+                }
             }
         }
     }
+
+    protected virtual bool ShouldAttackIfPossible()
+    {
+        return WithinAttackRange() && enemy.PlayerDetected();
+    }
+
+    protected virtual bool ShouldWalkAwayFromPlayer() => false;
 
     /// <summary>
     /// Handle target switching between Player and its Time Echo mirror clones.
@@ -97,25 +124,39 @@ public class Enemy_BattleState : EnemyState
         }
     }
 
-    private bool CanPerformAttack() => Time.time > enemy.AttackState.LastTimeAttackPerformed + enemy.GetAttackDelay();
+    private void FlipToFacePlayerIfNeeded()
+    {
+        if (DirectionToPlayer() != enemy.FacingDir)
+        {
+            enemy.HandleFlip(DirectionToPlayer());
+        }
+    }
+
+    protected bool CanPerformAttack() => Time.time > enemy.AttackState.LastTimeAttackPerformed + enemy.GetAttackDelay();
 
     private void UpdateBattlePursuitTimer() => lastTimeWasInBattle = Time.time;
 
     private bool BattleTimeIsOver() => Time.time > lastTimeWasInBattle + enemy.battleTimeDuration;
 
+    private bool IsPlayerBeyondReach() => DistanceToPlayer() > enemy.attackDistance * 2f;
+
     // Summary:
     //     Checks if the player is within attack range of this enemy.
-    private bool WithinAttackRange() => DistanceToPlayer() <= enemy.attackDistance;
+    protected bool WithinAttackRange() => DistanceToPlayer() <= enemy.attackDistance;
 
     // Summary:
     //     Checks whether the enemy should perform a retreat backstep, to prevent
     //     the player from exploiting distance checks and standing within the enemy,
     //     triggering a constant attacking state.
-    private bool ShouldBackstep() => DistanceToPlayer() < enemy.minRetreatDistance;
+    protected bool ShouldBackstep()
+    {
+        return DistanceToPlayer() < enemy.minRetreatDistance
+            && enemy.CanAggressivelyPursuePlayer();
+    }
 
     // Summary:
     //     Calculates the distance between player and enemy, as a positive value.
-    private float DistanceToPlayer()
+    protected float DistanceToPlayer()
     {
         if (player == null)
         {
@@ -123,7 +164,21 @@ public class Enemy_BattleState : EnemyState
             return float.MaxValue;
         }
 
-        return Mathf.Abs(player.position.x - enemy.transform.position.x);
+        // return Mathf.Abs(player.position.x - enemy.transform.position.x);
+
+        Vector2 playerPos = player.position;
+        Vector2 enemyPos = enemy.transform.position;
+
+        float verticalDiff = Mathf.Abs(playerPos.y - enemyPos.y);
+
+        // Player is too high or too low — treat as "out of range"
+        if (verticalDiff > verticalTolerance)
+        {
+            return float.MaxValue;
+        }
+
+        float horizontalDistance = Mathf.Abs(playerPos.x - enemyPos.x);
+        return horizontalDistance;
     }
 
     // Summary:

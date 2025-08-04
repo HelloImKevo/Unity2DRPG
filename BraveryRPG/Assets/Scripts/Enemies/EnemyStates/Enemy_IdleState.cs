@@ -10,6 +10,11 @@ public class Enemy_IdleState : Enemy_GroundedState
     {
         base.Enter();
 
+        if (enemy.shouldLogStateTransitions)
+        {
+            Debug.Log($"{enemy.gameObject.name} Entering IDLE state");
+        }
+
         stateTimer = enemy.idleTime;
     }
 
