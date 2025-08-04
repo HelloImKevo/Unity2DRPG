@@ -32,7 +32,7 @@ public class EnemyState : EntityState
     protected Enemy enemy;
 
     // When was the last attack performed (using Time.time).
-    public float LastTimeAttackPerformed { get; protected set; }
+    public float LastTimeAttackPerformed { get; protected set; } = float.NegativeInfinity;
 
     /// <summary>
     /// Constructs a new EnemyState with required enemy-specific dependencies.

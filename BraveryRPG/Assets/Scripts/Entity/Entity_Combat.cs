@@ -83,7 +83,7 @@ public class Entity_Combat : MonoBehaviour
     /// For more information about Unity layer masks:
     /// https://docs.unity3d.com/Manual/Layers.html
     /// </summary>
-    [Tooltip("Layers that can be targeted by this entity's attacks., like Enemies and Destructible Objects.")]
+    [Tooltip("Layers that can be targeted by this entity's attacks, like Enemies and Destructible Objects.")]
     [SerializeField] private LayerMask targetableLayers;
 
     private void Awake()
@@ -112,33 +112,11 @@ public class Entity_Combat : MonoBehaviour
     {
         bool targetGotHit = false;
 
-        foreach (var target in GetDetectedColliders())
+        foreach (Collider2D target in GetDetectedColliders(targetableLayers))
         {
-            if (target.TryGetComponent<IDamageable>(out var damageable))
+            if (PerformAttackOnTarget(target.transform))
             {
-                AttackData attackData = stats.GetAttackData(basicAttackScale);
-
-                float physicalDamage = attackData.physicalDamage;
-                float elementalDamage = attackData.elementalDamage;
-                ElementType element = attackData.element;
-
-                targetGotHit = damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
-
-                if (element != ElementType.None)
-                {
-                    // NOTE: Attackable Objects like Chests and Destructible Environments
-                    // cannot have status effects applied.
-                    if (target.TryGetComponent<Entity_StatusHandler>(out var statusHandler))
-                    {
-                        statusHandler.ApplyStatusEffect(element, attackData.effectData);
-                    }
-                }
-
-                if (targetGotHit)
-                {
-                    OnDoingPhysicalDamage?.Invoke(physicalDamage);
-                    vfx.CreateOnHitVfx(target.transform, attackData.isCrit, element);
-                }
+                targetGotHit = true;
             }
         }
 
@@ -150,6 +128,45 @@ public class Entity_Combat : MonoBehaviour
         {
             sfx?.PlayAttackMiss();
         }
+    }
+
+    public bool PerformAttackOnTarget(Transform target, bool playHitSfx = false)
+    {
+        bool targetGotHit = false;
+
+        if (target.TryGetComponent<IDamageable>(out var damageable))
+        {
+            AttackData attackData = stats.GetAttackData(basicAttackScale);
+
+            float physicalDamage = attackData.physicalDamage;
+            float elementalDamage = attackData.elementalDamage;
+            ElementType element = attackData.element;
+
+            targetGotHit = damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
+
+            if (element != ElementType.None)
+            {
+                // NOTE: Attackable Objects like Chests and Destructible Environments
+                // cannot have status effects applied.
+                if (target.TryGetComponent<Entity_StatusHandler>(out var statusHandler))
+                {
+                    statusHandler.ApplyStatusEffect(element, attackData.effectData);
+                }
+            }
+
+            if (targetGotHit)
+            {
+                OnDoingPhysicalDamage?.Invoke(physicalDamage);
+                vfx.CreateOnHitVfx(target.transform, attackData.isCrit, element);
+            }
+        }
+
+        if (playHitSfx && !targetGotHit)
+        {
+            sfx?.PlayAttackMiss();
+        }
+
+        return targetGotHit;
     }
 
     /// <summary>
@@ -167,12 +184,12 @@ public class Entity_Combat : MonoBehaviour
     /// An array of all Collider2D components found within the attack radius
     /// that match the specified layer mask.
     /// </returns>
-    protected Collider2D[] GetDetectedColliders()
+    protected Collider2D[] GetDetectedColliders(LayerMask layersToDetect)
     {
         return Physics2D.OverlapCircleAll(
             targetCheckPoint.position,
             targetCheckRadius,
-            targetableLayers
+            layersToDetect
         );
     }
 

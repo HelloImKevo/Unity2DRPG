@@ -42,11 +42,16 @@ public class Enemy_ArcherElf : Enemy
         Debug.Log($"{gameObject.name} calling START");
     }
 
-    // public override void SpecialAttack()
-    // {
-    //     GameObject newArrow = Instantiate(arrowPrefab, arrowStartPoint.position, Quaternion.identity);
-    //     newArrow.GetComponent<Enemy_ArcherElfArrow>().SetupArrow(arrowSpeed * facingDir, combat);
-    // }
+    public override void SpecialAttack()
+    {
+        GameObject newArrow = Instantiate(
+            arrowPrefab,
+            arrowStartPoint.position,
+            Quaternion.identity
+        );
+        // Make the arrow fly in the direction the enemy is facing.
+        newArrow.GetComponent<Enemy_ArcherElfArrow>().SetupArrow(arrowSpeed * FacingDir, combat);
+    }
 
     public void OnReceiveCounterattack()
     {

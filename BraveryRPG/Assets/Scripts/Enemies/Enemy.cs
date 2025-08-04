@@ -8,6 +8,7 @@ public class Enemy : Entity
 
     public Entity_Stats Stats { get; private set; }
     public Enemy_Health health { get; private set; }
+    public Entity_Combat combat { get; private set; }
 
     public Enemy_IdleState IdleState { get; protected set; }
     public Enemy_MoveState MoveState { get; protected set; }
@@ -82,6 +83,7 @@ public class Enemy : Entity
 
         Stats = GetComponent<Entity_Stats>();
         health = GetComponent<Enemy_Health>();
+        combat = GetComponent<Entity_Combat>();
     }
 
     protected override void Start()
@@ -131,6 +133,11 @@ public class Enemy : Entity
         // Enemies can pursue the player as long as there is a below ledge (so they don't blindly
         // walk off a cliff and fall to their death) and there isn't a wall obstructing them.
         return BelowLedgeDetected && !WallDetected;
+    }
+
+    public virtual void SpecialAttack()
+    {
+        // Override in enemies that have a Special Attack, like the Elf Archer.
     }
 
     protected override IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)

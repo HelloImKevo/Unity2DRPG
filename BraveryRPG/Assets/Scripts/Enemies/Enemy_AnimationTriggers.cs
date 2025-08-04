@@ -14,6 +14,13 @@ public class Enemy_AnimationTriggers : Entity_AnimationTriggers
     }
 
     // Summary:
+    //     Trigger a special attack, like the Elf Archer Arrow.
+    public void SpecialAttackTrigger()
+    {
+        enemy.SpecialAttack();
+    }
+
+    // Summary:
     //     The enemy can be counterattacked within this window.
     public void EnableCounterWindow()
     {
