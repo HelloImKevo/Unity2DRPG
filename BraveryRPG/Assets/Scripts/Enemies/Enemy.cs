@@ -200,6 +200,11 @@ public class Enemy : Entity
             PlayerRef = PlayerDetected().transform;
         }
 
+        if (PlayerRef == null)
+        {
+            PlayerRef = Player.GetInstance().transform;
+        }
+
         return PlayerRef;
     }
 
