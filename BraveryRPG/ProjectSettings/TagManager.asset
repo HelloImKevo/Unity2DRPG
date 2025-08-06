@@ -19,7 +19,7 @@ TagManager:
   - Projectile
   - AttackableObject
   - EnemyProjectile
-  - 
+  - Untargetable
   - 
   - 
   - 

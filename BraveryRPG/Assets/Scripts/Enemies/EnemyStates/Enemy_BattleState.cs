@@ -37,10 +37,9 @@ public class Enemy_BattleState : EnemyState
             player = enemy.GetPlayerReference();
         }
 
-        if (ShouldBackstep())
+        if (ShouldRetreat())
         {
-            rb.linearVelocity = new Vector2(enemy.retreatVelocity.x * -DirectionToPlayer(), enemy.retreatVelocity.y);
-            enemy.HandleFlip(DirectionToPlayer());
+            ShortRetreat();
         }
     }
 
@@ -101,6 +100,15 @@ public class Enemy_BattleState : EnemyState
         }
     }
 
+    protected void ShortRetreat()
+    {
+        float x = (enemy.retreatVelocity.x * enemy.activeSlowMultiplier) * -DirectionToPlayer();
+        float y = enemy.retreatVelocity.y;
+
+        rb.linearVelocity = new Vector2(x, y);
+        enemy.HandleFlip(DirectionToPlayer());
+    }
+
     protected virtual bool ShouldAttackIfPossible()
     {
         return WithinAttackRange() && enemy.PlayerDetected();
@@ -138,7 +146,7 @@ public class Enemy_BattleState : EnemyState
 
     private bool BattleTimeIsOver() => Time.time > lastTimeWasInBattle + enemy.battleTimeDuration;
 
-    private bool IsPlayerBeyondReach() => DistanceToPlayer() > enemy.attackDistance * 2f;
+    private bool IsPlayerBeyondReach() => DistanceToPlayer() > enemy.attackDistance * 5f;
 
     // Summary:
     //     Checks if the player is within attack range of this enemy.
@@ -148,7 +156,7 @@ public class Enemy_BattleState : EnemyState
     //     Checks whether the enemy should perform a retreat backstep, to prevent
     //     the player from exploiting distance checks and standing within the enemy,
     //     triggering a constant attacking state.
-    protected bool ShouldBackstep()
+    protected bool ShouldRetreat()
     {
         return DistanceToPlayer() < enemy.minRetreatDistance
             && enemy.CanAggressivelyPursuePlayer();

@@ -12,7 +12,7 @@ public class Enemy_IdleState : Enemy_GroundedState
 
         if (enemy.shouldLogStateTransitions)
         {
-            Debug.Log($"{enemy.gameObject.name} Entering IDLE state");
+            // Debug.Log($"{enemy.gameObject.name} Entering IDLE state");
         }
 
         stateTimer = enemy.idleTime;

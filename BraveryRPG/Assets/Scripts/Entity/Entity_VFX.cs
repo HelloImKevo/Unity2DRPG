@@ -3,6 +3,12 @@ using UnityEngine;
 
 public class Entity_VFX : MonoBehaviour
 {
+    [Header("Image Echo VFX")]
+    [Range(0.01f, 0.2f)]
+    [SerializeField] private float imageEchoInterval = 0.05f;
+    [SerializeField] private GameObject imageEchoPrefab;
+    private Coroutine imageEchoCo;
+
     [Header("On Damaged VFX")]
     [Tooltip("Shader effect to be activated during the VFX duration")]
     [SerializeField] private Material onDamageMaterial;
@@ -56,6 +62,53 @@ public class Entity_VFX : MonoBehaviour
             statusBlinkVfxCo = StartCoroutine(PlayStatusBlinkVfxCo(duration, shockVfx));
         }
     }
+
+    #region Image Echo Effect
+
+    public void DoImageEchoEffect(float duration)
+    {
+        StopImageEchoEffect();
+        imageEchoCo = StartCoroutine(ImageEchoEffectCo(duration));
+    }
+
+    public void StopImageEchoEffect()
+    {
+        if (imageEchoCo != null)
+        {
+            StopCoroutine(imageEchoCo);
+        }
+    }
+
+    private IEnumerator ImageEchoEffectCo(float duration)
+    {
+        float timeTracker = 0;
+
+        // Create several afterimage echo objects, which achieves the cool Alucard dash
+        // effect from Castlevania: Symphony of the Night.
+        while (timeTracker < duration)
+        {
+            CreateImageEcho();
+
+            yield return new WaitForSeconds(imageEchoInterval);
+            timeTracker += imageEchoInterval;
+        }
+    }
+
+    private void CreateImageEcho()
+    {
+        Vector3 position = entity.Anim.transform.position;
+        float scale = entity.Anim.transform.localScale.x;
+
+        // Create an afterimage object, which will quickly fade away.
+        GameObject imageEcho = Instantiate(imageEchoPrefab, position, transform.rotation);
+
+        imageEcho.transform.localScale = new Vector3(scale, scale, scale);
+        // Change the placeholder VFX image with an image matching the current
+        // sprite animation frame of the player or enemy.
+        imageEcho.GetComponentInChildren<SpriteRenderer>().sprite = sr.sprite;
+    }
+
+    #endregion
 
     public void StopAllVfx()
     {

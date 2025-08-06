@@ -18835,6 +18835,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1202805053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1024040151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1024040152}
+  m_Layer: 7
+  m_Name: BehindCollisionCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1024040152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024040151}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.245, y: -0.289, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 799165602495930778}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1131843298
 GameObject:
   m_ObjectHideFlags: 0
@@ -19343,6 +19374,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3302397358279549626, guid: 67a2c033eb1b14f3bb10f6e36d631085, type: 3}
+      propertyPath: m_Volume
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19849,6 +19884,10 @@ PrefabInstance:
     - target: {fileID: 3137347032517796761, guid: 67a2c033eb1b14f3bb10f6e36d631085, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302397358279549626, guid: 67a2c033eb1b14f3bb10f6e36d631085, type: 3}
+      propertyPath: m_Volume
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21106,6 +21145,10 @@ PrefabInstance:
     - target: {fileID: 3137347032517796761, guid: 67a2c033eb1b14f3bb10f6e36d631085, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302397358279549626, guid: 67a2c033eb1b14f3bb10f6e36d631085, type: 3}
+      propertyPath: m_Volume
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -60656,6 +60699,7 @@ Transform:
   - {fileID: 6975929696650219301}
   - {fileID: 6522284890195963856}
   - {fileID: 7658013980373318236}
+  - {fileID: 1024040152}
   - {fileID: 5879486555553421669}
   - {fileID: 7115571558993844398}
   m_Father: {fileID: 8666714248633343524}
@@ -61409,6 +61453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 196d1984c6b654a2aac6d2b7ff0188f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imageEchoInterval: 0.05
+  imageEchoPrefab: {fileID: 0}
   onDamageMaterial: {fileID: 2100000, guid: 364d2603c78f748da84f5ee8ad757af7, type: 2}
   onDamageVfxDuration: 0.15
   hitVfx: {fileID: 8384318563717163770, guid: 83300ca2739be446bb2708ff20689793, type: 3}
@@ -63807,6 +63853,63 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &6271870639581418697
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005156318003413171, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1400901487566490354, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
+      propertyPath: m_Name
+      value: VFX_EnemyMageImageEcho
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
 --- !u!1 &6294953267068030216
 GameObject:
   m_ObjectHideFlags: 0
@@ -63835,6 +63938,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 196d1984c6b654a2aac6d2b7ff0188f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imageEchoInterval: 0.05
+  imageEchoPrefab: {fileID: 1400901487566490354, guid: 5f0271b859d1c41f3980d44204787427, type: 3}
   onDamageMaterial: {fileID: 2100000, guid: 364d2603c78f748da84f5ee8ad757af7, type: 2}
   onDamageVfxDuration: 0.15
   hitVfx: {fileID: 8384318563717163770, guid: 83300ca2739be446bb2708ff20689793, type: 3}
@@ -64815,7 +64920,7 @@ MonoBehaviour:
   attackDelay: 1.2
   canChasePlayer: 1
   battleTimeDuration: 5
-  minRetreatDistance: 1
+  minRetreatDistance: 2.5
   retreatVelocity: {x: 9, y: 4}
   primaryFallCheck: {fileID: 6522284890195963856}
   secondaryFallCheck: {fileID: 7658013980373318236}
@@ -64836,9 +64941,10 @@ MonoBehaviour:
   spellStartPosition: {fileID: 0}
   amountToCast: 3
   spellCastCooldown: 0.3
-  retreatCooldown: 5
-  retreatMaxDistance: 8
+  retreatCooldown: 4
+  retreatMaxDistance: 6
   retreatSpeed: 15
+  behindCollsionCheck: {fileID: 1024040152}
   hasRecoveryAnimation: 1
 --- !u!1 &8780058314655523617
 GameObject:
@@ -65401,3 +65507,4 @@ SceneRoots:
   - {fileID: 440485413}
   - {fileID: 1202805053}
   - {fileID: 1608657179}
+  - {fileID: 6271870639581418697}

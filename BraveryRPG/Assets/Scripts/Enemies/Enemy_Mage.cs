@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Enemy_Mage : Enemy, ICounterable
 {
-    // public Enemy_MageRetreatState mageRetreatState { get; private set; }
-    // public Enemy_MageBattleState mageBattleState { get; private set; }
-    // public Enemy_MageSpellCastState mageSpellCastState { get; private set; }
+    public Enemy_MageRetreatState mageRetreatState { get; private set; }
+    public Enemy_MageBattleState mageBattleState { get; private set; }
+    public Enemy_MageSpellCastState mageSpellCastState { get; private set; }
 
     // MAGE SPECIFICS -------------------------------------------------------------------
 
@@ -18,10 +18,10 @@ public class Enemy_Mage : Enemy, ICounterable
 
     [Space]
     public float retreatCooldown = 5f;
-    public float retreatMaxDistance = 8f;
+    public float retreatMaxDistance = 6f;
     public float retreatSpeed = 15f;
 
-    // [SerializeField] private Transform behindCollsionCheck;
+    [SerializeField] private Transform behindCollsionCheck;
     [SerializeField] private bool hasRecoveryAnimation = true;
 
     protected override void Awake()
@@ -36,11 +36,10 @@ public class Enemy_Mage : Enemy, ICounterable
         DeadState = new Enemy_DeadState(this, stateMachine, "idle");
         StunnedState = new Enemy_StunnedState(this, stateMachine, "stunned");
 
-        BattleState = new Enemy_BattleState(this, stateMachine, "battle");
-        // mageSpellCastState = new Enemy_MageSpellCastState(this, stateMachine, "spellCast");
-        // mageRetreatState = new Enemy_MageRetreatState(this, stateMachine, "battle");
-        // mageBattleState = new Enemy_MageBattleState(this, stateMachine, "battle");
-        // BattleState = mageBattleState;
+        mageSpellCastState = new Enemy_MageSpellCastState(this, stateMachine, "spellCast");
+        mageRetreatState = new Enemy_MageRetreatState(this, stateMachine, "battle");
+        mageBattleState = new Enemy_MageBattleState(this, stateMachine, "battle");
+        BattleState = mageBattleState;
 
         Anim.SetBool("hasStunRecovery", hasRecoveryAnimation);
     }
@@ -93,16 +92,26 @@ public class Enemy_Mage : Enemy, ICounterable
     //     return noGround || detectedWall;
     // }
 
-    // protected override void OnDrawGizmos()
-    // {
-    //     base.OnDrawGizmos();
+    protected override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
 
-    //     Gizmos.DrawLine(behindCollsionCheck.position,
-    //         new Vector3(behindCollsionCheck.position.x + (1.5f * -FacingDir), behindCollsionCheck.position.y));
+        Gizmos.DrawLine(
+            behindCollsionCheck.position,
+            new Vector3(
+                behindCollsionCheck.position.x + (1.5f * -FacingDir),
+                behindCollsionCheck.position.y
+            )
+        );
 
-    //     Gizmos.DrawLine(behindCollsionCheck.position,
-    //         new Vector3(behindCollsionCheck.position.x, behindCollsionCheck.position.y - 1.5f));
-    // }
+        Gizmos.DrawLine(
+            behindCollsionCheck.position,
+            new Vector3(
+                behindCollsionCheck.position.x,
+                behindCollsionCheck.position.y - 1.5f
+            )
+        );
+    }
 
     #region ICounterable
 
