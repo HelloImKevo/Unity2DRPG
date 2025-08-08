@@ -57,40 +57,43 @@ public class Enemy_Mage : Enemy, ICounterable
 
     public override void SpecialAttack()
     {
-        // StartCoroutine(CastSpellCo());
+        StartCoroutine(CastSpellCo());
     }
 
-    // private IEnumerator CastSpellCo()
-    // {
-    //     for (int i = 0; i < amountToCast; i++)
-    //     {
-    //         Enemy_MageProjectile projectile
-    //             = Instantiate(spellPrefab, spellStartPosition.position, Quaternion.identity).GetComponent<Enemy_MageProjectile>();
+    private IEnumerator CastSpellCo()
+    {
+        for (int i = 0; i < amountToCast; i++)
+        {
+            Enemy_MageProjectile projectile = Instantiate(
+                spellPrefab,
+                spellStartPosition.position,
+                Quaternion.identity
+            ).GetComponent<Enemy_MageProjectile>();
 
-    //         projectile.SetupProjectile(GetPlayerReference().transform, combat);
-    //         yield return new WaitForSeconds(spellCastCooldown);
-    //     }
+            projectile.SetupProjectile(GetPlayerReference().transform, combat);
+            yield return new WaitForSeconds(spellCastCooldown);
+        }
 
-    //     SetSpellCastPerformed(true);
-    // }
+        SetSpellCastPerformed(true);
+    }
 
-    // public bool CantMoveBackwards()
-    // {
-    //     bool detectedWall = Physics2D.Raycast(
-    //         behindCollsionCheck.position,
-    //         Vector2.right * -FacingDir,
-    //         1.5f,
-    //         whatIsGround
-    //     );
-    //     bool noGround = !Physics2D.Raycast(
-    //         behindCollsionCheck.position,
-    //         Vector2.down,
-    //         1.5f,
-    //         whatIsGround
-    //     );
+    public bool CantMoveBackwards()
+    {
+        bool detectedWall = Physics2D.Raycast(
+            behindCollsionCheck.position,
+            Vector2.right * -FacingDir,
+            1.5f,
+            whatIsGround
+        );
+        bool noGround = !Physics2D.Raycast(
+            behindCollsionCheck.position,
+            Vector2.down,
+            1.5f,
+            whatIsGround
+        );
 
-    //     return noGround || detectedWall;
-    // }
+        return noGround || detectedWall;
+    }
 
     protected override void OnDrawGizmos()
     {

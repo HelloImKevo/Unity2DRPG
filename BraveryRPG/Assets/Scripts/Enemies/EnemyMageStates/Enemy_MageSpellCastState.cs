@@ -28,7 +28,7 @@ public class Enemy_MageSpellCastState : EnemyState
 
         if (enemyMage.spellCastPerformed)
         {
-            // anim.SetBool("spellCast_performed", true);
+            anim.SetBool("spellCast_performed", true);
         }
 
         if (onAnimationEndTriggered)
@@ -40,6 +40,6 @@ public class Enemy_MageSpellCastState : EnemyState
     public override void Exit()
     {
         base.Exit();
-        // anim.SetBool("spellCast_performed", false);
+        anim.SetBool("spellCast_performed", false);
     }
 }

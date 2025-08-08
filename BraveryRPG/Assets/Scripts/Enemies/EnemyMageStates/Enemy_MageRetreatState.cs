@@ -41,10 +41,7 @@ public class Enemy_MageRetreatState : EnemyState
 
         bool reachedMaxDistance = Vector2.Distance(enemy.transform.position, startPosition) > enemyMage.retreatMaxDistance;
 
-        if (reachedMaxDistance
-        // TODO: Implement Backwards Movement Collision check.
-        // || enemyMage.CantMoveBackwards()
-        )
+        if (reachedMaxDistance || enemyMage.CantMoveBackwards())
         {
             stateMachine.ChangeState(enemyMage.mageSpellCastState);
         }
