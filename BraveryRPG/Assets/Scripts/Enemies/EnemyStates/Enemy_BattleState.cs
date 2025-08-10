@@ -119,7 +119,7 @@ public class Enemy_BattleState : EnemyState
     /// <summary>
     /// Handle target switching between Player and its Time Echo mirror clones.
     /// </summary>
-    private void UpdateTargetIfNeeded()
+    protected void UpdateTargetIfNeeded()
     {
         if (!enemy.PlayerDetected()) return;
 
@@ -192,7 +192,7 @@ public class Enemy_BattleState : EnemyState
     // Summary:
     //     Determine appropriate Facing Direction of the enemy, to Face the Player.
     //     1 = Right, -1 = Left.
-    private int DirectionToPlayer()
+    protected int DirectionToPlayer()
     {
         if (player == null) return 0;
 
