@@ -15,16 +15,18 @@ public class Enemy_ReaperSpell : MonoBehaviour
         Destroy(gameObject, 2f);
     }
 
-    private void EnableCollider() => col.enabled = true;
+    /// <summary>Animation event trigger called on the frame before the spell checks for targets to damage.</summary>
+    public void EnableCollider() => col.enabled = true;
 
-    private void DisableCollider() => col.enabled = false;
+    /// <summary>Animation event trigger.</summary>
+    public void DisableCollider() => col.enabled = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // Check if collided object is on a layer we want to damage
         if (((1 << collision.gameObject.layer) & whatIsTarget) != 0)
         {
-            // combat.PerformAttackOnTarget(collision.transform, damageScaleData);
+            combat.PerformAttackOnTarget(collision.transform, damageScaleData);
             DisableCollider();
         }
     }

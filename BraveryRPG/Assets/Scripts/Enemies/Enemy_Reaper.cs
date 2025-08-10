@@ -21,7 +21,7 @@ public class Enemy_Reaper : Enemy, ICounterable
     [SerializeField] private float spellCastStateCooldown = 10f;
     [SerializeField] private Vector2 playerOffsetPrediction;
     private float lastTimeCastedSpells = float.NegativeInfinity;
-    public bool spellCastPreformed { get; private set; }
+    public bool spellCastPerformed { get; private set; }
     private Player playerScript;
 
     [Header("Reaper Teleport")]
@@ -86,13 +86,13 @@ public class Enemy_Reaper : Enemy, ICounterable
             float xOffset = playerMoving ? playerOffsetPrediction.x * playerScript.FacingDir : 0f;
             Vector3 spellPosition = player.transform.position + new Vector3(xOffset, playerOffsetPrediction.y);
 
-            // Enemy_ReaperSpell spell = Instantiate(
-            //     spellCastPrefab,
-            //     spellPosition,
-            //     Quaternion.identity
-            // ).GetComponent<Enemy_ReaperSpell>();
+            Enemy_ReaperSpell spell = Instantiate(
+                spellCastPrefab,
+                spellPosition,
+                Quaternion.identity
+            ).GetComponent<Enemy_ReaperSpell>();
 
-            // spell.SetupSpell(combat, spellDamageScale);
+            spell.SetupSpell(combat, spellDamageScale);
 
             yield return new WaitForSeconds(spellCastRate);
         }
@@ -100,10 +100,9 @@ public class Enemy_Reaper : Enemy, ICounterable
         SetSpellCastPreformed(true);
     }
 
-    public void SetSpellCastPreformed(bool spellCastStatus) => spellCastPreformed = spellCastStatus;
+    public void SetSpellCastPreformed(bool spellCastStatus) => spellCastPerformed = spellCastStatus;
 
-    // TODO: Implement spell cast state.
-    public bool CanDoSpellCast() => false; // Time.time > lastTimeCastedSpells + spellCastStateCooldown;
+    public bool CanDoSpellCast() => Time.time > lastTimeCastedSpells + spellCastStateCooldown;
 
     public void SetSpellCastOnCooldown() => lastTimeCastedSpells = Time.time;
 

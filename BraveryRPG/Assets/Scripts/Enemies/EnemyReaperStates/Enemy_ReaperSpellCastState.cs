@@ -27,8 +27,8 @@ public class Enemy_ReaperSpellCastState : EnemyState
     {
         base.Update();
 
-        if (enemyReaper.spellCastPreformed)
-            anim.SetBool("spellCast_Performed", true);
+        if (enemyReaper.spellCastPerformed)
+            anim.SetBool("spellCast_performed", true);
 
         if (onAnimationEndTriggered)
         {
@@ -46,6 +46,6 @@ public class Enemy_ReaperSpellCastState : EnemyState
     public override void Exit()
     {
         base.Exit();
-        anim.SetBool("spellCast_Performed", false);
+        anim.SetBool("spellCast_performed", false);
     }
 }

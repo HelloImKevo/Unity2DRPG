@@ -130,13 +130,20 @@ public class Entity_Combat : MonoBehaviour
         }
     }
 
-    public bool PerformAttackOnTarget(Transform target, bool playHitSfx = false)
+    public bool PerformAttackOnTarget(
+        Transform target,
+        DamageScaleData damageScaleData = null,
+        bool playHitSfx = false
+    )
     {
         bool targetGotHit = false;
 
         if (target.TryGetComponent<IDamageable>(out var damageable))
         {
-            AttackData attackData = stats.GetAttackData(basicAttackScale);
+            DamageScaleData damageScale = damageScaleData == null
+                ? basicAttackScale
+                : damageScaleData;
+            AttackData attackData = stats.GetAttackData(damageScale);
 
             float physicalDamage = attackData.physicalDamage;
             float elementalDamage = attackData.elementalDamage;

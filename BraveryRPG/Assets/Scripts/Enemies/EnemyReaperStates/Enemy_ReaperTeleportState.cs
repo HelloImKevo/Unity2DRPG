@@ -9,6 +9,7 @@ using UnityEngine;
 public class Enemy_ReaperTeleportState : EnemyState
 {
     private Enemy_Reaper enemyReaper;
+
     public Enemy_ReaperTeleportState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
     {
         enemyReaper = enemy as Enemy_Reaper;

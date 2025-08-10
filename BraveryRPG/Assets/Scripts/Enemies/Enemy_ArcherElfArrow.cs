@@ -37,7 +37,7 @@ public class Enemy_ArcherElfArrow : MonoBehaviour, ICounterable
         // 00000000000000000000000000000000
         if (((1 << collision.gameObject.layer) & whatIsTarget) != 0)
         {
-            combat.PerformAttackOnTarget(collision.transform, true);
+            combat.PerformAttackOnTarget(collision.transform, null, true);
             StickArrowIntoTarget(collision.transform);
         }
     }
